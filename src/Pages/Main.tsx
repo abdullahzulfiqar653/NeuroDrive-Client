@@ -185,10 +185,10 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             </div>
           </div>
         </div>
-        <Line className={"mt-2"} />
+        <Line className={"mt-2 min-w-[230px] w-full"} />
       </div>
       <div className="flex flex-col items-center gap-2 my-2 h-[30vh] min-h-[280px] overflow-auto">
-        <div className="flex items-center justify-between w-full px-2 ">
+        <div className="flex items-center justify-between w-full px-2 pb-2">
           <h1 className="flex text-[14px] text-[#9F9F9F] gap-1 items-center">
             <span>
               <Arrow color="#9F9F9F" />
@@ -199,27 +199,27 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             <Add />
           </span>
         </div>
-        <div className="flex items-center justify-start gap-3 w-full pt-2 font-sans px-3">
+        <div className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
           <Folder />
-          <p>Workspace</p>
+          <p className="">Workspace</p>
         </div>
-        <div className="flex items-center justify-start gap-3 w-full pt-2 font-sans px-3">
+        <div className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
           <Folder />
           <p>Desk setup</p>
         </div>
-        <div className="flex items-center justify-start gap-3 w-full pt-2 font-sans px-3">
+        <div className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
           <Folder />
           <p>Content corner</p>
         </div>
-        <div className="flex items-center justify-start gap-3 w-full pt-2 font-sans px-3">
+        <div className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
           <Folder />
           <p>Artistic assets</p>
         </div>
-        <div className="flex items-center justify-start gap-3 w-full pt-2 font-sans px-3">
+        <div className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
           <Folder />
           <p>Office work</p>
         </div>
-        <div className="flex items-center justify-start gap-3 w-full pt-2 font-sans px-3">
+        <div className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
           <Folder />
           <p>Home setup</p>
         </div>

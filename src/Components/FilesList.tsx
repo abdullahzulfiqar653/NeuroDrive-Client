@@ -4,7 +4,8 @@ import Popup from "reactjs-popup";
 
 function FilesList() {
   const [isOpen, seIsOpen] = useState(false);
-  const [iconClick, setIconClick] = useState(false);
+  //   const [iconClick, setIconClick] = useState(false);
+  const [radioClick, setRadioClick] = useState(false);
   const data = [
     { PersonName: "", name: "John Doe", size: "3.0 GB" },
     { PersonName: "Roanldo Richards", name: "John Doe", size: "3.0 GB" },
@@ -268,7 +269,13 @@ function FilesList() {
             </table> */}
               <div className="h-full rounded-xl bg-[#F1F5FA] w-[full] flex flex-col ">
                 <div className="overflow-hidden rounded-xl  bg-[#F1F5FA] w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
-                  <p className="border w-[30%] h-full flex items-center justify-start px-4">
+                  <p className="border w-[30%] gap-2 h-full flex items-center justify-start px-4">
+                    <span
+                      onClick={() => setRadioClick((prev) => !prev)}
+                      className="w-auto text-start mr-4 cursor-pointer"
+                    >
+                      <Circle color={radioClick ? "#2676ff" : "none"} />
+                    </span>{" "}
                     Name
                   </p>
                   <p className="border w-[30%] h-full flex items-center justify-start px-4">
@@ -283,8 +290,11 @@ function FilesList() {
                 </div>
                 <div className="overflow-hidden   bg-white w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
-                    <span className="w-auto text-start mr-4">
-                      <Circle />
+                    <span
+                      onClick={() => setRadioClick((prev) => !prev)}
+                      className="w-auto text-start mr-4 cursor-pointer"
+                    >
+                      <Circle color={radioClick ? "#2676ff" : "none"} />
                     </span>
                     <Xcel className={"w-4 h-4"} /> Design &Campign.xls
                   </p>
@@ -297,7 +307,7 @@ function FilesList() {
 
                   <Popup
                     trigger={
-                      <p className="border w-[10%] h-full flex items-center justify-start px-4">
+                      <p className="cursor-pointer border w-[10%] h-full flex items-center justify-start px-4">
                         <ThreeDots />
                       </p>
                     }
@@ -308,7 +318,7 @@ function FilesList() {
                     }}
                     contentStyle={{
                       marginLeft: "-50px",
-                      marginTop:"-10px",
+                      marginTop: "-10px",
                       padding: "10px",
                       borderRadius: "8px",
                       backgroundColor: "white",
@@ -351,8 +361,11 @@ function FilesList() {
                 </div>
                 <div className="overflow-hidden   bg-white w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
-                    <span className="w-auto text-start mr-4">
-                      <Circle />
+                    <span
+                      onClick={() => setRadioClick((prev) => !prev)}
+                      className="w-auto text-start mr-4 cursor-pointer"
+                    >
+                      <Circle color={radioClick ? "#2676ff" : "none"} />
                     </span>
                     <Xcel className={"w-4 h-4"} /> Design &Campign.xls
                   </p>
@@ -368,8 +381,11 @@ function FilesList() {
                 </div>
                 <div className="overflow-hidden   bg-[#F8FAFC] w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
-                    <span className="w-auto text-start mr-4">
-                      <Circle />
+                    <span
+                      onClick={() => setRadioClick((prev) => !prev)}
+                      className="w-auto cursor-pointer text-start mr-4"
+                    >
+                      <Circle color={radioClick ? "#2676ff" : "none"} />
                     </span>
                     <img src="rich.png" alt="" className={"w-4 h-4"} />
                     Design &Campign.xls
@@ -386,8 +402,11 @@ function FilesList() {
                 </div>
                 <div className="overflow-hidden   bg-white w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
-                    <span className="w-auto text-start mr-4">
-                      <Circle />
+                    <span
+                      onClick={() => setRadioClick((prev) => !prev)}
+                      className="w-auto cursor-pointer text-start mr-4"
+                    >
+                      <Circle color={radioClick ? "#2676ff" : "none"} />
                     </span>
                     <Gallery className={"w-4 h-4"} /> Design &Campign.xls
                   </p>
@@ -403,8 +422,11 @@ function FilesList() {
                 </div>
                 <div className="overflow-hidden  bg-[#F8FAFC] w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
-                    <span className="w-auto text-start mr-4">
-                      <Circle />
+                    <span
+                      onClick={() => setRadioClick((prev) => !prev)}
+                      className="w-auto cursor-pointer text-start mr-4"
+                    >
+                      <Circle color={radioClick ? "#2676ff" : "none"} />
                     </span>
                     <Xcel className={"w-4 h-4"} /> Design &Campign.xls
                   </p>
@@ -595,12 +617,12 @@ const ThreeDots = () => (
   </svg>
 );
 
-const Circle = () => (
+const Circle = ({ color }: IconsProps) => (
   <svg
     width="21"
     height="21"
     viewBox="0 0 21 21"
-    fill="none"
+    fill={color}
     xmlns="http://www.w3.org/2000/svg"
   >
     <circle cx="10.5" cy="10.5" r="10" stroke="#343434" stroke-opacity="0.34" />
