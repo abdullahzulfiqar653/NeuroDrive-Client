@@ -3,3 +3,11 @@
   margin: 0 auto;
   
 }
+
+.popup-content {
+  margin-left: -10px; /* Move the popup to the left */
+}
+
+.popup-arrow {
+  transform: translateX(20px); 
+}

@@ -1,4 +1,4 @@
-type IconsProps = {
+export type IconsProps = {
   color?: string;
   className?: string;
 };
@@ -126,13 +126,14 @@ export const Blocks = () => (
   </svg>
 );
 
-export const Trash = () => (
+export const Trash = ({className}:IconsProps) => (
   <svg
     width="23"
     height="23"
     viewBox="0 0 23 23"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
   >
     <path
       d="M20.125 5.73039C16.9337 5.41414 13.7233 5.25122 10.5225 5.25122C8.625 5.25122 6.7275 5.34705 4.83 5.53872L2.875 5.73039"

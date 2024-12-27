@@ -7,14 +7,14 @@ import {
   Blocks,
   Cross,
   Folder,
+  IconsProps,
   Line,
-  Setting,
   Trash,
 } from "../assets/Icons";
 import FilesList from "../Components/FilesList";
 
 function Main() {
-  const [isProfile, setProfile] = useState<Boolean>(false);
+  const [isProfile, setProfile] = useState(false);
   const [isLeftBar, setLeftBar] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -83,9 +83,7 @@ function Main() {
                   </p>
                   <Arrow color="#1E1E1E" />
                 </span>
-                {isProfile && (
-                  <Account close={() => {setProfile(false)}} />
-                )}
+                {isProfile && <Account setProfile={setProfile} />}
               </div>
             </div>
           </div>
@@ -97,23 +95,24 @@ function Main() {
               <span onClick={() => setLeftBar((prev) => !prev)}>
                 <img src="/bar.svg" />
               </span>
-              <input
-                className="font-sans w-[200px] h-[36px] ml-3  outline-none placeholder:text-[#6C849D52] text-[#647b93] text-[12px] "
-                placeholder="Search in neuromail"
-              />
             </div>
+            <img src="/logo.svg" alt="" className="w-8 h-8" />
             <div className="flex items-center relative gap-3">
-              <span className="cursor-pointer">
-                <img src="/icons.svg" className="w-[17px] h-[17px]" />{" "}
+              <span className="left-[-50px] absolute">
+                <Search className={"w-6 h-6"} />
               </span>
+              <div className="w-[40px] h-[35px] bg-[#F8FAFC] rounded-[12px] border border-[#BFBFBF57] flex items-center justify-center">
+                <SixDots />
+              </div>
               <div
                 onClick={() => setProfile((prev) => !prev)}
                 className=" h-[35px] w-[35px] rounded-full cursor-pointer overflow-hidden"
               >
                 <img
-                  src="https://s3-alpha-sig.figma.com/img/5298/20ef/398885b3c44f2931c974eeab97452589?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=LbV6IEdtt9vlJGwrps7NNrhoRRi6Vb0TkA2bqwazqax9FclsMTNpeem2Ak1SPi58c5SdyAKPpvu295p0R6CeJ29GOA1es6BqHkNrCGKcgaU6P-XNxWRvM01pwRNHsrHglZSfSYFbeHrOGLDqVMP3mdPP8HE3VnRAa2PUiKxLJjB8O5Zl8mGimUIzmFr-8HF1pnUA-qKAbQKxEVi8r~PK~IK5Sf5cM3vtVNUh8Swf6iLMeE-9rO7RIkEO6HOvUskG17Z7iXrP58Un5-PF7hSsxM1maAdWKTXC0OYMr~Y5Y8U11Fl-3so~Q5OYHUzcWBeZGByg9f4J2EDq3BBrSkigCw__"
+                  src="https://s3-alpha-sig.figma.com/img/5298/20ef/398885b3c44f2931c974eeab97452589?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gN2NdKafXBlh4NOklHHV1eMk5pPgM~xzInElAs6jU43hBLK1ZqyuFdVoaaAzSzJT35DEQIT702OG~38L5UL9QTt8vQPXaNa3OeRLdVgCdTCbbG6Mkiu~nrG3CdZjQllT4cZvq~pEPeHhdwKuBLJ~dWRP1X~mbGHgXTVIkyXyBkY1XEz8VBFmqnP6cQ7Pg1fl96tzu2PFVIET7I10KKdq3ddZFMFYLrrJcy6nXs8OCNl2qjz5NQt0F9~A6BtdCmPsne-a~xpOt6pJCzsBPz9VmItNEdCfyO17bdhhUQmLiwttWqiveWZ1YFLf4bHEXmjuWO0mhvKQ063l5E0G-YZL6Q__"
                   className="w-full h-full object-cover "
                 />
+                {isProfile && <Account setProfile={setProfile} />}
               </div>
             </div>
           </div>
@@ -333,14 +332,14 @@ const Invite = () => (
   </svg>
 );
 
-const Search = () => (
+const Search = ({ className }: IconsProps) => (
   <svg
     width="16"
     height="20"
     viewBox="0 0 16 20"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className="absolute top-[50%] left-[13px] translate-y-[-50%]"
+    className={`${className} absolute top-[50%] left-[13px] translate-y-[-50%]`}
   >
     <path
       fill-rule="evenodd"

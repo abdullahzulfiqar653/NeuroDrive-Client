@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Folders, Gallery, Xcel } from "../assets/Icons";
+import { Folders, Gallery, IconsProps, Trash, Xcel } from "../assets/Icons";
+import Popup from "reactjs-popup";
 
 function FilesList() {
   const [isOpen, seIsOpen] = useState(false);
+  const [iconClick, setIconClick] = useState(false);
   const data = [
     { PersonName: "", name: "John Doe", size: "3.0 GB" },
     { PersonName: "Roanldo Richards", name: "John Doe", size: "3.0 GB" },
@@ -292,9 +294,60 @@ function FilesList() {
                   <p className="border w-[30%] h-full flex items-center justify-start px-4">
                     3.0GB
                   </p>
-                  <p className="border w-[10%] h-full flex items-center justify-start px-4">
-                    <ThreeDots />
-                  </p>
+
+                  <Popup
+                    trigger={
+                      <p className="border w-[10%] h-full flex items-center justify-start px-4">
+                        <ThreeDots />
+                      </p>
+                    }
+                    position="bottom right"
+                    arrowStyle={{
+                      color: "white",
+                      transform: "translateX(20px)",
+                    }}
+                    contentStyle={{
+                      marginLeft: "-50px",
+                      marginTop:"-10px",
+                      padding: "10px",
+                      borderRadius: "8px",
+                      backgroundColor: "white",
+                      borderColor: "white",
+                      border: "none",
+                      width: "auto",
+                      height: "auto",
+                      boxShadow: "0px -2px 12px 0px #0000001A",
+                    }}
+                    // arrowClassName="popup-arrow"
+                    className="popup-content"
+                  >
+                    <div className=" flex flex-col gap-2 p-2 pr-4 font-sans text-[14px]">
+                      <div className="flex gap-2 items-center text-black">
+                        <Copy />
+                        Copy
+                      </div>
+                      <div className="flex gap-2 items-center text-black">
+                        <NoPerson className={"w-4 h-4"} />
+                        Share
+                      </div>
+                      <div className="flex gap-2 items-center text-black">
+                        <Download />
+                        Download
+                      </div>
+                      <div className="flex gap-2 items-center text-black">
+                        <Rename />
+                        Rename
+                      </div>
+                      <div className="flex gap-2 items-center text-black">
+                        <Starred className={"w-4 h-4"} />
+                        Starred
+                      </div>
+                      <div className="flex gap-2 items-center text-black whitespace-nowrap">
+                        <Trash className={"w-4 h-4"} />
+                        Move to Trash
+                      </div>
+                    </div>
+                  </Popup>
                 </div>
                 <div className="overflow-hidden   bg-white w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
@@ -376,6 +429,33 @@ function FilesList() {
 
 export default FilesList;
 
+const Copy = () => (
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 15 15"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M6.25 3.75H8.75C10 3.75 10 3.125 10 2.5C10 1.25 9.375 1.25 8.75 1.25H6.25C5.625 1.25 5 1.25 5 2.5C5 3.75 5.625 3.75 6.25 3.75Z"
+      stroke="#292D32"
+      stroke-width="0.7"
+      stroke-miterlimit="10"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M10 2.51245C12.0812 2.62495 13.125 3.3937 13.125 6.24995V9.99995C13.125 12.5 12.5 13.75 9.375 13.75H5.625C2.5 13.75 1.875 12.5 1.875 9.99995V6.24995C1.875 3.39995 2.91875 2.62495 5 2.51245"
+      stroke="#292D32"
+      stroke-width="0.7"
+      stroke-miterlimit="10"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
 const ShortRich = () => (
   <svg
     width="18"
@@ -447,13 +527,14 @@ const Box = () => (
   </svg>
 );
 
-const NoPerson = () => (
+const NoPerson = ({ className }: IconsProps) => (
   <svg
     width="24"
     height="24"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
   >
     <path
       d="M11.4599 13.73C13.0118 13.73 14.2699 12.4719 14.2699 10.92C14.2699 9.36806 13.0118 8.10999 11.4599 8.10999C9.90798 8.10999 8.6499 9.36806 8.6499 10.92C8.6499 12.4719 9.90798 13.73 11.4599 13.73Z"
@@ -586,14 +667,81 @@ const Filter = () => (
   </svg>
 );
 
-const Starred = () => (
+const Rename = () => (
+  <svg
+    width="13"
+    height="13"
+    viewBox="0 0 13 13"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M7.18264 1.94991L2.73556 6.657C2.56764 6.83575 2.40514 7.18783 2.37264 7.43158L2.17223 9.18658C2.10181 9.82033 2.55681 10.2537 3.18514 10.1453L4.92931 9.84741C5.17306 9.80408 5.51431 9.62533 5.68223 9.44116L10.1293 4.73408C10.8985 3.92158 11.2451 2.99533 10.0481 1.86325C8.85639 0.741997 7.95181 1.13741 7.18264 1.94991Z"
+      stroke="#292D32"
+      stroke-width="0.7"
+      stroke-miterlimit="10"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M6.44067 2.73535C6.67359 4.23035 7.88692 5.37327 9.39276 5.52493"
+      stroke="#292D32"
+      stroke-width="0.7"
+      stroke-miterlimit="10"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M1.625 11.9166H11.375"
+      stroke="#292D32"
+      stroke-width="0.7"
+      stroke-miterlimit="10"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
+const Download = () => (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 14 14"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M9.59011 5.19165C11.6901 5.37248 12.5476 6.45165 12.5476 8.81415V8.88998C12.5476 11.4975 11.5034 12.5417 8.89594 12.5417H5.09844C2.49094 12.5417 1.44678 11.4975 1.44678 8.88998V8.81415C1.44678 6.46915 2.29261 5.38998 4.35761 5.19748"
+      stroke="#292D32"
+      stroke-width="0.7"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M7 1.16675V8.68008"
+      stroke="#292D32"
+      stroke-width="0.7"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M8.95399 7.37915L6.99982 9.33332L5.04565 7.37915"
+      stroke="#292D32"
+      stroke-width="0.7"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
+const Starred = ({ className }: IconsProps) => (
   <svg
     width="21"
     height="21"
     viewBox="0 0 21 21"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className="w-[19px] h-[19px]"
+    className={`${className} w-[19px] h-[19px]`}
   >
     <path
       d="M12.1577 2.36366L13.8444 5.73699C14.0744 6.20657 14.6877 6.65699 15.2052 6.74324L18.2623 7.25116C20.2173 7.57699 20.6773 8.99532 19.2685 10.3945L16.8919 12.7712C16.4894 13.1737 16.269 13.9499 16.3935 14.5057L17.074 17.4478C17.6106 19.7766 16.3744 20.6774 14.314 19.4603L11.4485 17.7641C10.931 17.4574 10.0781 17.4574 9.55104 17.7641L6.68562 19.4603C4.63479 20.6774 3.38896 19.767 3.92562 17.4478L4.60604 14.5057C4.73062 13.9499 4.51021 13.1737 4.10771 12.7712L1.73104 10.3945C0.331874 8.99532 0.782291 7.57699 2.73729 7.25116L5.79437 6.74324C6.30229 6.65699 6.91562 6.20657 7.14562 5.73699L8.83229 2.36366C9.75229 0.533241 11.2473 0.533241 12.1577 2.36366Z"

@@ -3,10 +3,10 @@ import { useState } from "react";
 import { Cross, Signout } from "../assets/Icons";
 
 type AccountProps = {
-  close: () => void;
+  setProfile?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function Account({ close }: AccountProps) {
+function Account({ setProfile }: AccountProps) {
   const navigate = useNavigate();
   const [copytext, setCopyText] = useState(false);
 
@@ -25,11 +25,16 @@ function Account({ close }: AccountProps) {
   };
 
   return (
-    <div className="absolute bg-[#EAEEF5] flex flex-col z-20 gap-2 md:gap-9 font-sans text-[#333333] shadow-md shadow-[#00000040] p-4 w-[256px] md:w-[333px] max-h-[358px] md:max-h-[464px] rounded-[16px] md:rounded-[22px] left-[-190px] md:left-[-230px] top-[42px] md:top-[50px]">
+    <div className="absolute bg-[#EAEEF5] flex flex-col z-20 gap-2 md:gap-9 font-sans text-[#333333] shadow-md shadow-[#00000040] p-4 w-[256px] md:w-[333px] max-h-[358px] md:max-h-[464px] rounded-[16px] md:rounded-[22px] left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]">
       <div className="flex justify-end">
-        <button onClick={close}>
+        <span
+          className="cursor-pointer"
+          onClick={() => {
+            setProfile?.((prev) => !prev);
+          }}
+        >
           <Cross className={"w-[12px] h-[14px]"} />
-        </button>
+        </span>
       </div>
       <div className="flex flex-col justify-center items-center gap-2 md:gap-4">
         <div className="w-[110px] h-[110px] relative bg-white rounded-full flex justify-center items-center">
