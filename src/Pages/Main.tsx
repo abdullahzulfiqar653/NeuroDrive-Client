@@ -14,7 +14,7 @@ import {
 import FilesList from "../Components/FilesList";
 
 function Main() {
-  const [isProfile, setProfile] = useState(false);
+  const [isProfile, setProfile] = useState<Boolean>(false);
   const [isLeftBar, setLeftBar] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -35,7 +35,7 @@ function Main() {
     <>
       <div className="flex w-[100vw] bg-[#f6f8fc] h-screen">
         {/* left side bar  */}
-        <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl overflow-hidden flex-[0.2] h-[100vh] desktop-view-table hidden md:flex flex-col justify-between">
+        <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl overflow-hidden flex-[0.2] min-h-[800px] h-[100vh] desktop-view-table hidden md:flex flex-col justify-between">
           <LeftBar />
         </div>
         {/* content main  */}
@@ -84,7 +84,7 @@ function Main() {
                   <Arrow color="#1E1E1E" />
                 </span>
                 {isProfile && (
-                  <Account close={() => setProfile((prev) => !prev)} />
+                  <Account close={() => {setProfile(false)}} />
                 )}
               </div>
             </div>
@@ -188,7 +188,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         </div>
         <Line className={"mt-2"} />
       </div>
-      <div className="flex flex-col items-center gap-2 my-2 h-[30vh] overflow-auto">
+      <div className="flex flex-col items-center gap-2 my-2 h-[30vh] min-h-[280px] overflow-auto">
         <div className="flex items-center justify-between w-full px-2 ">
           <h1 className="flex text-[14px] text-[#9F9F9F] gap-1 items-center">
             <span>
