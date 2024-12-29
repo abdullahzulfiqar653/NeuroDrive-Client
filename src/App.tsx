@@ -1,14 +1,21 @@
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
-import Main from './Pages/Main'
+import Home from './Pages/Home'
+import TextFile from './Pages/TextFile'
+import ShareFile from './Components/ShareFile'
+import { useAuth } from './AuthContext'
+import CreateComponent from './Components/CreateComponent'
 
 function App() {
-
+    const {isOpenComponent} = useAuth();
   return (
     <>
      <Routes>
-       <Route path='/' element={<Main/>}/>
+       <Route path='/' element={<Home/>}/>
+       <Route path='/text-file' element={<TextFile/>}/>
      </Routes>
+    { isOpenComponent.share && <ShareFile/>}
+    { (isOpenComponent.newFolder || isOpenComponent.newExcel || isOpenComponent.newDocs ) && <CreateComponent/>}
     </>
   )
 }

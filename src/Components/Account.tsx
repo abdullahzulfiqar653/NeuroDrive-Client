@@ -1,13 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Cross, Signout } from "../assets/Icons";
+import { useAuth } from "../AuthContext";
 
-type AccountProps = {
-  setProfile?: React.Dispatch<React.SetStateAction<boolean>>;
-};
+interface AccountProps {
+  className: string;
+}
 
-function Account({ setProfile }: AccountProps) {
+function Account({className}:AccountProps) {
   const navigate = useNavigate();
+  const { setIsAccountOpen } = useAuth();
   const [copytext, setCopyText] = useState(false);
 
   const mails = [
@@ -25,16 +27,16 @@ function Account({ setProfile }: AccountProps) {
   };
 
   return (
-    <div className="absolute bg-[#EAEEF5] flex flex-col z-20 gap-2 md:gap-9 font-sans text-[#333333] shadow-md shadow-[#00000040] p-4 w-[256px] md:w-[333px] max-h-[358px] md:max-h-[464px] rounded-[16px] md:rounded-[22px] left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]">
+    <div className={` ${className} absolute bg-[#EAEEF5] flex flex-col z-20 gap-2 md:gap-9 font-sans text-[#333333] shadow-md shadow-[#00000040] p-4 w-[256px] md:w-[333px] max-h-[358px] md:max-h-[464px] rounded-[16px] md:rounded-[22px] left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]`}>
       <div className="flex justify-end">
-        <span
-          className="cursor-pointer"
-          onClick={() => {
-            setProfile?.((prev) => !prev);
+        <button
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent propagation to parent elements
+            setIsAccountOpen((prev) => !prev);
           }}
         >
-          <Cross className={"w-[12px] h-[14px]"} />
-        </span>
+          <Cross className="w-[12px] h-[14px]" />
+        </button>
       </div>
       <div className="flex flex-col justify-center items-center gap-2 md:gap-4">
         <div className="w-[110px] h-[110px] relative bg-white rounded-full flex justify-center items-center">

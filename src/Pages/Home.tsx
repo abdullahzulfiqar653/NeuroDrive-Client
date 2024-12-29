@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import Account from "../Components/Account";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -8,13 +7,16 @@ import {
   Cross,
   Folder,
   IconsProps,
+  Invite,
   Line,
+  SixDots,
   Trash,
 } from "../assets/Icons";
 import FilesList from "../Components/FilesList";
+import { useAuth } from "../AuthContext";
 
-function Main() {
-  const [isProfile, setProfile] = useState(false);
+function Home() {
+  const { isAccountOpen, setIsAccountOpen , toggleComponent} = useAuth();
   const [isLeftBar, setLeftBar] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -33,64 +35,69 @@ function Main() {
 
   return (
     <>
-      <div className="flex w-[100vw] bg-[#f6f8fc] h-screen">
+      <div className="flex w-[100vw] relative bg-[#f6f8fc] h-screen overflow-x-hidden">
         {/* left side bar  */}
         <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl overflow-hidden flex-[0.2] min-h-[800px] h-[100vh] desktop-view-table hidden md:flex flex-col justify-between">
           <LeftBar />
         </div>
         {/* content main  */}
-        <div className="desktop-view-table hidden md:flex flex-col flex-[0.8] items-center max-h-[938px] overflow-auto py-3 ">
+        <div className="desktop-view-table hidden md:flex flex-col flex-[0.8] items-center h-full overflow-auto py-3 ">
           {/* starting bar  */}
-          <div className="w-[96%] h-[68px] py-4 mb-3 px-3 bg-white rounded-[12px] flex justify-between items-center">
+          <div className="w-[96%] h-[10%] min-h-[68px] py-4 mb-3 px-3  bg-white rounded-[12px] flex justify-between items-center">
             <p className="text-[14px] mr-2">All Files</p>
             <div className="relative flex-1 hidden md:block">
               <Search />
               <input
-                className="font-sans w-[400px] h-[36px] pl-9 pr-3 rounded-[4px] outline-none bg-[#6C849D1F]  placeholder:text-[#6C849D52] text-[#6c849d] text-[12px] "
+                className="font-sans min-w-[300px] max-w-[400px] h-[36px] pl-9 pr-3 rounded-[4px] outline-none bg-[#6C849D1F]  placeholder:text-[#6C849D52] text-[#6c849d] text-[12px] "
                 placeholder="Search messages"
               />
             </div>
             <div className="flex gap-4 items-center">
               <div
+                onClick={()=>toggleComponent('share')}
                 style={{
                   background:
                     "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
                   borderImageSource:
                     "linear-gradient(357.47deg, #005EFF 12.36%, rgba(53, 90, 153, 0) 97.89%)",
                 }}
-                className="flex gap-2 w-[139px] h-[42px] rounded-[12px] border borderImage items-center justify-center"
+                className="flex gap-2 cursor-pointer w-[139px] h-[42px] rounded-[12px] border borderImage items-center justify-center"
               >
                 <Invite />
                 <p className="text-[14px] text-[white]">Invite Friends</p>
               </div>
+
               <div className="w-[47px] h-[42px] bg-[#F8FAFC] rounded-[12px] border border-[#BFBFBF57] flex items-center justify-center">
                 <SixDots />
               </div>
 
-              <div
-                onClick={() => setProfile((prev) => !prev)}
-                className="relative flex items-center gap-2 bg-[#F8FAFC] border border-[#BFBFBF57] p-2 h-[42px] rounded-[12px]"
-              >
-                <div className=" h-[35px] w-[35px] rounded-full cursor-pointer  overflow-hidden">
-                  <img
-                    src="https://s3-alpha-sig.figma.com/img/5298/20ef/398885b3c44f2931c974eeab97452589?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gN2NdKafXBlh4NOklHHV1eMk5pPgM~xzInElAs6jU43hBLK1ZqyuFdVoaaAzSzJT35DEQIT702OG~38L5UL9QTt8vQPXaNa3OeRLdVgCdTCbbG6Mkiu~nrG3CdZjQllT4cZvq~pEPeHhdwKuBLJ~dWRP1X~mbGHgXTVIkyXyBkY1XEz8VBFmqnP6cQ7Pg1fl96tzu2PFVIET7I10KKdq3ddZFMFYLrrJcy6nXs8OCNl2qjz5NQt0F9~A6BtdCmPsne-a~xpOt6pJCzsBPz9VmItNEdCfyO17bdhhUQmLiwttWqiveWZ1YFLf4bHEXmjuWO0mhvKQ063l5E0G-YZL6Q__"
-                    className="w-full h-full object-cover "
-                  />
+              <div className="relative ">
+                <div
+                  onClick={() => setIsAccountOpen((prev) => !prev)}
+                  className="flex items-center cursor-pointer gap-2 bg-[#F8FAFC] border border-[#BFBFBF57] p-2 h-[42px] rounded-[12px]"
+                >
+                  <div className=" h-[35px] w-[35px] rounded-full cursor-pointer  overflow-hidden">
+                    <img
+                      src="https://s3-alpha-sig.figma.com/img/5298/20ef/398885b3c44f2931c974eeab97452589?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gN2NdKafXBlh4NOklHHV1eMk5pPgM~xzInElAs6jU43hBLK1ZqyuFdVoaaAzSzJT35DEQIT702OG~38L5UL9QTt8vQPXaNa3OeRLdVgCdTCbbG6Mkiu~nrG3CdZjQllT4cZvq~pEPeHhdwKuBLJ~dWRP1X~mbGHgXTVIkyXyBkY1XEz8VBFmqnP6cQ7Pg1fl96tzu2PFVIET7I10KKdq3ddZFMFYLrrJcy6nXs8OCNl2qjz5NQt0F9~A6BtdCmPsne-a~xpOt6pJCzsBPz9VmItNEdCfyO17bdhhUQmLiwttWqiveWZ1YFLf4bHEXmjuWO0mhvKQ063l5E0G-YZL6Q__"
+                      className="w-full h-full object-cover "
+                    />
+                  </div>
+                  <span className="flex items-center justify-center gap-1">
+                    <p className="text-[#40566D] text-[12px] font-[600] font-sans text-right leading-[18px]">
+                      Kevin
+                    </p>
+                    <Arrow color="#1E1E1E" />
+                  </span>
                 </div>
-                <span className="flex items-center justify-center gap-1">
-                  <p className="text-[#40566D] text-[12px] font-[600] font-sans text-right leading-[18px]">
-                    Kevin
-                  </p>
-                  <Arrow color="#1E1E1E" />
-                </span>
-                {isProfile && <Account setProfile={setProfile} />}
+                {isAccountOpen && <Account className={"left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"}/>}
               </div>
             </div>
           </div>
           <FilesList />
         </div>
+
         <div className="mobile-view-table w-full flex flex-col items-center mt-3 md:hidden">
-          <div className="flex justify-between items-center pl-4 pr-2 w-[92vw] h-[49px] mb-4 rounded-[99px] bg-[white] ">
+          <div className="flex justify-between items-center pl-4 pr-2 w-[92vw] min-h-[49px] mb-4 rounded-[14px] bg-[white] ">
             <div className="flex items-center">
               <span onClick={() => setLeftBar((prev) => !prev)}>
                 <img src="/bar.svg" />
@@ -101,22 +108,22 @@ function Main() {
               <span className="left-[-50px] absolute">
                 <Search className={"w-6 h-6"} />
               </span>
-              <div className="w-[40px] h-[35px] bg-[#F8FAFC] rounded-[12px] border border-[#BFBFBF57] flex items-center justify-center">
+              <div className="w-[37px] h-[33px] md:w-[47px] md:h-[42px] bg-[#F8FAFC] rounded-[8px] md:rounded-[12px] border border-[#BFBFBF57] flex items-center justify-center">
                 <SixDots />
               </div>
               <div
-                onClick={() => setProfile((prev) => !prev)}
+                onClick={() => setIsAccountOpen((prev) => !prev)}
                 className=" h-[35px] w-[35px] rounded-full cursor-pointer overflow-hidden"
               >
                 <img
                   src="https://s3-alpha-sig.figma.com/img/5298/20ef/398885b3c44f2931c974eeab97452589?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gN2NdKafXBlh4NOklHHV1eMk5pPgM~xzInElAs6jU43hBLK1ZqyuFdVoaaAzSzJT35DEQIT702OG~38L5UL9QTt8vQPXaNa3OeRLdVgCdTCbbG6Mkiu~nrG3CdZjQllT4cZvq~pEPeHhdwKuBLJ~dWRP1X~mbGHgXTVIkyXyBkY1XEz8VBFmqnP6cQ7Pg1fl96tzu2PFVIET7I10KKdq3ddZFMFYLrrJcy6nXs8OCNl2qjz5NQt0F9~A6BtdCmPsne-a~xpOt6pJCzsBPz9VmItNEdCfyO17bdhhUQmLiwttWqiveWZ1YFLf4bHEXmjuWO0mhvKQ063l5E0G-YZL6Q__"
                   className="w-full h-full object-cover "
                 />
-                {isProfile && <Account setProfile={setProfile} />}
+                {isAccountOpen && <Account className={"left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"}/>}
               </div>
             </div>
           </div>
-          {/* <EmailList /> */}
+          <FilesList />
         </div>
 
         {isLeftBar && (
@@ -136,17 +143,20 @@ function Main() {
             </section>
           </section>
         )}
+
+        
       </div>
     </>
   );
 }
 
-export default Main;
+export default Home;
 
 type LeftBarProps = {
   setLeftBar?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 function LeftBar({ setLeftBar }: LeftBarProps) {
+   const {toggleComponent}=useAuth();
   return (
     <>
       <div className="flex flex-col justify-center items-start px-2 pt-4 gap-3 w-full">
@@ -195,7 +205,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             </span>
             FOLDERS
           </h1>
-          <span>
+          <span onClick={() => toggleComponent("newFolder")}>
             <Add />
           </span>
         </div>
@@ -264,73 +274,6 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
     </>
   );
 }
-
-const SixDots = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 18 18"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M9 3.08686C9.2767 3.08686 9.54206 2.97692 9.73771 2.78124C9.93336 2.58556 10.0433 2.32016 10.0433 2.04343C10.0433 1.76669 9.93336 1.50129 9.73771 1.30561C9.54206 1.10993 9.2767 1 9 1C8.72331 1 8.45794 1.10993 8.26229 1.30561C8.06664 1.50129 7.95672 1.76669 7.95672 2.04343C7.95672 2.32016 8.06664 2.58556 8.26229 2.78124C8.45794 2.97692 8.72331 3.08686 9 3.08686ZM15.9567 3.08686C16.0937 3.08686 16.2294 3.05987 16.356 3.00743C16.4825 2.95499 16.5976 2.87814 16.6944 2.78124C16.7913 2.68435 16.8682 2.56933 16.9206 2.44273C16.973 2.31614 17 2.18045 17 2.04343C17 1.9064 16.973 1.77072 16.9206 1.64413C16.8682 1.51753 16.7913 1.4025 16.6944 1.30561C16.5976 1.20872 16.4825 1.13186 16.356 1.07943C16.2294 1.02699 16.0937 1 15.9567 1C15.68 1 15.4147 1.10993 15.219 1.30561C15.0234 1.50129 14.9134 1.76669 14.9134 2.04343C14.9134 2.32016 15.0234 2.58556 15.219 2.78124C15.4147 2.97692 15.68 3.08686 15.9567 3.08686ZM2.04328 3.08686C2.18029 3.08686 2.31595 3.05987 2.44253 3.00743C2.5691 2.95499 2.68411 2.87814 2.78099 2.78124C2.87787 2.68435 2.95471 2.56933 3.00714 2.44273C3.05957 2.31614 3.08656 2.18045 3.08656 2.04343C3.08656 1.9064 3.05957 1.77072 3.00714 1.64413C2.95471 1.51753 2.87787 1.4025 2.78099 1.30561C2.68411 1.20872 2.5691 1.13186 2.44253 1.07943C2.31595 1.02699 2.18029 1 2.04328 1C1.76658 1 1.50122 1.10993 1.30557 1.30561C1.10992 1.50129 1 1.76669 1 2.04343C1 2.32016 1.10992 2.58556 1.30557 2.78124C1.50122 2.97692 1.76658 3.08686 2.04328 3.08686ZM9 10.0434C9.2767 10.0434 9.54206 9.9335 9.73771 9.73782C9.93336 9.54214 10.0433 9.27673 10.0433 9C10.0433 8.72327 9.93336 8.45787 9.73771 8.26218C9.54206 8.0665 9.2767 7.95657 9 7.95657C8.72331 7.95657 8.45794 8.0665 8.26229 8.26218C8.06664 8.45787 7.95672 8.72327 7.95672 9C7.95672 9.27673 8.06664 9.54214 8.26229 9.73782C8.45794 9.9335 8.72331 10.0434 9 10.0434ZM15.9567 10.0434C16.2334 10.0434 16.4988 9.9335 16.6944 9.73782C16.8901 9.54214 17 9.27673 17 9C17 8.72327 16.8901 8.45787 16.6944 8.26218C16.4988 8.0665 16.2334 7.95657 15.9567 7.95657C15.68 7.95657 15.4147 8.0665 15.219 8.26218C15.0234 8.45787 14.9134 8.72327 14.9134 9C14.9134 9.27673 15.0234 9.54214 15.219 9.73782C15.4147 9.9335 15.68 10.0434 15.9567 10.0434ZM2.04328 10.0434C2.31997 10.0434 2.58534 9.9335 2.78099 9.73782C2.97664 9.54214 3.08656 9.27673 3.08656 9C3.08656 8.72327 2.97664 8.45787 2.78099 8.26218C2.58534 8.0665 2.31997 7.95657 2.04328 7.95657C1.76658 7.95657 1.50122 8.0665 1.30557 8.26218C1.10992 8.45787 1 8.72327 1 9C1 9.27673 1.10992 9.54214 1.30557 9.73782C1.50122 9.9335 1.76658 10.0434 2.04328 10.0434ZM9 17C9.2767 17 9.54206 16.8901 9.73771 16.6944C9.93336 16.4987 10.0433 16.2333 10.0433 15.9566C10.0433 15.6798 9.93336 15.4144 9.73771 15.2188C9.54206 15.0231 9.2767 14.9131 9 14.9131C8.72331 14.9131 8.45794 15.0231 8.26229 15.2188C8.06664 15.4144 7.95672 15.6798 7.95672 15.9566C7.95672 16.2333 8.06664 16.4987 8.26229 16.6944C8.45794 16.8901 8.72331 17 9 17ZM15.9567 17C16.2334 17 16.4988 16.8901 16.6944 16.6944C16.8901 16.4987 17 16.2333 17 15.9566C17 15.6798 16.8901 15.4144 16.6944 15.2188C16.4988 15.0231 16.2334 14.9131 15.9567 14.9131C15.68 14.9131 15.4147 15.0231 15.219 15.2188C15.0234 15.4144 14.9134 15.6798 14.9134 15.9566C14.9134 16.2333 15.0234 16.4987 15.219 16.6944C15.4147 16.8901 15.68 17 15.9567 17ZM2.04328 17C2.31997 17 2.58534 16.8901 2.78099 16.6944C2.97664 16.4987 3.08656 16.2333 3.08656 15.9566C3.08656 15.6798 2.97664 15.4144 2.78099 15.2188C2.58534 15.0231 2.31997 14.9131 2.04328 14.9131C1.76658 14.9131 1.50122 15.0231 1.30557 15.2188C1.10992 15.4144 1 15.6798 1 15.9566C1 16.2333 1.10992 16.4987 1.30557 16.6944C1.50122 16.8901 1.76658 17 2.04328 17Z"
-      stroke="black"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-);
-
-const Invite = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M11.4599 13.73C13.0118 13.73 14.2699 12.4719 14.2699 10.92C14.2699 9.36806 13.0118 8.10999 11.4599 8.10999C9.90798 8.10999 8.6499 9.36806 8.6499 10.92C8.6499 12.4719 9.90798 13.73 11.4599 13.73Z"
-      stroke="white"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M16.65 20.2C16.65 17.87 14.33 15.97 11.46 15.97C8.59002 15.97 6.27002 17.86 6.27002 20.2"
-      stroke="white"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M21 12.5C21 17.75 16.75 22 11.5 22C6.25 22 2 17.75 2 12.5C2 7.25 6.25 3 11.5 3C12.81 3 14.06 3.25999 15.2 3.73999C15.07 4.13999 15 4.56 15 5C15 5.75 15.21 6.46 15.58 7.06C15.78 7.4 16.04 7.70997 16.34 7.96997C17.04 8.60997 17.97 9 19 9C19.44 9 19.86 8.92998 20.25 8.78998C20.73 9.92998 21 11.19 21 12.5Z"
-      stroke="white"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M23 5C23 5.32 22.96 5.62999 22.88 5.92999C22.79 6.32999 22.63 6.72 22.42 7.06C21.94 7.87 21.17 8.49998 20.25 8.78998C19.86 8.92998 19.44 9 19 9C17.97 9 17.04 8.60997 16.34 7.96997C16.04 7.70997 15.78 7.4 15.58 7.06C15.21 6.46 15 5.75 15 5C15 4.56 15.07 4.13999 15.2 3.73999C15.39 3.15999 15.71 2.64002 16.13 2.21002C16.86 1.46002 17.88 1 19 1C20.18 1 21.25 1.51002 21.97 2.33002C22.61 3.04002 23 3.98 23 5Z"
-      stroke="white"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M20.49 4.97998H17.51"
-      stroke="white"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M19 3.52002V6.51001"
-      stroke="white"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-);
 
 const Search = ({ className }: IconsProps) => (
   <svg

@@ -1,10 +1,19 @@
 import { useState } from "react";
-import { Folders, Gallery, IconsProps, Trash, Xcel } from "../assets/Icons";
+import {
+  Add,
+  Download,
+  Folders,
+  Gallery,
+  IconsProps,
+  Trash,
+  Xcel,
+} from "../assets/Icons";
 import Popup from "reactjs-popup";
+import { useAuth } from "../AuthContext";
 
 function FilesList() {
   const [isOpen, seIsOpen] = useState(false);
-  //   const [iconClick, setIconClick] = useState(false);
+  const { toggleComponent } = useAuth();
   const [radioClick, setRadioClick] = useState(false);
   const data = [
     { PersonName: "", name: "John Doe", size: "3.0 GB" },
@@ -14,64 +23,87 @@ function FilesList() {
     { PersonName: "", name: "Sarah Lee", size: "3.0 GB" },
   ];
   return (
-    <div className="flex flex-col items-center w-[96%]">
+    <div className="flex flex-col items-center h-full w-[96%]">
       <div className="flex flex-col items-center gap-4 w-[96%]">
-        <p className="text-[22px] text-start w-[96%] my-2">
-          Create New Document
-        </p>
+        <div className="flex flex-row items-center justify-between gap-4 w-[96%]">
+          <p className="text-[16px] md:text-[22px] text-start w-[96%] my-2">
+            Create New Document
+          </p>
+          <button
+            style={{
+              background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
+              borderImageSource:
+                "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)",
+            }}
+            className="w-[79px] h-[31px] rounded-lg flex gap-1 items-center justify-center md:hidden text-white font-sans text-[10px]"
+          >
+            <Add className={"w-4 h-4 mb-1"} color={"white"} /> Upload
+          </button>
+        </div>
         <div className="flex gap-4 items-start  justify-start w-[96%]">
           <div
+            onClick={() => toggleComponent("newExcel")}
             style={{
               borderImageSource:
                 "linear-gradient(180deg, #B325FC 0%, #8C44FD 45%, #6860FE 100%)",
             }}
-            className="w-[203px] h-[231px] rounded-[32px] bg-[white] overflow-hidden border flex flex-col items-center justify-between"
+            className="w-[109px] h-[124px] md:w-[203px] md:h-[231px] rounded-[16px] md:rounded-[32px] bg-[white] overflow-hidden border flex flex-col items-center justify-between"
           >
             <span className="h-[75%] w-full flex justify-center items-center">
-              <Xcel />
+              <Xcel className={"w-[32px] h-[41px] md:w-[61px] md:h-[77px]"} />
             </span>
-            <p className="h-[25%] w-full flex justify-center items-center object-cover overflow-hidden bg-[#F1F5FA] ">
+            <p className="h-[25%] text-[12px] md:text-[20px] font-sans w-full flex justify-center items-center object-cover overflow-hidden bg-[#F1F5FA] ">
               Sheets
             </p>
           </div>
           <div
+            onClick={() => toggleComponent("newDocs")}
             style={{
               borderImageSource:
                 "linear-gradient(180deg, #B325FC 0%, #8C44FD 45%, #6860FE 100%)",
             }}
-            className="w-[203px] h-[231px] rounded-[32px] bg-[white] overflow-hidden border flex flex-col items-center justify-between"
+            className="w-[109px] h-[124px] md:w-[203px] md:h-[231px] rounded-[16px] md:rounded-[32px]  bg-[white] overflow-hidden border flex flex-col items-center justify-between"
           >
             <span className="h-[75%] w-full flex justify-center items-center">
-              <img src="/rich.png" />
+              <img
+                src="/rich.png"
+                className={"w-[41px] h-[41px] md:w-[77px] md:h-[77px]"}
+              />
             </span>
-            <p className="h-[25%] w-full flex justify-center items-center object-cover overflow-hidden bg-[#F1F5FA] ">
+            <p className="h-[25%] text-[12px] md:text-[20px] font-sans  w-full flex justify-center items-center object-cover overflow-hidden bg-[#F1F5FA] ">
               Rich Text
             </p>
           </div>
           <div
+            onClick={() => toggleComponent("newFolder")}
             style={{
               borderImageSource:
                 "linear-gradient(180deg, #B325FC 0%, #8C44FD 45%, #6860FE 100%)",
             }}
-            className="w-[203px] h-[231px] rounded-[32px] bg-[white] overflow-hidden border flex flex-col items-center justify-between"
+            className="w-[109px] h-[124px] md:w-[203px] md:h-[231px] rounded-[16px] md:rounded-[32px] bg-[white] overflow-hidden border flex flex-col items-center justify-between"
           >
             <span className="h-[75%] w-full flex justify-center items-center">
-              <Folders />
+              <img
+                src="/folders.png"
+                className={"w-[44px] h-[41px] md:w-[83px] md:h-[77px]"}
+              />
             </span>
-            <p className="h-[25%] w-full flex justify-center items-center object-cover overflow-hidden bg-[#F1F5FA] ">
+            <p className="h-[25%] text-[12px] md:text-[20px] font-sans w-full flex justify-center items-center object-cover overflow-hidden bg-[#F1F5FA] ">
               Folder
             </p>
           </div>
         </div>
       </div>
       <div className="flex flex-col items-center gap-4 mt-8 w-[96%]">
-        <p className="text-[22px] text-start w-[96%]">All Files</p>
+        <p className="text-[16px] md:text-[22px] text-start w-[96%]">
+          All Files
+        </p>
         <div className="flex gap-2 justify-between items-center w-[96%]">
           <div className="flex gap-2 items-start">
-            <button className="flex items-center justify-start pl-3 gap-2  w-[107px] h-[42px] text-[12px] bg-white rounded-xl border border-[#BFBFBF57]">
+            <button className="flex items-center justify-start  pl-2 md:pl-3 gap-1 md:gap-2  w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl font-sans border border-[#BFBFBF57]">
               <Recent /> Recent
             </button>
-            <button className="flex items-center justify-start pl-3 gap-2 w-[107px] h-[42px] text-[12px] bg-white rounded-xl border border-[#BFBFBF57]">
+            <button className="flex items-center justify-start pl-2 md:pl-3 gap-1 md:gap-2 w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl  font-sans border border-[#BFBFBF57]">
               <Starred /> Starred
             </button>
           </div>
@@ -85,22 +117,24 @@ function FilesList() {
                 <List />
               </span>
             )}
-            <button className="flex items-center justify-start pl-3 gap-2 w-[107px] h-[42px] text-[12px] bg-white rounded-xl border border-[#BFBFBF57]">
+            <button className="flex items-center justify-start pl-2 md:pl-3 gap-1 md:gap-2 w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl font-sans border border-[#BFBFBF57]">
               <Filter /> Filter
             </button>
           </div>
         </div>
-        <div className="h-full w-[96%]">
+        <div className="h-full w-[100%] md:w-[96%]">
           {isOpen ? (
-            <div className="flex flex-wrap gap-4 my-4">
-              <div className="min-w-[207px] h-[213px] flex flex-col ">
-                <div className="flex items-center justify-center h-[80%]  bg-white rounded-[32px]">
-                  <Xcel />
+            <div className="flex flex-wrap justify-center gap-2 md:gap-4 my-2 md:my-4">
+              <div className="w-[109px] h-[117px] md:w-[207px] md:h-[213px] flex flex-col ">
+                <div className="flex items-center justify-center h-[80%]  bg-white rounded-[16px] md:rounded-[32px]">
+                  <Xcel
+                    className={"w-[32px] h-[41px] md:w-[61px] md:h-[77px]"}
+                  />
                 </div>
                 <div className="flex items-center justify-between mt-1 px-2">
                   <div className="flex items-center gap-2">
                     <ShortXcel />
-                    <p className="text-[12px] flex flex-col">
+                    <p className="text-[10px] md:text-[12px] font-sans flex flex-col">
                       <span>Sheets</span>
                       <span className="text-[#00000069]">xls . 1h ago</span>
                     </p>
@@ -110,14 +144,17 @@ function FilesList() {
                   </span>
                 </div>
               </div>
-              <div className="min-w-[207px] h-[213px] flex flex-col ">
-                <div className="flex items-center justify-center h-[80%]  bg-white rounded-[32px]">
-                  <img src="/rich.png" />
+              <div className="w-[109px] h-[117px] md:w-[207px] md:h-[213px] flex flex-col ">
+                <div className="flex items-center justify-center h-[80%]  bg-white rounded-[16px] md:rounded-[32px]">
+                  <img
+                    src="/rich.png"
+                    className={"w-[40px] h-[40px] md:w-[77px] md:h-[77px]"}
+                  />
                 </div>
                 <div className="flex items-center justify-between mt-1 px-2">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 md:gap-2">
                     <ShortRich />
-                    <p className="text-[12px] flex flex-col">
+                    <p className="text-[10px] md:text-[12px] font-sans flex flex-col">
                       <span>Workspace</span>
                       <span className="text-[#00000069]">docs . 1h ago</span>
                     </p>
@@ -127,14 +164,17 @@ function FilesList() {
                   </span>
                 </div>
               </div>
-              <div className="min-w-[207px] h-[213px] flex flex-col">
-                <div className="flex items-center justify-center h-[80%]  bg-white rounded-[32px]">
-                  <img src="/pic.png" />
+              <div className="w-[109px] h-[117px] md:w-[207px] md:h-[213px] flex flex-col">
+                <div className="flex items-center justify-center h-[80%]  bg-white rounded-[16px] md:rounded-[32px]">
+                  <img
+                    src="/pic.png"
+                    className={"w-[52px] h-[47px] md:w-[99px] md:h-[90px]"}
+                  />
                 </div>
                 <div className="flex items-center justify-between mt-1 px-2">
-                  <div className="flex items-center gap-2">
-                    <Gallery className={"w-4 h-4"} />
-                    <p className="text-[12px] flex flex-col">
+                  <div className="flex items-center gap-1 md:gap-2">
+                    <Gallery className={"w-3 h-3 md:w-4 md:h-4"} />
+                    <p className="text-[10px] md:text-[12px] font-sans flex flex-col">
                       <span>Butterfly </span>
                       <span className="text-[#00000069]">png . 1h ago</span>
                     </p>
@@ -144,14 +184,16 @@ function FilesList() {
                   </span>
                 </div>
               </div>
-              <div className="min-w-[207px] h-[213px] flex flex-col ">
-                <div className="flex items-center justify-center h-[80%]  bg-white rounded-[32px]">
-                  <Xcel />
+              <div className="w-[109px] h-[117px] md:w-[207px] md:h-[213px] flex flex-col ">
+                <div className="flex items-center justify-center h-[80%]  bg-white rounded-[16px] md:rounded-[32px]">
+                  <Xcel
+                    className={"w-[32px] h-[41px] md:w-[61px] md:h-[77px]"}
+                  />
                 </div>
                 <div className="flex items-center justify-between mt-1 px-2">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 md:gap-2">
                     <ShortXcel />
-                    <p className="text-[12px] flex flex-col">
+                    <p className="text-[10px] md:text-[12px] font-sans flex flex-col">
                       <span>Sheets</span>
                       <span className="text-[#00000069]">xls . 1h ago</span>
                     </p>
@@ -162,14 +204,16 @@ function FilesList() {
                 </div>
               </div>
 
-              <div className="min-w-[207px] h-[213px] flex flex-col ">
-                <div className="flex items-center justify-center h-[80%]  bg-white rounded-[32px]">
-                  <Xcel />
+              <div className="w-[109px] h-[117px] md:w-[207px] md:h-[213px] flex flex-col ">
+                <div className="flex items-center justify-center h-[80%]  bg-white rounded-[16px] md:rounded-[32px]">
+                  <Xcel
+                    className={"w-[32px] h-[41px] md:w-[61px] md:h-[77px]"}
+                  />
                 </div>
                 <div className="flex items-center justify-between mt-1 px-2">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 md:gap-2">
                     <ShortXcel />
-                    <p className="text-[12px] flex flex-col">
+                    <p className="text-[10px] md:text-[12px] font-sans flex flex-col">
                       <span>Sheets</span>
                       <span className="text-[#00000069]">xls . 1h ago</span>
                     </p>
@@ -179,14 +223,16 @@ function FilesList() {
                   </span>
                 </div>
               </div>
-              <div className="min-w-[207px] h-[213px] flex flex-col ">
-                <div className="flex items-center justify-center h-[80%]  bg-white rounded-[32px]">
-                  <Xcel />
+              <div className="w-[109px] h-[117px] md:w-[207px] md:h-[213px] flex flex-col ">
+                <div className="flex items-center justify-center h-[80%]  bg-white rounded-[16px] md:rounded-[32px]">
+                  <Xcel
+                    className={"w-[32px] h-[41px] md:w-[61px] md:h-[77px]"}
+                  />
                 </div>
                 <div className="flex items-center justify-between mt-1 px-2">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 md:gap-2">
                     <ShortXcel />
-                    <p className="text-[12px] flex flex-col">
+                    <p className="text-[10px] md:text-[12px] font-sans flex flex-col">
                       <span>Sheets</span>
                       <span className="text-[#00000069]">xls . 1h ago</span>
                     </p>
@@ -196,14 +242,17 @@ function FilesList() {
                   </span>
                 </div>
               </div>
-              <div className="min-w-[207px] h-[213px] flex flex-col ">
-                <div className="flex items-center justify-center h-[80%]  bg-white rounded-[32px]">
-                  <img src="/rich.png" />
+              <div className="w-[109px] h-[117px] md:w-[207px] md:h-[213px] flex flex-col ">
+                <div className="flex items-center justify-center h-[80%]  bg-white rounded-[16px] md:rounded-[32px]">
+                  <img
+                    src="/rich.png"
+                    className={"w-[41px] h-[41px] md:w-[77px] md:h-[77px]"}
+                  />
                 </div>
                 <div className="flex items-center justify-between mt-1 px-2">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 md:gap-2">
                     <ShortRich />
-                    <p className="text-[12px] flex flex-col">
+                    <p className="text-[10px] md:text-[12px] font-sans flex flex-col">
                       <span>Workspace</span>
                       <span className="text-[#00000069]">docs . 1h ago</span>
                     </p>
@@ -213,14 +262,17 @@ function FilesList() {
                   </span>
                 </div>
               </div>
-              <div className="min-w-[207px] h-[213px] flex flex-col">
-                <div className="flex items-center justify-center h-[80%]  bg-white rounded-[32px]">
-                  <img src="/pic.png" />
+              <div className="w-[109px] h-[117px] md:w-[207px] md:h-[213px] flex flex-col">
+                <div className="flex items-center justify-center h-[80%]  bg-white rounded-[16px] md:rounded-[32px]">
+                  <img
+                    src="/pic.png"
+                    className={"w-[52px] h-[47px] md:w-[99px] md:h-[90px]"}
+                  />
                 </div>
                 <div className="flex items-center justify-between mt-1 px-2">
-                  <div className="flex items-center gap-2">
-                    <Gallery className={"w-4 h-4"} />
-                    <p className="text-[12px] flex flex-col">
+                  <div className="flex items-center gap-1 md:gap-2">
+                    <Gallery className={"w-3 h-3 md:w-4 md:h-4"} />
+                    <p className="text-[10px] md:text-[12px] font-sans flex flex-col">
                       <span>Butterfly </span>
                       <span className="text-[#00000069]">png . 1h ago</span>
                     </p>
@@ -232,7 +284,7 @@ function FilesList() {
               </div>
             </div>
           ) : (
-            <div className="container rounded-xl border w-full h-full my-4">
+            <div className="container md:rounded-xl  md:border w-full h-full my-4">
               {/* <table className="min-w-full table-auto border-collapse ">
               <thead className="bg-[#F1F5FA] rounded-xl">
                 <tr>
@@ -267,7 +319,7 @@ function FilesList() {
                 ))}
               </tbody>
             </table> */}
-              <div className="h-full rounded-xl bg-[#F1F5FA] w-[full] flex flex-col ">
+              <div className="h-full rounded-xl bg-[#F1F5FA] w-[full] hidden md:flex flex-col ">
                 <div className="overflow-hidden rounded-xl  bg-[#F1F5FA] w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
                   <p className="border w-[30%] gap-2 h-full flex items-center justify-start px-4">
                     <span
@@ -408,7 +460,8 @@ function FilesList() {
                     >
                       <Circle color={radioClick ? "#2676ff" : "none"} />
                     </span>
-                    <Gallery className={"w-4 h-4"} /> Design &Campign.xls
+                    <Gallery className={"w-3 h-3 md:w-4 md:h-4"} /> Design
+                    &Campign.xls
                   </p>
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
                     <img src="per1.png" alt="" /> Roanldo
@@ -438,6 +491,72 @@ function FilesList() {
                   </p>
                   <p className="border w-[10%] h-full flex items-center justify-start px-4">
                     <ThreeDots />
+                  </p>
+                </div>
+              </div>
+              <div className="w-full h-[74px] my-2  rounded-tl-[12px] rounded-tr-[12px] bg-[#FFFFFF] md:hidden flex flex-col items-center">
+                <div className="h-[50%] w-full bg-[#F1F5FA] rounded-tl-[12px] rounded-tr-[12px] px-2 pr-4 flex justify-between items-center">
+                  <p className="flex items-center font-sans text-[10px]">
+                    <span
+                      onClick={() => setRadioClick((prev) => !prev)}
+                      className="w-auto text-start mr-4 cursor-pointer"
+                    >
+                      <Circle color={radioClick ? "#2676ff" : "none"} />
+                    </span>
+                    <Xcel className={"w-4 h-5 mr-1"} /> Design &Campign.xls
+                  </p>
+                  <ThreeDots />
+                </div>
+                <div className="h-[50%] w-[85%] flex justify-between items-center">
+                <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
+                    <NoPerson className={"w-[20px] h-[20px]"}/> _
+                  </p>
+                  <p className=" w-[50%] text-[10px] font-sans h-full flex items-center justify-end px-4">
+                  File size: 3.0 GB
+                  </p>
+                </div>
+              </div>
+              <div className="w-full h-[74px] my-2  rounded-tl-[12px] rounded-tr-[12px] bg-[#FFFFFF] md:hidden flex flex-col items-center">
+                <div className="h-[50%] w-full bg-[#F1F5FA] rounded-tl-[12px] rounded-tr-[12px] px-2 pr-4 flex justify-between items-center">
+                  <p className="flex items-center font-sans text-[10px]">
+                    <span
+                      onClick={() => setRadioClick((prev) => !prev)}
+                      className="w-auto text-start mr-4 cursor-pointer"
+                    >
+                      <Circle color={radioClick ? "#2676ff" : "none"} />
+                    </span>
+                    <Xcel className={"w-4 h-5 mr-1"} /> Design &Campign.xls
+                  </p>
+                  <ThreeDots />
+                </div>
+                <div className="h-[50%] w-[85%] flex justify-between items-center">
+                <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
+                    <NoPerson className={"w-[20px] h-[20px]"}/> _
+                  </p>
+                  <p className=" w-[50%] text-[10px] font-sans h-full flex items-center justify-end px-4">
+                  File size: 3.0 GB
+                  </p>
+                </div>
+              </div>
+              <div className="w-full h-[74px] my-2  rounded-tl-[12px] rounded-tr-[12px]  bg-[#FFFFFF] md:hidden flex flex-col items-center">
+                <div className="h-[50%] w-full bg-[#F1F5FA] rounded-tl-[12px] rounded-tr-[12px] px-2 pr-4 flex justify-between items-center">
+                  <p className="flex items-center font-sans text-[10px]">
+                    <span
+                      onClick={() => setRadioClick((prev) => !prev)}
+                      className="w-auto text-start mr-4 cursor-pointer"
+                    >
+                      <Circle color={radioClick ? "#2676ff" : "none"} />
+                    </span>
+                    <Xcel className={"w-4 h-5 mr-1"} /> Design &Campign.xls
+                  </p>
+                  <ThreeDots />
+                </div>
+                <div className="h-[50%] w-[85%] flex justify-between items-center">
+                <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
+                    <NoPerson className={"w-[20px] h-[20px]"}/> _
+                  </p>
+                  <p className=" w-[50%] text-[10px] font-sans h-full flex items-center justify-end px-4">
+                  File size: 3.0 GB
                   </p>
                 </div>
               </div>
@@ -485,6 +604,7 @@ const ShortRich = () => (
     viewBox="0 0 18 20"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className="w-[12px] h-[12px] md:w-[18px] md:h-[20px]"
   >
     <path
       d="M6.64977 0C5.60977 0 4.75977 0.84 4.75977 1.88V2.82C4.75977 3.86 5.59977 4.7 6.63977 4.7H11.3498C12.3898 4.7 13.2298 3.86 13.2298 2.82V1.88C13.2398 0.84 12.3898 0 11.3498 0H6.64977Z"
@@ -506,6 +626,7 @@ const ShortXcel = () => (
     viewBox="0 0 18 20"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className="w-[12px] h-[12px] md:w-[18px] md:h-[20px]"
   >
     <path
       d="M6.64977 0C5.60977 0 4.75977 0.84 4.75977 1.88V2.82C4.75977 3.86 5.59977 4.7 6.63977 4.7H11.3498C12.3898 4.7 13.2298 3.86 13.2298 2.82V1.88C13.2398 0.84 12.3898 0 11.3498 0H6.64977Z"
@@ -527,6 +648,7 @@ const Box = () => (
     viewBox="0 0 21 21"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className="w-[15px] h-[15px] md:h-[21px] md:w-[21px]"
   >
     <path
       d="M7.875 19.25H13.125C17.5 19.25 19.25 17.5 19.25 13.125V7.875C19.25 3.5 17.5 1.75 13.125 1.75H7.875C3.5 1.75 1.75 3.5 1.75 7.875V13.125C1.75 17.5 3.5 19.25 7.875 19.25Z"
@@ -607,6 +729,7 @@ const ThreeDots = () => (
     viewBox="0 0 4 18"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className="w-[10px] h-[12px] md:w-[18px] md:h-[18px]"
   >
     <path
       d="M2 17C2.26522 17 2.51957 16.8946 2.70711 16.7071C2.89464 16.5196 3 16.2652 3 16C3 15.7348 2.89464 15.4804 2.70711 15.2929C2.51957 15.1054 2.26522 15 2 15C1.73478 15 1.48043 15.1054 1.29289 15.2929C1.10536 15.4804 1 15.7348 1 16C1 16.2652 1.10536 16.5196 1.29289 16.7071C1.48043 16.8946 1.73478 17 2 17ZM2 10C2.26522 10 2.51957 9.89464 2.70711 9.70711C2.89464 9.51957 3 9.26522 3 9C3 8.73478 2.89464 8.48043 2.70711 8.29289C2.51957 8.10536 2.26522 8 2 8C1.73478 8 1.48043 8.10536 1.29289 8.29289C1.10536 8.48043 1 8.73478 1 9C1 9.26522 1.10536 9.51957 1.29289 9.70711C1.48043 9.89464 1.73478 10 2 10ZM2 3C2.26522 3 2.51957 2.89464 2.70711 2.70711C2.89464 2.51957 3 2.26522 3 2C3 1.73478 2.89464 1.48043 2.70711 1.29289C2.51957 1.10536 2.26522 1 2 1C1.73478 1 1.48043 1.10536 1.29289 1.29289C1.10536 1.48043 1 1.73478 1 2C1 2.26522 1.10536 2.51957 1.29289 2.70711C1.48043 2.89464 1.73478 3 2 3Z"
@@ -624,6 +747,7 @@ const Circle = ({ color }: IconsProps) => (
     viewBox="0 0 21 21"
     fill={color}
     xmlns="http://www.w3.org/2000/svg"
+    className="w-[16px] h-[16px] md:w-[21px] md:h-[21px]"
   >
     <circle cx="10.5" cy="10.5" r="10" stroke="#343434" stroke-opacity="0.34" />
   </svg>
@@ -636,6 +760,7 @@ const List = () => (
     viewBox="0 0 18 18"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className="w-[16px] h-[16px] md:h-[18px] md:w-[18px]"
   >
     <path
       d="M16.5 6.39V2.985C16.5 1.9275 16.02 1.5 14.8275 1.5H11.7975C10.605 1.5 10.125 1.9275 10.125 2.985V6.3825C10.125 7.4475 10.605 7.8675 11.7975 7.8675H14.8275C16.02 7.875 16.5 7.4475 16.5 6.39Z"
@@ -671,6 +796,7 @@ const Filter = () => (
     viewBox="0 0 23 23"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className="w-[12px] h-[14px] md:h-[23px] md:w-[23px]"
   >
     <path
       d="M5.17497 2.01257H17.825C18.8791 2.01257 19.7416 2.87507 19.7416 3.92924V6.03757C19.7416 6.80424 19.2625 7.76257 18.7833 8.24174L14.6625 11.8834C14.0875 12.3626 13.7041 13.3209 13.7041 14.0876V18.2084C13.7041 18.7834 13.3208 19.5501 12.8416 19.8376L11.5 20.7001C10.2541 21.4667 8.52913 20.6042 8.52913 19.0709V13.9917C8.52913 13.3209 8.1458 12.4584 7.76247 11.9792L4.1208 8.14591C3.64163 7.66674 3.2583 6.80424 3.2583 6.22924V4.02507C3.2583 2.87507 4.1208 2.01257 5.17497 2.01257Z"
@@ -724,38 +850,6 @@ const Rename = () => (
   </svg>
 );
 
-const Download = () => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 14 14"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M9.59011 5.19165C11.6901 5.37248 12.5476 6.45165 12.5476 8.81415V8.88998C12.5476 11.4975 11.5034 12.5417 8.89594 12.5417H5.09844C2.49094 12.5417 1.44678 11.4975 1.44678 8.88998V8.81415C1.44678 6.46915 2.29261 5.38998 4.35761 5.19748"
-      stroke="#292D32"
-      stroke-width="0.7"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M7 1.16675V8.68008"
-      stroke="#292D32"
-      stroke-width="0.7"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M8.95399 7.37915L6.99982 9.33332L5.04565 7.37915"
-      stroke="#292D32"
-      stroke-width="0.7"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-);
-
 const Starred = ({ className }: IconsProps) => (
   <svg
     width="21"
@@ -763,7 +857,7 @@ const Starred = ({ className }: IconsProps) => (
     viewBox="0 0 21 21"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={`${className} w-[19px] h-[19px]`}
+    className={`${className} w-[12px] h-[12px] md:w-[19px] md:h-[19px]`}
   >
     <path
       d="M12.1577 2.36366L13.8444 5.73699C14.0744 6.20657 14.6877 6.65699 15.2052 6.74324L18.2623 7.25116C20.2173 7.57699 20.6773 8.99532 19.2685 10.3945L16.8919 12.7712C16.4894 13.1737 16.269 13.9499 16.3935 14.5057L17.074 17.4478C17.6106 19.7766 16.3744 20.6774 14.314 19.4603L11.4485 17.7641C10.931 17.4574 10.0781 17.4574 9.55104 17.7641L6.68562 19.4603C4.63479 20.6774 3.38896 19.767 3.92562 17.4478L4.60604 14.5057C4.73062 13.9499 4.51021 13.1737 4.10771 12.7712L1.73104 10.3945C0.331874 8.99532 0.782291 7.57699 2.73729 7.25116L5.79437 6.74324C6.30229 6.65699 6.91562 6.20657 7.14562 5.73699L8.83229 2.36366C9.75229 0.533241 11.2473 0.533241 12.1577 2.36366Z"
@@ -781,7 +875,7 @@ const Recent = () => (
     viewBox="0 0 22 22"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className="w-[19px] h-[19px]"
+    className="w-[14px] h-[14px] md:w-[19px] md:h-[19px]"
   >
     <path
       d="M20.1666 11C20.1666 16.06 16.0599 20.1667 10.9999 20.1667C5.93992 20.1667 1.83325 16.06 1.83325 11C1.83325 5.94004 5.93992 1.83337 10.9999 1.83337C16.0599 1.83337 20.1666 5.94004 20.1666 11Z"
