@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
 type OpenComponentsState = {
-  [key: string]: boolean;
+  [key: string]: boolean | null; 
 };
 
 // Define types for AuthContext

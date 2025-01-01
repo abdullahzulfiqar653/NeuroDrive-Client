@@ -1,11 +1,41 @@
+import { useState, useEffect } from "react";
 import { Arrow, Download, Invite, Print, SixDots } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
 import Account from "../Components/Account";
+import { DocumentEditorContainerComponent, Toolbar } from '@syncfusion/ej2-react-documenteditor';
+import { SpreadsheetComponent } from '@syncfusion/ej2-react-spreadsheet';
+import { useLocation } from 'react-router-dom';
+
+DocumentEditorContainerComponent.Inject(Toolbar);
 
 function TextFile() {
-  const { isAccountOpen, setIsAccountOpen,toggleComponent } = useAuth();
+  const { isAccountOpen, setIsAccountOpen, toggleComponent } = useAuth();
+  const [isExcel, setIsExcel] = useState(false)
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const fileType = queryParams.get('type');
+
+  useEffect(() => {
+    setIsExcel(true);
+  }, []);
+
+  let container: DocumentEditorContainerComponent;
+  function onCreate() {
+    setInterval(() => {
+      updateDocumentEditorSize();
+    }, 100);
+    window.addEventListener('resize', onWindowResize);
+  }
+  function onWindowResize() {
+    updateDocumentEditorSize();
+  }
+  function updateDocumentEditorSize() {
+    var windowWidth = window.innerWidth;
+    var windowHeight = window.innerHeight;
+    container.resize(windowWidth, windowHeight);
+  }
+
   return (
-    // Navbar
     <div className="w-[100vw]">
       <div
         style={{
@@ -28,7 +58,7 @@ function TextFile() {
 
         <div className="flex items-center gap-2">
           <div
-          onClick={()=>toggleComponent('share')}
+            onClick={() => toggleComponent('share')}
             style={{
               background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
               borderImageSource:
@@ -83,13 +113,13 @@ function TextFile() {
         <span className="flex items-center gap-2">
           <img src="/rich.png" alt="" className="w-[26px] h-[26px]" />
           <p className="font-sans text-[14px] text-black">NeuroDocs</p>
-        </span> 
+        </span>
         <div className="flex items-center gap-4">
           <p className="text-black border-b-2 border-black text-[14px]  ">
             Text
           </p>
           <button
-           onClick={()=>toggleComponent('share')}
+            onClick={() => toggleComponent('share')}
             style={{
               background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
               borderImageSource:
@@ -101,6 +131,19 @@ function TextFile() {
           </button>
         </div>
       </div>
+      {fileType === 'excel' ? (
+        <SpreadsheetComponent />
+      ) : fileType === 'word' ? (
+        <DocumentEditorContainerComponent
+          id="container"
+          created={onCreate}
+          height="590px"
+          serviceUrl="https://ej2services.syncfusion.com/production/web-services/api/documenteditor/"
+          enableToolbar
+        />
+      ) : (
+        <p className="text-center mt-5">No file type specified.</p>
+      )}
     </div>
   );
 }

@@ -1,32 +1,38 @@
 import { Cross, Folder, Folders, Xcel } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
+import { useNavigate } from 'react-router-dom';
 
 function CreateComponent() {
   const { isOpenComponent, toggleComponent } = useAuth();
+  const navigate = useNavigate();
+
+  const handleCreate = () => {
+    toggleComponent('');
+  
+    if (isOpenComponent.newExcel) {
+      setTimeout(() => navigate('/text-file?type=excel'), 0);
+    } else if (isOpenComponent.newDocs) {
+      setTimeout(() => navigate('/text-file?type=word'), 0);
+    } else {
+      alert('Please select a file type to create.');
+      return;
+    }
+  };
+  
+  
+  
+
   return (
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center">
       <div className="w-[95vw] h-[60vh] gap-4 relative max-w-[351px] max-h-[366px] md:min-w-[493px] md:min-h-[463px] px-3 md:px-4 flex flex-col items-center justify-center rounded-lg bg-[#ffffff]">
         <span
-          onClick={() => {
-            {
-              isOpenComponent.newFolder && toggleComponent("newFolder");
-            }
-            {
-              isOpenComponent.newExcel && toggleComponent("newExcel");
-            }
-            {
-              isOpenComponent.newDocs && toggleComponent("newDocs");
-            }
-          }}
+          onClick={() => toggleComponent('')}
           className="absolute right-[17px] top-[17px] cursor-pointer"
         >
-          <Cross
-            className={"w-[11px] h-[11px] md:w-3 md:h-3"}
-            color={"#000000"}
-          />
+          <Cross className="w-[11px] h-[11px] md:w-3 md:h-3" color="#000000" />
         </span>
-        {isOpenComponent.newFolder && <img src="/folders.png" className={"w-[49px] h-[40px] md:w-[83px] md:h-[77px]"}/>}
-        {isOpenComponent.newDocs && <img src="/rich.png" />}
+        {isOpenComponent.newFolder && <img src="/folders.png" alt="Folder Icon" className="w-[49px] h-[40px] md:w-[83px] md:h-[77px]" />}
+        {isOpenComponent.newDocs && <img src="/rich.png" alt="Word Icon" />}
         {isOpenComponent.newExcel && <Xcel />}
         <p className="text-[22px] text-[#202343]">
           Create New {isOpenComponent.newFolder && "Folder"}
@@ -35,7 +41,7 @@ function CreateComponent() {
         </p>
         <div className="flex flex-col items-start w-full justify-start text-[12px] md:text-[14px] text-[black]">
           <p className="font-sans">Enter Name</p>
-          <div className=" h-[36px] w-[97%] md:h-[54px] bg-[#ECECEC] rounded-md  px-3">
+          <div className="h-[36px] w-[97%] md:h-[54px] bg-[#ECECEC] rounded-md px-3">
             <input
               type="text"
               placeholder="Workspace"
@@ -44,10 +50,10 @@ function CreateComponent() {
           </div>
         </div>
         <button
+          onClick={handleCreate}
           style={{
             background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
-            borderImageSource:
-              "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)",
+            borderImageSource: "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)",
           }}
           className="w-[132px] h-[34px] md:w-[163px] md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5"
         >
