@@ -8,7 +8,6 @@ function CreateComponent() {
 
   const handleCreate = () => {
     toggleComponent('');
-  
     if (isOpenComponent.newExcel) {
       setTimeout(() => navigate('/text-file?type=excel'), 0);
     } else if (isOpenComponent.newDocs) {
@@ -18,9 +17,6 @@ function CreateComponent() {
       return;
     }
   };
-  
-  
-  
 
   return (
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center">

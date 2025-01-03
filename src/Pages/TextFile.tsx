@@ -1,39 +1,13 @@
-import { useState, useEffect } from "react";
 import { Arrow, Download, Invite, Print, SixDots } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
 import Account from "../Components/Account";
-import { DocumentEditorContainerComponent, Toolbar } from '@syncfusion/ej2-react-documenteditor';
-import { SpreadsheetComponent } from '@syncfusion/ej2-react-spreadsheet';
-import { useLocation } from 'react-router-dom';
-
-DocumentEditorContainerComponent.Inject(Toolbar);
+import Word from "../Components/Word";
+import ExcelSheet from "../Components/ExcelSheet";
 
 function TextFile() {
   const { isAccountOpen, setIsAccountOpen, toggleComponent } = useAuth();
-  const [isExcel, setIsExcel] = useState(false)
-  const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const fileType = queryParams.get('type');
-
-  useEffect(() => {
-    setIsExcel(true);
-  }, []);
-
-  let container: DocumentEditorContainerComponent;
-  function onCreate() {
-    setInterval(() => {
-      updateDocumentEditorSize();
-    }, 100);
-    window.addEventListener('resize', onWindowResize);
-  }
-  function onWindowResize() {
-    updateDocumentEditorSize();
-  }
-  function updateDocumentEditorSize() {
-    var windowWidth = window.innerWidth;
-    var windowHeight = window.innerHeight;
-    container.resize(windowWidth, windowHeight);
-  }
 
   return (
     <div className="w-[100vw]">
@@ -132,15 +106,9 @@ function TextFile() {
         </div>
       </div>
       {fileType === 'excel' ? (
-        <SpreadsheetComponent />
+        <ExcelSheet/>
       ) : fileType === 'word' ? (
-        <DocumentEditorContainerComponent
-          id="container"
-          created={onCreate}
-          height="590px"
-          serviceUrl="https://ej2services.syncfusion.com/production/web-services/api/documenteditor/"
-          enableToolbar
-        />
+      <Word/>
       ) : (
         <p className="text-center mt-5">No file type specified.</p>
       )}
