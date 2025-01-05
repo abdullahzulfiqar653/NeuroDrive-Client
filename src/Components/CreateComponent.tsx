@@ -6,15 +6,26 @@ function CreateComponent() {
   const { isOpenComponent, toggleComponent } = useAuth();
   const navigate = useNavigate();
 
-  const handleCreate = () => {
-    toggleComponent('');
+  const handleClose = () => {
     if (isOpenComponent.newExcel) {
-      setTimeout(() => navigate('/text-file?type=excel'), 0);
+      toggleComponent('newExcel', false);
     } else if (isOpenComponent.newDocs) {
-      setTimeout(() => navigate('/text-file?type=word'), 0);
+      toggleComponent('newDocs', false);
+    } else if (isOpenComponent.newFolder) {
+      toggleComponent('newFolder', false);
+    }
+  };
+  
+  const handleCreate = () => {
+    if (isOpenComponent.newExcel) {
+      navigate('/text-file?type=excel');
+      setTimeout(() => toggleComponent('newExcel', false), 0);
+    } else if (isOpenComponent.newDocs) {
+      navigate('/text-file?type=word');
+      setTimeout(() => toggleComponent('newDocs', false), 0);
     } else {
       alert('Please select a file type to create.');
-      return;
+      handleClose(); // This will now correctly close the modal
     }
   };
 
@@ -22,7 +33,7 @@ function CreateComponent() {
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center">
       <div className="w-[95vw] h-[60vh] gap-4 relative max-w-[351px] max-h-[366px] md:min-w-[493px] md:min-h-[463px] px-3 md:px-4 flex flex-col items-center justify-center rounded-lg bg-[#ffffff]">
         <span
-          onClick={() => toggleComponent('')}
+          onClick={handleClose}
           className="absolute right-[17px] top-[17px] cursor-pointer"
         >
           <Cross className="w-[11px] h-[11px] md:w-3 md:h-3" color="#000000" />

@@ -1,14 +1,14 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
 type OpenComponentsState = {
-  [key: string]: boolean | null; 
+  [key: string]: boolean; 
 };
 
 // Define types for AuthContext
 interface AuthContextType {
   isAccountOpen: boolean;
   isOpenComponent: OpenComponentsState;
-  toggleComponent: (component: string) => void;
+  toggleComponent: (component: string, isOpen?: boolean) => void;
   setIsAccountOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -27,11 +27,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     newDocs: false,
   });
 
-  // Function to toggle a specific component
-  const toggleComponent = (component: string) => {
-    setOpenComponent((prevState) => ({
+  const toggleComponent = (component: string, isOpen?: boolean) => {
+    setOpenComponent(prevState => ({
       ...prevState,
-      [component]: !prevState[component],
+      [component]: isOpen !== undefined ? isOpen : !prevState[component]
     }));
   };
 
