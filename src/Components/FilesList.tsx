@@ -346,7 +346,7 @@ function FilesList() {
                     More
                   </p>
                 </div>
-                <div className="overflow-hidden   bg-white w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
+                <div className="overflow-hidden   bg-white w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center" onClick={handleClick}>
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
                     <span
                       onClick={() => setRadioClick((prev) => !prev)}
@@ -355,6 +355,9 @@ function FilesList() {
                       <Circle color={radioClick ? "#2676ff" : "none"} />
                     </span>
                     <Xcel className={"w-4 h-4"} /> Design &Campign.xls
+                    {isSelected && (
+                      <FileViewer fileUrl={'uuuu'} fileType={'excel'} fileName={'sample'} />
+                    )}
                   </p>
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
                     <NoPerson /> _
@@ -417,7 +420,7 @@ function FilesList() {
                     </div>
                   </Popup>
                 </div>
-                <div className="overflow-hidden   bg-white w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
+                <div className="overflow-hidden   bg-white w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center" onClick={handleClick}>
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
                     <span
                       onClick={() => setRadioClick((prev) => !prev)}
@@ -426,6 +429,9 @@ function FilesList() {
                       <Circle color={radioClick ? "#2676ff" : "none"} />
                     </span>
                     <Xcel className={"w-4 h-4"} /> Design &Campign.xls
+                    {isSelected && (
+                      <FileViewer fileUrl={'uuuu'} fileType={'excel'} fileName={'sample'} />
+                    )}
                   </p>
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
                     <img src="per1.png" alt="" /> Roanldo Richards
