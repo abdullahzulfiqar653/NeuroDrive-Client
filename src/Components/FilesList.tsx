@@ -10,10 +10,16 @@ import {
 } from "../assets/Icons";
 import Popup from "reactjs-popup";
 import { useAuth } from "../AuthContext";
+import { FileViewer } from "../Hooks/FileViewer";
 
 function FilesList() {
   const [isOpen, seIsOpen] = useState(false);
   const { toggleComponent } = useAuth();
+  const [isSelected, setIsSelected] = useState(false);
+
+  const handleClick = () => {
+    setIsSelected(!isSelected);
+  };
   const [radioClick, setRadioClick] = useState(false);
   const data = [
     { PersonName: "", name: "John Doe", size: "3.0 GB" },
@@ -473,7 +479,7 @@ function FilesList() {
                     <ThreeDots />
                   </p>
                 </div>
-                <div className="overflow-hidden  bg-[#F8FAFC] w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
+                <div className="overflow-hidden  bg-[#F8FAFC] w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center" onClick={handleClick} >
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
                     <span
                       onClick={() => setRadioClick((prev) => !prev)}
@@ -482,6 +488,9 @@ function FilesList() {
                       <Circle color={radioClick ? "#2676ff" : "none"} />
                     </span>
                     <Xcel className={"w-4 h-4"} /> Design &Campign.xls
+                    {isSelected && (
+                      <FileViewer fileUrl={'uuuu'} fileType={'excel'} fileName={'sample'} />
+                    )}
                   </p>
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
                     <NoPerson /> _
@@ -508,11 +517,11 @@ function FilesList() {
                   <ThreeDots />
                 </div>
                 <div className="h-[50%] w-[85%] flex justify-between items-center">
-                <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
-                    <NoPerson className={"w-[20px] h-[20px]"}/> _
+                  <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
+                    <NoPerson className={"w-[20px] h-[20px]"} /> _
                   </p>
                   <p className=" w-[50%] text-[10px] font-sans h-full flex items-center justify-end px-4">
-                  File size: 3.0 GB
+                    File size: 3.0 GB
                   </p>
                 </div>
               </div>
@@ -530,11 +539,11 @@ function FilesList() {
                   <ThreeDots />
                 </div>
                 <div className="h-[50%] w-[85%] flex justify-between items-center">
-                <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
-                    <NoPerson className={"w-[20px] h-[20px]"}/> _
+                  <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
+                    <NoPerson className={"w-[20px] h-[20px]"} /> _
                   </p>
                   <p className=" w-[50%] text-[10px] font-sans h-full flex items-center justify-end px-4">
-                  File size: 3.0 GB
+                    File size: 3.0 GB
                   </p>
                 </div>
               </div>
@@ -552,11 +561,11 @@ function FilesList() {
                   <ThreeDots />
                 </div>
                 <div className="h-[50%] w-[85%] flex justify-between items-center">
-                <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
-                    <NoPerson className={"w-[20px] h-[20px]"}/> _
+                  <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
+                    <NoPerson className={"w-[20px] h-[20px]"} /> _
                   </p>
                   <p className=" w-[50%] text-[10px] font-sans h-full flex items-center justify-end px-4">
-                  File size: 3.0 GB
+                    File size: 3.0 GB
                   </p>
                 </div>
               </div>

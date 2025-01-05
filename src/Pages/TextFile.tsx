@@ -8,6 +8,8 @@ function TextFile() {
   const { isAccountOpen, setIsAccountOpen, toggleComponent } = useAuth();
   const queryParams = new URLSearchParams(location.search);
   const fileType = queryParams.get('type');
+  const fileName = queryParams.get('fileName');
+  const fileUrl = queryParams.get('fileUrl');
 
   return (
     <div className="w-[100vw]">
@@ -105,13 +107,8 @@ function TextFile() {
           </button>
         </div>
       </div>
-      {fileType === 'excel' ? (
-        <ExcelSheet/>
-      ) : fileType === 'word' ? (
-      <Word/>
-      ) : (
-        <p className="text-center mt-5">No file type specified.</p>
-      )}
+      {fileType === 'excel' && <ExcelSheet fileUrl={fileUrl} fileName={fileName} />}
+      {fileType === 'word' && <Word fileUrl={fileUrl} fileName={fileName} />}
     </div>
   );
 }
