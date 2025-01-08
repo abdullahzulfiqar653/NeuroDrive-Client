@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   DocumentEditorContainerComponent,
   Toolbar,
@@ -6,75 +6,72 @@ import {
 } from "@syncfusion/ej2-react-documenteditor";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 DocumentEditorContainerComponent.Inject(Toolbar);
 
-const Word = ({ fileUrl , fileName }: any) => {
+const Word = ({ fileUrl }: any) => {
   const [savedData, setSavedData] = useState(null);
   const containerRef = useRef<DocumentEditorContainerComponent>(null);
   const navigate = useNavigate();
 
-  function save() {
-    let http = new XMLHttpRequest();
-    http.open("POST", "http://localhost:5000/api");
-    http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    http.responseType = "json";
+  const save = () => {
+    if (!containerRef.current) return;
 
-    const sfdt = { content: containerRef.current?.documentEditor.serialize() };
-
+    const sfdt = { content: containerRef.current.documentEditor.serialize() };
     console.log("Sending JSON data to backend:", JSON.stringify(sfdt));
 
-    http.onload = function () {
-      if (this.status === 200) {
-        setSavedData(this.response);
-        navigate("/")
+    axios.post('http://localhost:5000/api', sfdt, {
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((response) => {
+        setSavedData(response.data);
+        navigate('/');
+        console.log(response , 'response')
         toast.success("Document saved successfully!");
-      } else {
+      })
+      .catch((error) => {
+        console.error("Save error:", error);
         toast.error("Error saving document!");
-      }
-    };
-
-    http.send(JSON.stringify(sfdt));
-  }
-
-  const onToolbarClick = (args: ClickEventArgs): void => {
-    if (args.item.id === "save") {
-      save();
-    }
+      });
   };
 
-  function onCreate() {
-    setInterval(() => {
-      updateDocumentEditorSize();
-    }, 100);
-    window.addEventListener('resize', onWindowResize);
-  }
-
-  function onWindowResize() {
-    updateDocumentEditorSize();
-  }
-
-  function updateDocumentEditorSize() {
-    if (containerRef.current && containerRef.current.documentEditor) {
-      var windowWidth = window.innerWidth;
-      var windowHeight = window.innerHeight;
-      containerRef.current.documentEditor.resize(windowWidth, windowHeight);
-    } else {
-      console.log("Document editor not initialized yet.");
-    }
-  }
-
-  let toolItem: CustomToolbarItemModel = {
-    prefixIcon: "e-save icon",
-    tooltipText: "Save the Document",
-    text: "Save",
-    id: "save",
+  const onToolbarClick = (args: any): void => {
+    if (args.item.id === "save") save();
   };
 
-  let items: (string | CustomToolbarItemModel)[] = [
+ 
+const loadDocxFromURL = async (url: string) => {
+  if (!containerRef.current) {
+    toast.error("Document Editor is not initialized.");
+    return;
+  }
+
+  try {
+    const response = await axios.get(url, { responseType: 'arraybuffer' });
+    if (response.status !== 200) throw new Error(`Failed to fetch document: ${response.statusText}`);
+    const arrayBuffer = response.data;
+    const base64String = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+    containerRef.current.documentEditor.open(base64String);
+    toast.success("Document loaded successfully!");
+    const sfdtContent = containerRef.current.documentEditor.serialize();
+    console.log("SFDT Content:", sfdtContent);
+    toast.success("Document converted to SFDT!");
+  } catch (error) {
+    console.error("Error loading document:", error);
+    toast.error("Failed to load and convert document.");
+  }
+};
+  useEffect(() => {
+    if (fileUrl) {
+      loadDocxFromURL(fileUrl);
+    }
+  }, [fileUrl]);
+
+  const toolbarItems: (string | CustomToolbarItemModel)[] = [
     "New",
     "Open",
-    toolItem,
+    { prefixIcon: "e-save icon", tooltipText: "Save the Document", text: "Save", id: "save" },
     "Separator",
     "Undo",
     "Redo",
@@ -106,41 +103,35 @@ const Word = ({ fileUrl , fileName }: any) => {
     "ContentControl",
   ];
 
-  function loadWord(): void {
-    fetch(
-      fileUrl,
-      {
-        method: 'Post',
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        body: JSON.stringify({ documentName: fileName })
-      }
-    )
-      .then(response => {
-        if (response.status === 200 || response.status === 304) {
-          return response.json();
-        } else {
-          throw new Error('Error loading data');
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (containerRef.current) {
+        const editor = containerRef.current.documentEditor;
+        if (editor) {
+          editor.resize(window.innerWidth, window.innerHeight);
         }
-      })
-      .then(json => {
-        container.documentEditor.open(JSON.stringify(json));
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <DocumentEditorContainerComponent
-      created={onCreate}
+      created={() => {
+        setInterval(() => {
+          if (containerRef.current) {
+            const editor = containerRef.current.documentEditor;
+            editor.resize(window.innerWidth, window.innerHeight);
+          }
+        }, 100);
+      }}
       ref={containerRef}
       id="container"
-      serviceUrl="http://localhost:62870/api/documenteditor/"
+      serviceUrl="https://ej2services.syncfusion.com/production/web-services/api/documenteditor/"
       style={{ height: "590px" }}
-      toolbarItems={items}
+      toolbarItems={toolbarItems}
       toolbarClick={onToolbarClick}
       enableToolbar={true}
-      open={loadWord}
     />
   );
 };

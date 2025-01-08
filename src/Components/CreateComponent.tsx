@@ -25,7 +25,7 @@ function CreateComponent() {
       setTimeout(() => toggleComponent('newDocs', false), 0);
     } else {
       alert('Please select a file type to create.');
-      handleClose(); // This will now correctly close the modal
+      handleClose(); 
     }
   };
 

@@ -430,7 +430,7 @@ function FilesList() {
                     </span>
                     <Xcel className={"w-4 h-4"} /> Design &Campign.xls
                     {isSelected && (
-                      <FileViewer fileUrl='https://neuroservices.lon1.digitaloceanspaces.com/neuroservices/test/students-data-report.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00N87PJKGNJTGMNEMZ%2F20250103%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250103T172929Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=3b07afd316486f58f9035314d0043f11c0f2b8d91025b0b4db2e766ab38a5ebe' fileType={'excel'} fileName={'sample'} />
+                      <FileViewer fileUrl='https://neuroservices.lon1.digitaloceanspaces.com/neuroservices/test/Terms-Conditions.docx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00N87PJKGNJTGMNEMZ%2F20250103%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250103T172649Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=d09348290ea054fd554e703f7982cf49ee24363729b326dce50a5765e99b7ec2' fileType={'word'} fileName={'sample'} />
                     )}
                   </p>
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
@@ -443,7 +443,7 @@ function FilesList() {
                     <ThreeDots />
                   </p>
                 </div>
-                <div className="overflow-hidden   bg-[#F8FAFC] w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
+                <div className="overflow-hidden   bg-[#F8FAFC] w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center" onClick={handleClick}>
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
                     <span
                       onClick={() => setRadioClick((prev) => !prev)}
@@ -453,6 +453,9 @@ function FilesList() {
                     </span>
                     <img src="rich.png" alt="" className={"w-4 h-4"} />
                     Design &Campign.xls
+                    {isSelected && (
+                      <FileViewer fileUrl='https://neuroservices.lon1.digitaloceanspaces.com/neuroservices/test/Terms-Conditions.docx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00N87PJKGNJTGMNEMZ%2F20250103%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250103T172649Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=d09348290ea054fd554e703f7982cf49ee24363729b326dce50a5765e99b7ec2' fileType={'word'} fileName={'sample'} />
+                    )}
                   </p>
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
                     <img src="per1.png" alt="" /> Richards
@@ -464,7 +467,7 @@ function FilesList() {
                     <ThreeDots />
                   </p>
                 </div>
-                <div className="overflow-hidden   bg-white w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
+                <div className="overflow-hidden   bg-white w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center" onClick={handleClick}>
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
                     <span
                       onClick={() => setRadioClick((prev) => !prev)}
@@ -495,7 +498,7 @@ function FilesList() {
                     </span>
                     <Xcel className={"w-4 h-4"} /> Design &Campign.xls
                     {isSelected && (
-                      <FileViewer fileUrl='https://neuroservices.lon1.digitaloceanspaces.com/neuroservices/test/students-data-report.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00N87PJKGNJTGMNEMZ%2F20250103%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250103T172929Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=3b07afd316486f58f9035314d0043f11c0f2b8d91025b0b4db2e766ab38a5ebe' fileType={'excel'} fileName={'sample'} />
+                      <FileViewer fileUrl='https://neuroservices.lon1.digitaloceanspaces.com/neuroservices/test/Terms-Conditions.docx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00N87PJKGNJTGMNEMZ%2F20250103%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250103T172649Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=d09348290ea054fd554e703f7982cf49ee24363729b326dce50a5765e99b7ec2' fileType={'word'} fileName={'sample'}  />
                     )}
                   </p>
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">

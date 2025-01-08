@@ -3,13 +3,13 @@ import { useAuth } from "../AuthContext";
 import Account from "../Components/Account";
 import Word from "../Components/Word";
 import ExcelSheet from "../Components/ExcelSheet";
+import { useFileContext } from '../FileContext';
 
 function TextFile() {
   const { isAccountOpen, setIsAccountOpen, toggleComponent } = useAuth();
   const queryParams = new URLSearchParams(location.search);
-  const fileType = queryParams.get('type');
-  const fileName = queryParams.get('fileName');
-  const fileUrl = queryParams.get('fileUrl');
+  const Type = queryParams.get('type');
+  const { fileUrl, fileType, fileName } = useFileContext();
 
   return (
     <div className="w-[100vw]">
@@ -108,7 +108,9 @@ function TextFile() {
         </div>
       </div>
       {fileType === 'excel' && <ExcelSheet fileUrl={fileUrl} fileName={fileName} />}
+      {Type === 'excel' && <ExcelSheet fileUrl={fileUrl} fileName={fileName} />}
       {fileType === 'word' && <Word fileUrl={fileUrl} fileName={fileName} />}
+      {Type === 'word' && <Word fileUrl={fileUrl} fileName={fileName} />}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { SpreadsheetComponent } from '@syncfusion/ej2-react-spreadsheet';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 interface ExcelSheetProps {
   fileUrl: any;
@@ -24,12 +25,9 @@ const ExcelSheet: React.FC<ExcelSheetProps> = ({ fileUrl, fileName }) => {
       formData.append('saveType', 'Xlsx');
       formData.append('FileData', args.blobData, fileName || 'Sample');
       console.log(formData, 'FormData');
-      fetch('https://your-backend-url/save', {
-        method: 'POST',
-        body: formData,
-      })
+      axios.post('https://your-backend-url/save', formData)
         .then((response) => {
-          if (response.ok) {
+          if (response.status === 200) {
             toast.success("Data Saved Successfully!");
           } else {
             console.error("Error saving data:", response.statusText);
@@ -43,16 +41,23 @@ const ExcelSheet: React.FC<ExcelSheetProps> = ({ fileUrl, fileName }) => {
     }
   };
 
+
   const fetchData = async () => {
-    fetch(
-      fileUrl
-    ).then((response) => {
-      response.blob().then((fileBlob) => {
-        const file = new File([fileBlob], 'Sample.xlsx');
+    if (fileUrl) {
+      try {
+        const response = await axios.get(fileUrl, {
+          responseType: 'blob',
+        });
+        const file = new File([response.data], 'Sample.xlsx', {
+          type: response.headers['content-type'], 
+        });
         spreadsheetRef.current?.open({ file });
-      });
-    });
+      } catch (error) {
+        console.error('Error fetching file:', error);
+      }
+    }
   };
+  
 
   useEffect(() => {
     if (fileUrl) {
