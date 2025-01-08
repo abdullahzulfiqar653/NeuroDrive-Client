@@ -356,7 +356,7 @@ function FilesList() {
                     </span>
                     <Xcel className={"w-4 h-4"} /> Design &Campign.xls
                     {isSelected && (
-                      <FileViewer fileUrl={'uuuu'} fileType={'excel'} fileName={'sample'} />
+                      <FileViewer fileUrl='https://neuroservices.lon1.digitaloceanspaces.com/neuroservices/test/students-data-report.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00N87PJKGNJTGMNEMZ%2F20250103%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250103T172929Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=3b07afd316486f58f9035314d0043f11c0f2b8d91025b0b4db2e766ab38a5ebe' fileType={'excel'} fileName={'sample'} />
                     )}
                   </p>
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
@@ -430,7 +430,7 @@ function FilesList() {
                     </span>
                     <Xcel className={"w-4 h-4"} /> Design &Campign.xls
                     {isSelected && (
-                      <FileViewer fileUrl={'uuuu'} fileType={'excel'} fileName={'sample'} />
+                      <FileViewer fileUrl='https://neuroservices.lon1.digitaloceanspaces.com/neuroservices/test/students-data-report.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00N87PJKGNJTGMNEMZ%2F20250103%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250103T172929Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=3b07afd316486f58f9035314d0043f11c0f2b8d91025b0b4db2e766ab38a5ebe' fileType={'excel'} fileName={'sample'} />
                     )}
                   </p>
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
@@ -495,7 +495,7 @@ function FilesList() {
                     </span>
                     <Xcel className={"w-4 h-4"} /> Design &Campign.xls
                     {isSelected && (
-                      <FileViewer fileUrl={'uuuu'} fileType={'excel'} fileName={'sample'} />
+                      <FileViewer fileUrl='https://neuroservices.lon1.digitaloceanspaces.com/neuroservices/test/students-data-report.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00N87PJKGNJTGMNEMZ%2F20250103%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250103T172929Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=3b07afd316486f58f9035314d0043f11c0f2b8d91025b0b4db2e766ab38a5ebe' fileType={'excel'} fileName={'sample'} />
                     )}
                   </p>
                   <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
@@ -596,18 +596,18 @@ const Copy = () => (
     <path
       d="M6.25 3.75H8.75C10 3.75 10 3.125 10 2.5C10 1.25 9.375 1.25 8.75 1.25H6.25C5.625 1.25 5 1.25 5 2.5C5 3.75 5.625 3.75 6.25 3.75Z"
       stroke="#292D32"
-      stroke-width="0.7"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="0.7"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M10 2.51245C12.0812 2.62495 13.125 3.3937 13.125 6.24995V9.99995C13.125 12.5 12.5 13.75 9.375 13.75H5.625C2.5 13.75 1.875 12.5 1.875 9.99995V6.24995C1.875 3.39995 2.91875 2.62495 5 2.51245"
       stroke="#292D32"
-      stroke-width="0.7"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="0.7"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -668,20 +668,20 @@ const Box = () => (
     <path
       d="M7.875 19.25H13.125C17.5 19.25 19.25 17.5 19.25 13.125V7.875C19.25 3.5 17.5 1.75 13.125 1.75H7.875C3.5 1.75 1.75 3.5 1.75 7.875V13.125C1.75 17.5 3.5 19.25 7.875 19.25Z"
       stroke="#292D32"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M19.25 8.75H1.75"
       stroke="#292D32"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M10.5 8.75V19.25"
       stroke="#292D32"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -698,41 +698,41 @@ const NoPerson = ({ className }: IconsProps) => (
     <path
       d="M11.4599 13.73C13.0118 13.73 14.2699 12.4719 14.2699 10.92C14.2699 9.36806 13.0118 8.10999 11.4599 8.10999C9.90798 8.10999 8.6499 9.36806 8.6499 10.92C8.6499 12.4719 9.90798 13.73 11.4599 13.73Z"
       stroke="#292D32"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M16.65 20.2C16.65 17.87 14.33 15.97 11.46 15.97C8.59002 15.97 6.27002 17.86 6.27002 20.2"
       stroke="#292D32"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M21 12.5C21 17.75 16.75 22 11.5 22C6.25 22 2 17.75 2 12.5C2 7.25 6.25 3 11.5 3C12.81 3 14.06 3.25999 15.2 3.73999C15.07 4.13999 15 4.56 15 5C15 5.75 15.21 6.46 15.58 7.06C15.78 7.4 16.04 7.70997 16.34 7.96997C17.04 8.60997 17.97 9 19 9C19.44 9 19.86 8.92998 20.25 8.78998C20.73 9.92998 21 11.19 21 12.5Z"
       stroke="#292D32"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M23 5C23 5.32 22.96 5.62999 22.88 5.92999C22.79 6.32999 22.63 6.72 22.42 7.06C21.94 7.87 21.17 8.49998 20.25 8.78998C19.86 8.92998 19.44 9 19 9C17.97 9 17.04 8.60997 16.34 7.96997C16.04 7.70997 15.78 7.4 15.58 7.06C15.21 6.46 15 5.75 15 5C15 4.56 15.07 4.13999 15.2 3.73999C15.39 3.15999 15.71 2.64002 16.13 2.21002C16.86 1.46002 17.88 1 19 1C20.18 1 21.25 1.51002 21.97 2.33002C22.61 3.04002 23 3.98 23 5Z"
       stroke="#292D32"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M20.49 4.97998H17.51"
       stroke="#292D32"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M19 3.52002V6.51001"
       stroke="#292D32"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -749,8 +749,8 @@ const ThreeDots = () => (
     <path
       d="M2 17C2.26522 17 2.51957 16.8946 2.70711 16.7071C2.89464 16.5196 3 16.2652 3 16C3 15.7348 2.89464 15.4804 2.70711 15.2929C2.51957 15.1054 2.26522 15 2 15C1.73478 15 1.48043 15.1054 1.29289 15.2929C1.10536 15.4804 1 15.7348 1 16C1 16.2652 1.10536 16.5196 1.29289 16.7071C1.48043 16.8946 1.73478 17 2 17ZM2 10C2.26522 10 2.51957 9.89464 2.70711 9.70711C2.89464 9.51957 3 9.26522 3 9C3 8.73478 2.89464 8.48043 2.70711 8.29289C2.51957 8.10536 2.26522 8 2 8C1.73478 8 1.48043 8.10536 1.29289 8.29289C1.10536 8.48043 1 8.73478 1 9C1 9.26522 1.10536 9.51957 1.29289 9.70711C1.48043 9.89464 1.73478 10 2 10ZM2 3C2.26522 3 2.51957 2.89464 2.70711 2.70711C2.89464 2.51957 3 2.26522 3 2C3 1.73478 2.89464 1.48043 2.70711 1.29289C2.51957 1.10536 2.26522 1 2 1C1.73478 1 1.48043 1.10536 1.29289 1.29289C1.10536 1.48043 1 1.73478 1 2C1 2.26522 1.10536 2.51957 1.29289 2.70711C1.48043 2.89464 1.73478 3 2 3Z"
       stroke="black"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -780,26 +780,26 @@ const List = () => (
     <path
       d="M16.5 6.39V2.985C16.5 1.9275 16.02 1.5 14.8275 1.5H11.7975C10.605 1.5 10.125 1.9275 10.125 2.985V6.3825C10.125 7.4475 10.605 7.8675 11.7975 7.8675H14.8275C16.02 7.875 16.5 7.4475 16.5 6.39Z"
       stroke="#292D32"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M16.5 14.8275V11.7975C16.5 10.605 16.02 10.125 14.8275 10.125H11.7975C10.605 10.125 10.125 10.605 10.125 11.7975V14.8275C10.125 16.02 10.605 16.5 11.7975 16.5H14.8275C16.02 16.5 16.5 16.02 16.5 14.8275Z"
       stroke="#292D32"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M7.875 6.39V2.985C7.875 1.9275 7.395 1.5 6.2025 1.5H3.1725C1.98 1.5 1.5 1.9275 1.5 2.985V6.3825C1.5 7.4475 1.98 7.8675 3.1725 7.8675H6.2025C7.395 7.875 7.875 7.4475 7.875 6.39Z"
       stroke="#292D32"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M7.875 14.8275V11.7975C7.875 10.605 7.395 10.125 6.2025 10.125H3.1725C1.98 10.125 1.5 10.605 1.5 11.7975V14.8275C1.5 16.02 1.98 16.5 3.1725 16.5H6.2025C7.395 16.5 7.875 16.02 7.875 14.8275Z"
       stroke="#292D32"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -816,16 +816,16 @@ const Filter = () => (
     <path
       d="M5.17497 2.01257H17.825C18.8791 2.01257 19.7416 2.87507 19.7416 3.92924V6.03757C19.7416 6.80424 19.2625 7.76257 18.7833 8.24174L14.6625 11.8834C14.0875 12.3626 13.7041 13.3209 13.7041 14.0876V18.2084C13.7041 18.7834 13.3208 19.5501 12.8416 19.8376L11.5 20.7001C10.2541 21.4667 8.52913 20.6042 8.52913 19.0709V13.9917C8.52913 13.3209 8.1458 12.4584 7.76247 11.9792L4.1208 8.14591C3.64163 7.66674 3.2583 6.80424 3.2583 6.22924V4.02507C3.2583 2.87507 4.1208 2.01257 5.17497 2.01257Z"
       stroke="#292D32"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M10.4746 2.01257L5.75 9.58341"
       stroke="#292D32"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -841,26 +841,26 @@ const Rename = () => (
     <path
       d="M7.18264 1.94991L2.73556 6.657C2.56764 6.83575 2.40514 7.18783 2.37264 7.43158L2.17223 9.18658C2.10181 9.82033 2.55681 10.2537 3.18514 10.1453L4.92931 9.84741C5.17306 9.80408 5.51431 9.62533 5.68223 9.44116L10.1293 4.73408C10.8985 3.92158 11.2451 2.99533 10.0481 1.86325C8.85639 0.741997 7.95181 1.13741 7.18264 1.94991Z"
       stroke="#292D32"
-      stroke-width="0.7"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="0.7"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M6.44067 2.73535C6.67359 4.23035 7.88692 5.37327 9.39276 5.52493"
       stroke="#292D32"
-      stroke-width="0.7"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="0.7"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M1.625 11.9166H11.375"
       stroke="#292D32"
-      stroke-width="0.7"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="0.7"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -877,8 +877,8 @@ const Starred = ({ className }: IconsProps) => (
     <path
       d="M12.1577 2.36366L13.8444 5.73699C14.0744 6.20657 14.6877 6.65699 15.2052 6.74324L18.2623 7.25116C20.2173 7.57699 20.6773 8.99532 19.2685 10.3945L16.8919 12.7712C16.4894 13.1737 16.269 13.9499 16.3935 14.5057L17.074 17.4478C17.6106 19.7766 16.3744 20.6774 14.314 19.4603L11.4485 17.7641C10.931 17.4574 10.0781 17.4574 9.55104 17.7641L6.68562 19.4603C4.63479 20.6774 3.38896 19.767 3.92562 17.4478L4.60604 14.5057C4.73062 13.9499 4.51021 13.1737 4.10771 12.7712L1.73104 10.3945C0.331874 8.99532 0.782291 7.57699 2.73729 7.25116L5.79437 6.74324C6.30229 6.65699 6.91562 6.20657 7.14562 5.73699L8.83229 2.36366C9.75229 0.533241 11.2473 0.533241 12.1577 2.36366Z"
       stroke="#292D32"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -895,14 +895,14 @@ const Recent = () => (
     <path
       d="M20.1666 11C20.1666 16.06 16.0599 20.1667 10.9999 20.1667C5.93992 20.1667 1.83325 16.06 1.83325 11C1.83325 5.94004 5.93992 1.83337 10.9999 1.83337C16.0599 1.83337 20.1666 5.94004 20.1666 11Z"
       stroke="#292D32"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M14.4006 13.915L11.559 12.2192C11.064 11.9258 10.6606 11.22 10.6606 10.6425V6.88416"
       stroke="#292D32"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );

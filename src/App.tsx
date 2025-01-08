@@ -8,26 +8,26 @@ import CreateComponent from './Components/CreateComponent'
 import { ToastContainer } from 'react-toastify';
 
 function App() {
-    const {isOpenComponent} = useAuth();
+  const { isOpenComponent } = useAuth();
   return (
     <>
-              <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
-     <Routes>
-       <Route path='/' element={<Home/>}/>
-       <Route path='/text-file' element={<TextFile/>}/>
-     </Routes>
-    { isOpenComponent.share && <ShareFile/>}
-    { (isOpenComponent.newFolder || isOpenComponent.newExcel || isOpenComponent.newDocs ) && <CreateComponent/>}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/text-file' element={<TextFile />} />
+      </Routes>
+      {isOpenComponent.share && <ShareFile />}
+      {(isOpenComponent.newFolder || isOpenComponent.newExcel || isOpenComponent.newDocs) && <CreateComponent />}
     </>
   )
 }
