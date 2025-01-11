@@ -2,19 +2,22 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFileContext } from '../FileContext';
 
-export const FileViewer = ({ fileUrl, fileType, fileName }: any) => {
+interface FileViewerProps {
+  fileUrl: string;
+  fileType: 'excel' | 'word' | 'pdf';
+  fileName: string;
+}
+
+export const FileViewer: React.FC<FileViewerProps> = ({ fileUrl, fileType, fileName }) => {
   const navigate = useNavigate();
   const { setFileDetails } = useFileContext();
 
   useEffect(() => {
-    setFileDetails(fileUrl, fileType, fileName);
-
-    if (fileType === 'excel') {
-      navigate(`/text-file`);
-    } else if (fileType === 'word') {
-      navigate(`/text-file`);
+    if (fileUrl && fileType && fileName) {
+      setFileDetails(fileUrl, fileType, fileName);
+      navigate('/text-file');
     }
-  }, [fileType, fileUrl, fileName, navigate, setFileDetails]);
+  }, [fileUrl, fileType, fileName, navigate, setFileDetails]);
 
   return null;
 };

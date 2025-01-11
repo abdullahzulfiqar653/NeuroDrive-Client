@@ -4,6 +4,7 @@ import Account from "../Components/Account";
 import Word from "../Components/Word";
 import ExcelSheet from "../Components/ExcelSheet";
 import { useFileContext } from '../FileContext';
+import PDF from "../Components/PDF";
 
 function TextFile() {
   const { isAccountOpen, setIsAccountOpen, toggleComponent } = useAuth();
@@ -111,6 +112,8 @@ function TextFile() {
       {Type === 'excel' && <ExcelSheet fileUrl={fileUrl} fileName={fileName} />}
       {fileType === 'word' && <Word fileUrl={fileUrl} fileName={fileName} />}
       {Type === 'word' && <Word fileUrl={fileUrl} fileName={fileName} />}
+      {fileType === 'pdf' && <PDF fileUrl={fileUrl} fileName={fileName} />}
+      {Type === 'pdf' && <PDF fileUrl={fileUrl} fileName={fileName} />}
     </div>
   );
 }
