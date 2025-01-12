@@ -1,13 +1,15 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
 type OpenComponentsState = {
-  [key: string]: boolean; 
+  [key: string]: boolean;
 };
 
 // Define types for AuthContext
 interface AuthContextType {
+  isGridMode: boolean;
   isAccountOpen: boolean;
   isOpenComponent: OpenComponentsState;
+  setIsGridMode: (isGridMode: boolean) => void;
   toggleComponent: (component: string, isOpen?: boolean) => void;
   setIsAccountOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -20,6 +22,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAccountOpen, setIsAccountOpen] = useState<boolean>(false);
+  const [isGridMode, setIsGridMode] = useState<boolean>(false);
   const [isOpenComponent, setOpenComponent] = useState<OpenComponentsState>({
     share: false,
     newFolder: false,
@@ -28,14 +31,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   });
 
   const toggleComponent = (component: string, isOpen?: boolean) => {
-    setOpenComponent(prevState => ({
+    setOpenComponent((prevState) => ({
       ...prevState,
-      [component]: isOpen !== undefined ? isOpen : !prevState[component]
+      [component]: isOpen !== undefined ? isOpen : !prevState[component],
     }));
   };
 
   return (
-    <AuthContext.Provider value={{ isAccountOpen, setIsAccountOpen ,isOpenComponent, toggleComponent}}>
+    <AuthContext.Provider
+      value={{
+        isGridMode,
+        setIsGridMode,
+        isAccountOpen,
+        setIsAccountOpen,
+        isOpenComponent,
+        toggleComponent,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
