@@ -2,21 +2,21 @@ import Account from "../Components/Account";
 import { useEffect, useRef, useState } from "react";
 import {
   Add,
-  Arrow,
-  Blocks,
-  Cross,
-  Folder,
-  IconsProps,
-  Invite,
   Line,
-  SixDots,
   Trash,
+  Cross,
+  Arrow,
+  Folder,
+  Blocks,
+  Invite,
+  Search,
+  SixDots,
 } from "../assets/Icons";
 import FilesList from "../Components/FilesList";
 import { useAuth } from "../AuthContext";
 
 function Home() {
-  const { isAccountOpen, setIsAccountOpen , toggleComponent} = useAuth();
+  const { isAccountOpen, setIsAccountOpen, toggleComponent } = useAuth();
   const [isLeftBar, setLeftBar] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -54,7 +54,7 @@ function Home() {
             </div>
             <div className="flex gap-4 items-center">
               <div
-                onClick={()=>toggleComponent('share')}
+                onClick={() => toggleComponent("share")}
                 style={{
                   background:
                     "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
@@ -89,7 +89,13 @@ function Home() {
                     <Arrow color="#1E1E1E" />
                   </span>
                 </div>
-                {isAccountOpen && <Account className={"left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"}/>}
+                {isAccountOpen && (
+                  <Account
+                    className={
+                      "left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"
+                    }
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -119,7 +125,13 @@ function Home() {
                   src="https://s3-alpha-sig.figma.com/img/5298/20ef/398885b3c44f2931c974eeab97452589?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gN2NdKafXBlh4NOklHHV1eMk5pPgM~xzInElAs6jU43hBLK1ZqyuFdVoaaAzSzJT35DEQIT702OG~38L5UL9QTt8vQPXaNa3OeRLdVgCdTCbbG6Mkiu~nrG3CdZjQllT4cZvq~pEPeHhdwKuBLJ~dWRP1X~mbGHgXTVIkyXyBkY1XEz8VBFmqnP6cQ7Pg1fl96tzu2PFVIET7I10KKdq3ddZFMFYLrrJcy6nXs8OCNl2qjz5NQt0F9~A6BtdCmPsne-a~xpOt6pJCzsBPz9VmItNEdCfyO17bdhhUQmLiwttWqiveWZ1YFLf4bHEXmjuWO0mhvKQ063l5E0G-YZL6Q__"
                   className="w-full h-full object-cover "
                 />
-                {isAccountOpen && <Account className={"left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"}/>}
+                {isAccountOpen && (
+                  <Account
+                    className={
+                      "left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"
+                    }
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -143,8 +155,6 @@ function Home() {
             </section>
           </section>
         )}
-
-        
       </div>
     </>
   );
@@ -156,7 +166,7 @@ type LeftBarProps = {
   setLeftBar?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 function LeftBar({ setLeftBar }: LeftBarProps) {
-   const {toggleComponent}=useAuth();
+  const { toggleComponent } = useAuth();
   return (
     <>
       <div className="flex flex-col justify-center items-start px-2 pt-4 gap-3 w-full">
@@ -274,21 +284,3 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
     </>
   );
 }
-
-const Search = ({ className }: IconsProps) => (
-  <svg
-    width="16"
-    height="20"
-    viewBox="0 0 16 20"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={`${className} absolute top-[50%] left-[13px] translate-y-[-50%]`}
-  >
-    <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
-      d="M11.0781 14.0214C10.0517 14.8425 8.74968 15.3335 7.33301 15.3335C4.0193 15.3335 1.33301 12.6472 1.33301 9.3335C1.33301 6.01979 4.0193 3.3335 7.33301 3.3335C10.6467 3.3335 13.333 6.01979 13.333 9.3335C13.333 10.7502 12.842 12.0522 12.0209 13.0786L14.4711 15.5288C14.7314 15.7891 14.7314 16.2112 14.4711 16.4716C14.2107 16.7319 13.7886 16.7319 13.5283 16.4716L11.0781 14.0214ZM2.66634 9.3335C2.66634 6.75617 4.75568 4.66683 7.33301 4.66683C9.91034 4.66683 11.9997 6.75617 11.9997 9.3335C11.9997 10.5908 11.5024 11.732 10.6939 12.5711C10.6711 12.5887 10.6492 12.6079 10.6283 12.6288C10.6074 12.6497 10.5882 12.6716 10.5706 12.6944C9.7315 13.5029 8.59032 14.0002 7.33301 14.0002C4.75568 14.0002 2.66634 11.9108 2.66634 9.3335Z"
-      fill="#40566D"
-    />
-  </svg>
-);
