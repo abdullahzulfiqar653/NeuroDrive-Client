@@ -1,19 +1,40 @@
 import { useState } from "react";
-import {
-  Add,
-  Box,
-  List,
-  Xcel,
-  Recent,
-  Filter,
-  Starred,
-} from "../assets/Icons";
+import { Add, Box, List, Xcel, Recent, Filter, Starred } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
 import FileGallery from "./FileGallery";
 
 function FilesList() {
   const { isGridMode, setIsGridMode, toggleComponent } = useAuth();
- 
+  const newDocuments = [
+    {
+      id: "newExcel",
+      icon: <Xcel className="w-[32px] h-[41px] md:w-[61px] md:h-[77px]" />,
+      label: "Sheets",
+    },
+    {
+      id: "newDocs",
+      icon: (
+        <img
+          src="/rich.png"
+          alt="Rich Text Icon"
+          className="w-[41px] h-[41px] md:w-[77px] md:h-[77px]"
+        />
+      ),
+      label: "Rich Text",
+    },
+    {
+      id: "newFolder",
+      icon: (
+        <img
+          src="/folders.png"
+          alt="Folder Icon"
+          className="w-[44px] h-[41px] md:w-[83px] md:h-[77px]"
+        />
+      ),
+      label: "Folder",
+    },
+  ];
+
   return (
     <div className="flex flex-col items-center h-full w-[96%]">
       <div className="flex flex-col items-center gap-4 w-[96%]">
@@ -33,57 +54,24 @@ function FilesList() {
           </button>
         </div>
         <div className="flex gap-4 items-start  justify-start w-[96%]">
-          <div
-            onClick={() => toggleComponent("newExcel")}
-            style={{
-              borderImageSource:
-                "linear-gradient(180deg, #B325FC 0%, #8C44FD 45%, #6860FE 100%)",
-            }}
-            className="w-[109px] h-[124px] md:w-[203px] md:h-[231px] rounded-[16px] md:rounded-[32px] bg-[white] overflow-hidden border flex flex-col items-center justify-between"
-          >
-            <span className="h-[75%] w-full flex justify-center items-center">
-              <Xcel className={"w-[32px] h-[41px] md:w-[61px] md:h-[77px]"} />
-            </span>
-            <p className="h-[25%] text-[12px] md:text-[20px] font-sans w-full flex justify-center items-center object-cover overflow-hidden bg-[#F1F5FA] ">
-              Sheets
-            </p>
-          </div>
-          <div
-            onClick={() => toggleComponent("newDocs")}
-            style={{
-              borderImageSource:
-                "linear-gradient(180deg, #B325FC 0%, #8C44FD 45%, #6860FE 100%)",
-            }}
-            className="w-[109px] h-[124px] md:w-[203px] md:h-[231px] rounded-[16px] md:rounded-[32px]  bg-[white] overflow-hidden border flex flex-col items-center justify-between"
-          >
-            <span className="h-[75%] w-full flex justify-center items-center">
-              <img
-                src="/rich.png"
-                className={"w-[41px] h-[41px] md:w-[77px] md:h-[77px]"}
-              />
-            </span>
-            <p className="h-[25%] text-[12px] md:text-[20px] font-sans  w-full flex justify-center items-center object-cover overflow-hidden bg-[#F1F5FA] ">
-              Rich Text
-            </p>
-          </div>
-          <div
-            onClick={() => toggleComponent("newFolder")}
-            style={{
-              borderImageSource:
-                "linear-gradient(180deg, #B325FC 0%, #8C44FD 45%, #6860FE 100%)",
-            }}
-            className="w-[109px] h-[124px] md:w-[203px] md:h-[231px] rounded-[16px] md:rounded-[32px] bg-[white] overflow-hidden border flex flex-col items-center justify-between"
-          >
-            <span className="h-[75%] w-full flex justify-center items-center">
-              <img
-                src="/folders.png"
-                className={"w-[44px] h-[41px] md:w-[83px] md:h-[77px]"}
-              />
-            </span>
-            <p className="h-[25%] text-[12px] md:text-[20px] font-sans w-full flex justify-center items-center object-cover overflow-hidden bg-[#F1F5FA] ">
-              Folder
-            </p>
-          </div>
+          {newDocuments.map((Document) => (
+            <div
+              key={Document.id}
+              onClick={() => toggleComponent(Document.id)}
+              style={{
+                borderImageSource:
+                  "linear-gradient(180deg, #B325FC 0%, #8C44FD 45%, #6860FE 100%)",
+              }}
+              className="w-[109px] h-[124px] md:w-[203px] md:h-[231px] rounded-[16px] md:rounded-[32px] bg-[white] hover:drop-shadow-lg hover:border-none overflow-hidden border flex flex-col items-center justify-between"
+            >
+              <span className="h-[75%] w-full flex justify-center items-center">
+                {Document.icon}
+              </span>
+              <p className="h-[25%] text-[12px] md:text-[20px] font-sans w-full flex justify-center items-center object-cover overflow-hidden bg-[#F1F5FA]">
+                {Document.label}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
       <div className="flex flex-col items-center gap-4 mt-8 w-[96%]">
@@ -101,11 +89,17 @@ function FilesList() {
           </div>
           <div className="flex gap-4 items-center">
             {isGridMode ? (
-              <span className="cursor-pointer" onClick={() => setIsGridMode(false)}>
+              <span
+                className="cursor-pointer"
+                onClick={() => setIsGridMode(false)}
+              >
                 <Box />{" "}
               </span>
             ) : (
-              <span className="cursor-pointer" onClick={() => setIsGridMode(true)}>
+              <span
+                className="cursor-pointer"
+                onClick={() => setIsGridMode(true)}
+              >
                 <List />
               </span>
             )}
@@ -114,7 +108,7 @@ function FilesList() {
             </button>
           </div>
         </div>
-        <FileGallery/>
+        <FileGallery />
       </div>
     </div>
   );
