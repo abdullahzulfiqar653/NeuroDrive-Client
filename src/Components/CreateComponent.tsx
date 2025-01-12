@@ -39,7 +39,7 @@ function CreateComponent() {
             <input
               type="text"
               placeholder="Workspace"
-              className="w-full h-full outline-none text-[12px] md:text-[16px] bg-[#ffffff00] placeholder:text-[black]"
+              className="w-full h-full outline-none text-[12px] font-sans font-[600] md:text-[16px] bg-[#ffffff00] placeholder:text-[black]"
             />
           </div>
         </div>
