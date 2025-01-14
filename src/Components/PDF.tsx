@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 import {
   PdfViewerComponent,
   Toolbar,
@@ -14,48 +14,39 @@ import {
   FormFields,
   FormDesigner,
   Inject,
-} from '@syncfusion/ej2-react-pdfviewer';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+} from "@syncfusion/ej2-react-pdfviewer";
+import axios from "axios";
+import { toast } from "react-toastify";
+import useFileLoader from "../Hooks/useFileLoader";
 
 const PDF = ({ fileUrl, fileName }: any) => {
   const viewerRef = useRef<PdfViewerComponent | null>(null);
   const [isViewerReady, setIsViewerReady] = useState(false);
-
-  const loadPdfFromS3 = async () => {
-    setTimeout(async () => {
-      if (fileUrl && viewerRef.current) {
-        try {
-          const response = await axios.get(fileUrl, { responseType: 'blob' });
-          const arrayBuffer = await response.data.arrayBuffer();
-          const uint8Array = new Uint8Array(arrayBuffer);
-          viewerRef.current.load(uint8Array, fileName);
-        } catch (error) {
-          console.error('Error loading PDF:', error);
-        }
-      }
-    }, 1000); 
-  };
-  
+  const { loadFile } = useFileLoader({
+    fileType: "pdf",
+    fileUrl,
+    fileName,
+    viewerRef,
+  });
 
   const handleToolbarClick = async (args: any) => {
-    console.log('Toolbar item clicked:', args);
-    if (args && args.item && args.item.id === 'container_download') { 
+    console.log("Toolbar item clicked:", args);
+    if (args && args.item && args.item.id === "container_download") {
       if (viewerRef.current) {
         try {
           const blob = await viewerRef.current.saveAsBlob();
           const formData = new FormData();
-          formData.append('file', blob, fileName);
-          const response = await axios.post('/api/upload-pdf', formData, {
+          formData.append("file", blob, fileName);
+          const response = await axios.post("/api/upload-pdf", formData, {
             headers: {
-              'Content-Type': 'multipart/form-data',
+              "Content-Type": "multipart/form-data",
             },
           });
-          console.log(response, 'response');
-          toast.success('PDF sent to the backend successfully!');
+          console.log(response, "response");
+          toast.success("PDF sent to the backend successfully!");
         } catch (error) {
-          console.error('Error sending the PDF:', error);
-          toast.error('Failed to send the PDF to the backend');
+          console.error("Error sending the PDF:", error);
+          toast.error("Failed to send the PDF to the backend");
         }
       }
     }
@@ -68,9 +59,11 @@ const PDF = ({ fileUrl, fileName }: any) => {
   }, []);
 
   useEffect(() => {
-    if (isViewerReady && fileUrl) {
-      loadPdfFromS3();
-    }
+    setTimeout(async () => {
+      if (isViewerReady && fileUrl) {
+        loadFile();
+      }
+    }, 1000);
   }, [isViewerReady, fileUrl]);
 
   return (
@@ -79,7 +72,7 @@ const PDF = ({ fileUrl, fileName }: any) => {
         id="container"
         ref={viewerRef}
         resourceUrl="https://cdn.syncfusion.com/ej2/23.2.6/dist/ej2-pdfviewer-lib"
-        style={{ height: '170vw' }}
+        style={{ height: "170vw" }}
         toolbarClick={handleToolbarClick}
       >
         <Inject

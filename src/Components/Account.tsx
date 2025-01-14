@@ -1,13 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { CopyMail, Cross, Edit, Signout, TickIcon, VerticalLine } from "../assets/Icons";
+import {
+  CopyMail,
+  Cross,
+  Edit,
+  Signout,
+  TickIcon,
+  VerticalLine,
+} from "../assets/Icons";
 import { useAuth } from "../AuthContext";
 
 interface AccountProps {
   className: string;
 }
 
-function Account({className}:AccountProps) {
+function Account({ className }: AccountProps) {
   const navigate = useNavigate();
   const { setIsAccountOpen } = useAuth();
   const [copytext, setCopyText] = useState(false);
@@ -27,7 +34,9 @@ function Account({className}:AccountProps) {
   };
 
   return (
-    <div className={` ${className} absolute bg-[#EAEEF5] flex flex-col z-20 gap-2 md:gap-9 font-sans text-[#333333] shadow-md shadow-[#00000040] p-4 w-[256px] md:w-[333px] max-h-[358px] md:max-h-[464px] rounded-[16px] md:rounded-[22px] left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]`}>
+    <div
+      className={` ${className} absolute bg-[#EAEEF5] flex flex-col z-20 gap-2 md:gap-9 font-sans text-[#333333] shadow-md shadow-[#00000040] p-4 w-[256px] md:w-[333px] max-h-[358px] md:max-h-[464px] rounded-[16px] md:rounded-[22px] left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]`}
+    >
       <div className="flex justify-end">
         <button
           onClick={(e) => {
@@ -42,7 +51,7 @@ function Account({className}:AccountProps) {
         <div className="w-[110px] h-[110px] relative bg-white rounded-full flex justify-center items-center">
           <div className=" h-[84px] w-[84px] rounded-full cursor-pointer  overflow-hidden">
             <img
-              src="https://s3-alpha-sig.figma.com/img/5298/20ef/398885b3c44f2931c974eeab97452589?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gN2NdKafXBlh4NOklHHV1eMk5pPgM~xzInElAs6jU43hBLK1ZqyuFdVoaaAzSzJT35DEQIT702OG~38L5UL9QTt8vQPXaNa3OeRLdVgCdTCbbG6Mkiu~nrG3CdZjQllT4cZvq~pEPeHhdwKuBLJ~dWRP1X~mbGHgXTVIkyXyBkY1XEz8VBFmqnP6cQ7Pg1fl96tzu2PFVIET7I10KKdq3ddZFMFYLrrJcy6nXs8OCNl2qjz5NQt0F9~A6BtdCmPsne-a~xpOt6pJCzsBPz9VmItNEdCfyO17bdhhUQmLiwttWqiveWZ1YFLf4bHEXmjuWO0mhvKQ063l5E0G-YZL6Q__"
+              src="https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg"
               className="w-full h-full object-cover "
             />
             {/* <p className="bg-[#EB417A] w-full h-full text-[white] flex justify-center items-center text-[40px]">
