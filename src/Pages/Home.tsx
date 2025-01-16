@@ -15,6 +15,15 @@ import {
 import FilesList from "../Components/FilesList";
 import { useAuth } from "../AuthContext";
 
+const folder = [
+  "Workspace",
+  "Artistic assets",
+  "Office work",
+  // "Home setup",
+  // "Content corner",
+  // "Desk setup",
+];
+
 function Home() {
   const { isAccountOpen, setIsAccountOpen, toggleComponent } = useAuth();
   const [isLeftBar, setLeftBar] = useState(false);
@@ -37,7 +46,7 @@ function Home() {
     <>
       <div className="flex w-[100vw] relative bg-[#f6f8fc] h-screen overflow-x-hidden">
         {/* left side bar  */}
-        <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl overflow-hidden flex-[0.2] min-h-[800px] h-[100vh] desktop-view-table hidden md:flex flex-col justify-between">
+        <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl overflow-hidden flex-[0.2]  h-[100vh] min-h-[600px] desktop-view-table hidden md:flex flex-col justify-between">
           <LeftBar />
         </div>
         {/* content main  */}
@@ -78,7 +87,7 @@ function Home() {
                 >
                   <div className=" h-[35px] w-[35px] rounded-full cursor-pointer  overflow-hidden">
                     <img
-                      src="https://s3-alpha-sig.figma.com/img/5298/20ef/398885b3c44f2931c974eeab97452589?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gN2NdKafXBlh4NOklHHV1eMk5pPgM~xzInElAs6jU43hBLK1ZqyuFdVoaaAzSzJT35DEQIT702OG~38L5UL9QTt8vQPXaNa3OeRLdVgCdTCbbG6Mkiu~nrG3CdZjQllT4cZvq~pEPeHhdwKuBLJ~dWRP1X~mbGHgXTVIkyXyBkY1XEz8VBFmqnP6cQ7Pg1fl96tzu2PFVIET7I10KKdq3ddZFMFYLrrJcy6nXs8OCNl2qjz5NQt0F9~A6BtdCmPsne-a~xpOt6pJCzsBPz9VmItNEdCfyO17bdhhUQmLiwttWqiveWZ1YFLf4bHEXmjuWO0mhvKQ063l5E0G-YZL6Q__"
+                      src="https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg"
                       className="w-full h-full object-cover "
                     />
                   </div>
@@ -207,7 +216,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         </div>
         <Line className={"mt-2 min-w-[230px] w-full"} />
       </div>
-      <div className="flex flex-col items-center gap-2 my-2 h-[30vh] min-h-[280px] overflow-auto">
+      <div className="flex flex-col items-center gap-2 my-2 h-[30vh] overflow-auto">
         <div className="flex items-center justify-between w-full px-2 pb-2">
           <h1 className="flex text-[14px] text-[#9F9F9F] gap-1 items-center">
             <span>
@@ -219,30 +228,13 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             <Add />
           </span>
         </div>
-        <div className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
-          <Folder />
-          <p className="">Workspace</p>
-        </div>
-        <div className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
-          <Folder />
-          <p>Desk setup</p>
-        </div>
-        <div className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
-          <Folder />
-          <p>Content corner</p>
-        </div>
-        <div className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
-          <Folder />
-          <p>Artistic assets</p>
-        </div>
-        <div className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
-          <Folder />
-          <p>Office work</p>
-        </div>
-        <div className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
-          <Folder />
-          <p>Home setup</p>
-        </div>
+        
+        {folder.map((name, index) => (
+          <div key={index} className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
+            <Folder /> {name}
+            <p className=""></p>
+          </div>
+        ))}
       </div>
       <div className="flex flex-col justify-center items-center gap-4">
         <div

@@ -10,13 +10,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@syncfusion/ej2-react-documenteditor": "^28.1.37",
+    "@syncfusion/ej2-react-pdfviewer": "^28.1.38",
+    "@syncfusion/ej2-react-spreadsheet": "^28.1.37",
+    "axios": "^1.7.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-query": "^3.39.3",
     "react-router-dom": "^7.1.1",
+    "react-toastify": "^11.0.2",
     "reactjs-popup": "^2.0.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@types/node": "^22.10.3",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
