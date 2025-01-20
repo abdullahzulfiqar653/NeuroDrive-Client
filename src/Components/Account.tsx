@@ -1,15 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { CopyMail, Cross, Edit, Signout, TickIcon, VerticalLine } from "../assets/Icons";
+import {
+  CopyMail,
+  Cross,
+  Edit,
+  Signout,
+  TickIcon,
+  VerticalLine,
+} from "../assets/Icons";
 import { useAuth } from "../AuthContext";
 
 interface AccountProps {
   className: string;
 }
 
-function Account({className}:AccountProps) {
+function Account({ className }: AccountProps) {
   const navigate = useNavigate();
-  const { setIsAccountOpen } = useAuth();
+  const { logout, setIsAccountOpen } = useAuth();
   const [copytext, setCopyText] = useState(false);
 
   const mails = [
@@ -27,7 +34,9 @@ function Account({className}:AccountProps) {
   };
 
   return (
-    <div className={` ${className} absolute bg-[#EAEEF5] flex flex-col z-20 gap-2 md:gap-9 font-sans text-[#333333] shadow-md shadow-[#00000040] p-4 w-[256px] md:w-[333px] max-h-[358px] md:max-h-[464px] rounded-[16px] md:rounded-[22px] left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]`}>
+    <div
+      className={` ${className} absolute bg-[#EAEEF5] flex flex-col z-20 gap-2 md:gap-9 font-sans text-[#333333] shadow-md shadow-[#00000040] p-4 w-[256px] md:w-[333px] max-h-[358px] md:max-h-[464px] rounded-[16px] md:rounded-[22px] left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]`}
+    >
       <div className="flex justify-end">
         <button
           onClick={(e) => {
@@ -78,7 +87,10 @@ function Account({className}:AccountProps) {
             Add email address
           </p>
           <VerticalLine />
-          <p className="text-[9px] md:text-[11px] cursor-pointer  flex items-center w-[45%] md:w-[50%] ml-4">
+          <p
+            onClick={logout}
+            className="text-[9px] md:text-[11px] cursor-pointer  flex items-center w-[45%] md:w-[50%] ml-4"
+          >
             <span className="mr-2">
               <Signout className={"h-[11px] w-[12px]"} />
             </span>

@@ -1,7 +1,12 @@
+import { useNavigate } from "react-router-dom";
+
 interface RegisterInfoProps {
   setAcknowledged: (value: boolean) => void;
 }
+
 function RegisterInfo({ setAcknowledged }: RegisterInfoProps) {
+  const navigate = useNavigate();
+
   return (
     <div className="relative flex w-full h-[100vh] p-4 justify-between">
       <div className="absolute flex items-center justify-center -left-[9vw] right-0 top-[8vh]">
@@ -23,10 +28,14 @@ function RegisterInfo({ setAcknowledged }: RegisterInfoProps) {
             <h1 className="text-[#202343] text-[48px]">Register Account</h1>
             <p className="text-[#202343] text-[18px] font-sans">
               Don’t have any account?{" "}
-              <span className="text-blue-600">Login here</span>
+              <span
+                onClick={() => navigate("/login")}
+                className="text-blue-600 cursor-pointer"
+              >
+                Login here
+              </span>
             </p>
           </div>
-
           <div className="font-sans w-[35vw] flex flex-col items-center gap-4">
             <p className="text-[18px]">Important Note :</p>
             <p className="text-[#000000B2] text-[16px] text-center">
@@ -38,7 +47,7 @@ function RegisterInfo({ setAcknowledged }: RegisterInfoProps) {
             </p>
           </div>
           <button
-          onClick={()=>setAcknowledged(true)}
+            onClick={() => setAcknowledged(true)}
             style={{
               background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
               borderImageSource:

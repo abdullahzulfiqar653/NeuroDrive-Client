@@ -1,13 +1,16 @@
 import { useState } from "react";
-import RegisterInfo from "../Components/RegisterInfo";
-import RegisterSeeds from "../Components/RegisterSeeds";
+import RegisterInfo from "../../Components/RegisterInfo";
+import RegisterSeeds from "../../Components/RegisterSeeds";
 
 function Register() {
   const [acknowledged, setAcknowledged] = useState(false);
+
+
+
   return (
     <div className="bg-white">
       {acknowledged ? (
-        <RegisterSeeds />
+        <RegisterSeeds/>
       ) : (
         <RegisterInfo setAcknowledged={setAcknowledged} />
       )}
