@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CopyMail,
   Cross,
@@ -9,7 +9,8 @@ import {
   VerticalLine,
 } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
-
+import useApi from "../Hooks/usiApi";
+import { ThreeCircles } from "react-loader-spinner";
 interface AccountProps {
   className: string;
 }
@@ -18,6 +19,16 @@ function Account({ className }: AccountProps) {
   const navigate = useNavigate();
   const { logout, setIsAccountOpen } = useAuth();
   const [copytext, setCopyText] = useState(false);
+  const { response, isLoading, fetch, reset, error } = useApi();
+
+  useEffect(() => {
+    fetch("/user/profile");
+    return () => reset();
+  }, []);
+
+  useEffect(() => {
+    console.log(response);
+  }, [response, error]);
 
   const mails = [
     { id: 1, mail: "example@gmail.com" },
@@ -32,6 +43,8 @@ function Account({ className }: AccountProps) {
       setCopyText(false);
     }, 700);
   };
+
+  const handleUpload = () => {};
 
   return (
     <div
@@ -50,15 +63,22 @@ function Account({ className }: AccountProps) {
       <div className="flex flex-col justify-center items-center gap-2 md:gap-4">
         <div className="w-[110px] h-[110px] relative bg-white rounded-full flex justify-center items-center">
           <div className=" h-[84px] w-[84px] rounded-full cursor-pointer  overflow-hidden">
-            <img
-              src="https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg"
-              className="w-full h-full object-cover "
-            />
+            {isLoading ? (
+              <ThreeCircles height="80" width="80" color="black" />
+            ) : (
+              <img
+                src="https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg"
+                className="w-full h-full object-cover "
+              />
+            )}
             {/* <p className="bg-[#EB417A] w-full h-full text-[white] flex justify-center items-center text-[40px]">
               {userEmail?.email[0]?.toUpperCase()}
             </p> */}
           </div>
-          <div className="absolute right-1 bottom-[2px]">
+          <div
+            onClick={handleUpload}
+            className="absolute right-1 bottom-[2px] cursor-pointer"
+          >
             <Edit />
           </div>
         </div>

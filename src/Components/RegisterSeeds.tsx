@@ -2,19 +2,24 @@ import { useEffect, useState } from "react";
 import { CheckMark, CopySeeds, Save, TickIcon } from "../assets/Icons";
 import { ThreeCircles, ThreeDots } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSeeds, generateToken } from "../features/authentication/authSlice";
+import {
+  fetchSeeds,
+  generateToken,
+} from "../features/authentication/authSlice";
 import { AppDispatch, RootState } from "../app/store";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../AuthContext";
 
 function RegisterSeeds() {
-  const {signup}=useAuth();
+  const { signup } = useAuth();
   const [copytext, setCopyText] = useState(false);
-  const navigate=useNavigate();
-  
+  const navigate = useNavigate();
+
   const dispatch = useDispatch<AppDispatch>();
-  const { seeds, isSeedsLoading, isTokenLoading } = useSelector((state: RootState)=> state.auth);
+  const { seeds, isSeedsLoading, isTokenLoading } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   useEffect(() => {
     dispatch(fetchSeeds());
@@ -32,18 +37,16 @@ function RegisterSeeds() {
     dispatch(generateToken(seeds))
       .unwrap()
       .then((res) => {
-       toast.success('Successfully Registered');
-       navigate('/');
-       signup();
-       localStorage.setItem("access_token",res.data.access)
-       
+        localStorage.setItem("access_token", res.access);
+        toast.success("Successfully Registered");
+        navigate("/");
+        signup();
       })
       .catch((error) => {
-        console.error("Token generation failed:", error); 
+        console.error("Token generation failed:", error);
       });
   };
-  
-  
+
   return (
     <div className="relative flex w-full h-[100vh] p-4 justify-between">
       <div className="absolute flex items-center justify-center -left-[9vw] right-0 top-[8vh]">
@@ -66,7 +69,12 @@ function RegisterSeeds() {
             <h1 className="text-[#202343] text-[48px]">Your Seed</h1>
             <p className="text-[#202343] text-[18px] font-sans">
               Don’t have any account?{" "}
-              <span onClick={()=>navigate('/login')} className="text-blue-600 cursor-pointer">Login here</span>
+              <span
+                onClick={() => navigate("/login")}
+                className="text-blue-600 cursor-pointer"
+              >
+                Login here
+              </span>
             </p>
           </div>
 
@@ -124,7 +132,7 @@ function RegisterSeeds() {
             </div>
           </div>
           <button
-          onClick={handleRegister}
+            onClick={handleRegister}
             style={{
               background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
               borderImageSource:
@@ -132,12 +140,12 @@ function RegisterSeeds() {
             }}
             className="w-[202px] h-[48px] flex justify-center items-center text-white hover:shadow-lg shadow-black border-[1.16px] rounded-[13px] text-[15px] font-sans text-center"
           >
-            Next 
+            Next
             {isTokenLoading && (
-            <span className="ml-2">
-              <ThreeDots height="25" width="25" color="white" />
-            </span>
-          )}
+              <span className="ml-2">
+                <ThreeDots height="25" width="25" color="white" />
+              </span>
+            )}
           </button>
         </div>
       </div>

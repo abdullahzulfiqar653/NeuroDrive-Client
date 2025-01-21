@@ -224,13 +224,19 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             </span>
             FOLDERS
           </h1>
-          <span onClick={() => toggleComponent("newFolder")}>
+          <span
+            onClick={() => toggleComponent("newFolder")}
+            className="cursor-pointer"
+          >
             <Add />
           </span>
         </div>
-        
+
         {folder.map((name, index) => (
-          <div key={index} className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
+          <div
+            key={index}
+            className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3"
+          >
             <Folder /> {name}
             <p className=""></p>
           </div>
