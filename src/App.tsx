@@ -1,16 +1,19 @@
-import { Route, Routes } from 'react-router-dom'
-import './App.css'
-import Home from './Pages/Home'
-import TextFile from './Pages/TextFile'
-import ShareFile from './Components/ShareFile'
-import { useAuth } from './AuthContext'
-import CreateComponent from './Components/CreateComponent'
-import { ToastContainer } from 'react-toastify'
-import { FileProvider } from './FileContext'
-
+import { Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
+import { useAuth } from "./AuthContext";
+import CreateComponent from "./Components/CreateComponent";
+import ShareFile from "./Components/ShareFile";
+import Home from "./app/Pages/Home";
+import Login from "./app/Pages/Login";
+import Register from "./app/Pages/Register";
+import TextFile from "./app/Pages/TextFile";
+import ProtectedRoute from "./ProtectedRoute";
+import { FileProvider } from "./FileContext";
 
 function App() {
-  const { isOpenComponent } = useAuth()
+  const { isOpenComponent } = useAuth();
 
   return (
     <>
@@ -25,17 +28,24 @@ function App() {
         draggable
         pauseOnHover
       />
-      <FileProvider> 
+      <FileProvider>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/text-file" element={<TextFile />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<ProtectedRoute element={<Home />} />} />
+          <Route
+            path="/text-file"
+            element={<ProtectedRoute element={<TextFile />} />}
+          />
         </Routes>
       </FileProvider>
 
       {isOpenComponent.share && <ShareFile />}
-      {(isOpenComponent.newFolder || isOpenComponent.newExcel || isOpenComponent.newDocs) && <CreateComponent />}
+      {(isOpenComponent.newFolder ||
+        isOpenComponent.newExcel ||
+        isOpenComponent.newDocs) && <CreateComponent />}
     </>
-  )
+  );
 }
 
-export default App
+export default App;

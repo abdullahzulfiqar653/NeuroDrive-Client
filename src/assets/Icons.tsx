@@ -828,13 +828,14 @@ export const CopyMail = () => (
   </svg>
 );
 
-export const TickIcon = () => (
+export const TickIcon = ({ className }: IconsProps) => (
   <svg
     width="12"
     height="12"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
   >
     <path
       d="M20 6L9 17L4 12"
@@ -904,6 +905,87 @@ export const Search = ({ className }: IconsProps) => (
       clip-rule="evenodd"
       d="M11.0781 14.0214C10.0517 14.8425 8.74968 15.3335 7.33301 15.3335C4.0193 15.3335 1.33301 12.6472 1.33301 9.3335C1.33301 6.01979 4.0193 3.3335 7.33301 3.3335C10.6467 3.3335 13.333 6.01979 13.333 9.3335C13.333 10.7502 12.842 12.0522 12.0209 13.0786L14.4711 15.5288C14.7314 15.7891 14.7314 16.2112 14.4711 16.4716C14.2107 16.7319 13.7886 16.7319 13.5283 16.4716L11.0781 14.0214ZM2.66634 9.3335C2.66634 6.75617 4.75568 4.66683 7.33301 4.66683C9.91034 4.66683 11.9997 6.75617 11.9997 9.3335C11.9997 10.5908 11.5024 11.732 10.6939 12.5711C10.6711 12.5887 10.6492 12.6079 10.6283 12.6288C10.6074 12.6497 10.5882 12.6716 10.5706 12.6944C9.7315 13.5029 8.59032 14.0002 7.33301 14.0002C4.75568 14.0002 2.66634 11.9108 2.66634 9.3335Z"
       fill="#40566D"
+    />
+  </svg>
+);
+
+export const CopySeeds = ({ className }: IconsProps) => (
+  <svg
+    width="22"
+    height="22"
+    viewBox="0 0 22 22"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    <path
+      d="M18.2596 4.84598H7.58695C6.07354 4.84598 4.84668 6.07284 4.84668 7.58625V18.2589C4.84668 19.7723 6.07354 20.9992 7.58695 20.9992H18.2596C19.773 20.9992 20.9999 19.7723 20.9999 18.2589V7.58625C20.9999 6.07284 19.773 4.84598 18.2596 4.84598Z"
+      stroke="black"
+      stroke-opacity="0.63"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M17.1291 4.84599L17.1532 3.6922C17.1511 2.97881 16.8669 2.29521 16.3624 1.79077C15.858 1.28632 15.1744 1.00203 14.461 1H4.0768C3.26152 1.00241 2.48032 1.32734 1.90383 1.90383C1.32734 2.48032 1.00241 3.26152 1 4.0768V14.461C1.00203 15.1744 1.28632 15.858 1.79077 16.3624C2.29521 16.8669 2.97881 17.1511 3.6922 17.1532H4.84599"
+      stroke="black"
+      stroke-opacity="0.63"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
+export const Save = ({ className }: IconsProps) => (
+  <svg
+    width="29"
+    height="29"
+    viewBox="0 0 29 29"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    <path
+      d="M10.8892 13.6443L13.8797 16.6348L16.8702 13.6443"
+      stroke="black"
+      stroke-opacity="0.63"
+      stroke-miterlimit="10"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M13.8794 4.67273V16.553"
+      stroke="black"
+      stroke-opacity="0.63"
+      stroke-miterlimit="10"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M23.3655 14.2284C23.3655 19.3917 19.861 23.5737 14.0202 23.5737C8.17931 23.5737 4.6748 19.3917 4.6748 14.2284"
+      stroke="black"
+      stroke-opacity="0.63"
+      stroke-miterlimit="10"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
+export const CheckMark = ({ className }: IconsProps) => (
+  <svg
+    width="27"
+    height="27"
+    viewBox="0 0 27 27"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    <circle cx="13.5" cy="13.5" r="13.5" fill="#1E9700" />
+    <path
+      d="M9 14L12.5 17.5L19.5 10"
+      stroke="#FCFCFC"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
     />
   </svg>
 );

@@ -1,4 +1,4 @@
-import { Cross, Folder, Folders, Xcel } from "../assets/Icons";
+import { Cross, Xcel } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
 import { useNavigate } from 'react-router-dom';
 

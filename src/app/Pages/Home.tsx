@@ -1,4 +1,4 @@
-import Account from "../Components/Account";
+import Account from "../../Components/Account";
 import { useEffect, useRef, useState } from "react";
 import {
   Add,
@@ -11,9 +11,9 @@ import {
   Invite,
   Search,
   SixDots,
-} from "../assets/Icons";
-import FilesList from "../Components/FilesList";
-import { useAuth } from "../AuthContext";
+} from "../../assets/Icons";
+import FilesList from "../../Components/FilesList";
+import { useAuth } from "../../AuthContext";
 
 const folder = [
   "Workspace",

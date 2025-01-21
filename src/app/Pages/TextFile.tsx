@@ -1,10 +1,11 @@
-import { Arrow, Download, Invite, Print, SixDots, Xcel } from "../assets/Icons";
-import { useAuth } from "../AuthContext";
-import Account from "../Components/Account";
-import Word from "../Components/Word";
-import ExcelSheet from "../Components/ExcelSheet";
-import { useFileContext } from "../FileContext";
-import PDF from "../Components/PDF";
+
+import { useAuth } from "../../AuthContext";
+import Account from "../../Components/Account";
+import { Arrow, Download, Invite, Print, SixDots, Xcel } from "../../assets/Icons";
+import Word from "../../Components/Word";
+import ExcelSheet from "../../Components/ExcelSheet";
+import { useFileContext } from "../../FileContext";
+import PDF from "../../Components/PDF";
 
 function TextFile() {
   const { isAccountOpen, setIsAccountOpen, toggleComponent } = useAuth();

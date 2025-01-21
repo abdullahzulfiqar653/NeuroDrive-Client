@@ -8,7 +8,11 @@ type OpenComponentsState = {
 interface AuthContextType {
   isGridMode: boolean;
   isAccountOpen: boolean;
+  isAuthenticated: boolean;
   isOpenComponent: OpenComponentsState;
+  login: () => void;
+  signup: () => void;
+  logout: () => void;
   setIsGridMode: (isGridMode: boolean) => void;
   toggleComponent: (component: string, isOpen?: boolean) => void;
   setIsAccountOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,6 +26,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAccountOpen, setIsAccountOpen] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [isGridMode, setIsGridMode] = useState<boolean>(false);
   const [isOpenComponent, setOpenComponent] = useState<OpenComponentsState>({
     share: false,
@@ -37,15 +42,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }));
   };
 
+  const login = () => {
+    setIsAuthenticated(true);
+  };
+
+  const signup = () => {
+    setIsAuthenticated(true);
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem("access_token");
+  };
+
   return (
     <AuthContext.Provider
       value={{
+        login,
+        signup,
+        logout,
         isGridMode,
         setIsGridMode,
         isAccountOpen,
         setIsAccountOpen,
         isOpenComponent,
         toggleComponent,
+        isAuthenticated,
       }}
     >
       {children}

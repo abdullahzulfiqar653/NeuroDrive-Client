@@ -16,7 +16,7 @@ interface AccountProps {
 
 function Account({ className }: AccountProps) {
   const navigate = useNavigate();
-  const { setIsAccountOpen } = useAuth();
+  const { logout, setIsAccountOpen } = useAuth();
   const [copytext, setCopyText] = useState(false);
 
   const mails = [
@@ -87,7 +87,10 @@ function Account({ className }: AccountProps) {
             Add email address
           </p>
           <VerticalLine />
-          <p className="text-[9px] md:text-[11px] cursor-pointer  flex items-center w-[45%] md:w-[50%] ml-4">
+          <p
+            onClick={logout}
+            className="text-[9px] md:text-[11px] cursor-pointer  flex items-center w-[45%] md:w-[50%] ml-4"
+          >
             <span className="mr-2">
               <Signout className={"h-[11px] w-[12px]"} />
             </span>
