@@ -6,13 +6,15 @@ type OpenComponentsState = {
 
 // Define types for AuthContext
 interface AuthContextType {
+  isGridMode: boolean;
   isAccountOpen: boolean;
   isAuthenticated: boolean;
   isOpenComponent: OpenComponentsState;
   login: () => void;
   signup: () => void;
   logout: () => void;
-  toggleComponent: (component: string) => void;
+  setIsGridMode: (isGridMode: boolean) => void;
+  toggleComponent: (component: string, isOpen?: boolean) => void;
   setIsAccountOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -25,6 +27,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAccountOpen, setIsAccountOpen] = useState<boolean>(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [isGridMode, setIsGridMode] = useState<boolean>(false);
   const [isOpenComponent, setOpenComponent] = useState<OpenComponentsState>({
     share: false,
     newFolder: false,
@@ -32,11 +35,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     newDocs: false,
   });
 
-  // Function to toggle a specific component
-  const toggleComponent = (component: string) => {
+  const toggleComponent = (component: string, isOpen?: boolean) => {
     setOpenComponent((prevState) => ({
       ...prevState,
-      [component]: !prevState[component],
+      [component]: isOpen !== undefined ? isOpen : !prevState[component],
     }));
   };
 
@@ -54,7 +56,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{login, signup, logout, isAccountOpen, setIsAccountOpen ,isOpenComponent, toggleComponent, isAuthenticated}}>
+    <AuthContext.Provider
+      value={{
+        login,
+        signup,
+        logout,
+        isGridMode,
+        setIsGridMode,
+        isAccountOpen,
+        setIsAccountOpen,
+        isOpenComponent,
+        toggleComponent,
+        isAuthenticated,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,11 +1,21 @@
-import { Arrow, Download, Invite, Print, SixDots } from "../../assets/Icons";
+
 import { useAuth } from "../../AuthContext";
 import Account from "../../Components/Account";
+import { Arrow, Download, Invite, Print, SixDots, Xcel } from "../../assets/Icons";
+import Word from "../../Components/Word";
+import ExcelSheet from "../../Components/ExcelSheet";
+import { useFileContext } from "../../FileContext";
+import PDF from "../../Components/PDF";
 
 function TextFile() {
-  const { isAccountOpen, setIsAccountOpen,toggleComponent } = useAuth();
+  const { isAccountOpen, setIsAccountOpen, toggleComponent } = useAuth();
+  // const queryParams = new URLSearchParams(location.search);
+  // const Type = queryParams.get('type');
+  const { fileUrl, fileType, fileName } = useFileContext();
+
+  console.log("FileeeeTypeeeee", fileType);
+
   return (
-    // Navbar
     <div className="w-[100vw]">
       <div
         style={{
@@ -21,14 +31,22 @@ function TextFile() {
             </p>
           </span>
           <span className="md:flex items-center gap-2 pl-7 hidden">
-            <img src="/rich.png" alt="" className="w-6 h-6" />
-            <p className="font-sans text-[12px] text-white">NeuroDocs</p>
+            <>
+              {fileType === "word" && (
+                <img src="/rich.png" alt="" className="w-[26px] h-[26px]" />
+              )}
+              {fileType === "excel" && <Xcel className="w-[26px] h-[26px]" />}
+              {fileType === "pdf" && (
+                <img src="/pdf.png" alt="" className="w-[26px] h-[26px]" />
+              )}
+              <p className="font-sans text-[14px] text-white">{fileName}</p>
+            </>
           </span>
         </div>
 
         <div className="flex items-center gap-2">
           <div
-          onClick={()=>toggleComponent('share')}
+            onClick={() => toggleComponent("share")}
             style={{
               background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
               borderImageSource:
@@ -58,7 +76,7 @@ function TextFile() {
             >
               <div className=" h-[35px] w-[35px] rounded-full cursor-pointer  overflow-hidden">
                 <img
-                  src="https://s3-alpha-sig.figma.com/img/5298/20ef/398885b3c44f2931c974eeab97452589?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gN2NdKafXBlh4NOklHHV1eMk5pPgM~xzInElAs6jU43hBLK1ZqyuFdVoaaAzSzJT35DEQIT702OG~38L5UL9QTt8vQPXaNa3OeRLdVgCdTCbbG6Mkiu~nrG3CdZjQllT4cZvq~pEPeHhdwKuBLJ~dWRP1X~mbGHgXTVIkyXyBkY1XEz8VBFmqnP6cQ7Pg1fl96tzu2PFVIET7I10KKdq3ddZFMFYLrrJcy6nXs8OCNl2qjz5NQt0F9~A6BtdCmPsne-a~xpOt6pJCzsBPz9VmItNEdCfyO17bdhhUQmLiwttWqiveWZ1YFLf4bHEXmjuWO0mhvKQ063l5E0G-YZL6Q__"
+                  src="https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg"
                   className="w-full h-full object-cover "
                 />
               </div>
@@ -83,13 +101,13 @@ function TextFile() {
         <span className="flex items-center gap-2">
           <img src="/rich.png" alt="" className="w-[26px] h-[26px]" />
           <p className="font-sans text-[14px] text-black">NeuroDocs</p>
-        </span> 
+        </span>
         <div className="flex items-center gap-4">
           <p className="text-black border-b-2 border-black text-[14px]  ">
             Text
           </p>
           <button
-           onClick={()=>toggleComponent('share')}
+            onClick={() => toggleComponent("share")}
             style={{
               background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
               borderImageSource:
@@ -101,6 +119,14 @@ function TextFile() {
           </button>
         </div>
       </div>
+      {fileType === "excel" && (
+        <ExcelSheet fileUrl={fileUrl} fileName={fileName} />
+      )}
+      {/* {Type === 'excel' && <ExcelSheet fileUrl={fileUrl} fileName={fileName} />} */}
+      {fileType === "word" && <Word fileUrl={fileUrl} fileName={fileName} />}
+      {/* {Type === 'word' && <Word fileUrl={fileUrl} fileName={fileName} />} */}
+      {fileType === "pdf" && <PDF fileUrl={fileUrl} fileName={fileName} />}
+      {/* {Type === 'pdf' && <PDF fileUrl={fileUrl} fileName={fileName} />} */}
     </div>
   );
 }
