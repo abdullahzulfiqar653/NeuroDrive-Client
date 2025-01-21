@@ -203,7 +203,7 @@ export const Add = ({ className, color }: IconsProps) => (
 
 export const Folder = () => (
   <svg
-    width="20"
+    width="35"
     height="20"
     viewBox="0 0 20 20"
     fill="none"

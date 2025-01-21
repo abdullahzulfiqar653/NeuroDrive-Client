@@ -14,15 +14,21 @@ import {
 } from "../../assets/Icons";
 import FilesList from "../../Components/FilesList";
 import { useAuth } from "../../AuthContext";
+import { AppDispatch, RootState } from "../store";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getDirectory,
+  getFolders,
+} from "../../features/directories/folderSlice";
 
-const folder = [
-  "Workspace",
-  "Artistic assets",
-  "Office work",
-  // "Home setup",
-  // "Content corner",
-  // "Desk setup",
-];
+// const folder = [
+//   // "Workspace",
+//   // "Artistic assets",
+//   // "Office work",
+//   // "Home setup",
+//   // "Content corner",
+//   // "Desk setup",
+// ];
 
 function Home() {
   const { isAccountOpen, setIsAccountOpen, toggleComponent } = useAuth();
@@ -175,7 +181,36 @@ type LeftBarProps = {
   setLeftBar?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 function LeftBar({ setLeftBar }: LeftBarProps) {
-  const { toggleComponent } = useAuth();
+  const dispatch = useDispatch<AppDispatch>();
+  const { directory } = useSelector((state: RootState) => state.folders);
+  const { toggleComponent, parentFolder, setParentFolder } = useAuth();
+
+  useEffect(() => {
+    if (!parentFolder) {
+      dispatch(getDirectory("main"))
+        .unwrap()
+        .then((res) => {
+          setParentFolder(res);
+          localStorage.setItem("parent_folder_id", res.id);
+        })
+        .catch((error) => {
+          console.error("Error fetching folder details:", error);
+        });
+    }
+  }, []);
+
+  const handleClickFolder = (folder_id: string) => {
+    dispatch(getDirectory(folder_id))
+      .unwrap()
+      .then((res) => {
+        setParentFolder(res);
+        localStorage.setItem("parent_folder_id", res.id);
+      })
+      .catch((error) => {
+        console.error("Error fetching folder details:", error);
+      });
+  };
+
   return (
     <>
       <div className="flex flex-col justify-center items-start px-2 pt-4 gap-3 w-full">
@@ -185,7 +220,10 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         />
         {/* <Line className={"my-1 md:hidden block"} /> */}
         <div className="flex flex-col gap-2 md:pl-1 pl-5 mt-3">
-          <div className="cursor-pointer bg-[#3984FF] w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center shadow-md">
+          <div
+            onClick={() => handleClickFolder("main")}
+            className="cursor-pointer bg-[#3984FF] w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center shadow-md"
+          >
             <div className="flex items-center gap-3">
               <Blocks />
               <p className="text-[14px] font-sans text-white leading-[20px]">
@@ -224,17 +262,31 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             </span>
             FOLDERS
           </h1>
-          <span onClick={() => toggleComponent("newFolder")}>
+          <span
+            onClick={() => toggleComponent("newFolder")}
+            className="cursor-pointer"
+          >
             <Add />
           </span>
         </div>
-        
-        {folder.map((name, index) => (
-          <div key={index} className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
-            <Folder /> {name}
-            <p className=""></p>
-          </div>
-        ))}
+        <div className="flex flex-col justify-start gap-2 w-[90%] px-3">
+          {directory?.children && directory.children.length > 0 ? (
+            directory.children.map((child) => (
+              <h1
+                onClick={() => handleClickFolder(child.id)}
+                key={child.id}
+                className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 font-sans"
+              >
+                <Folder />{" "}
+                <span className="truncate w-[60%]">{child.name}</span>
+              </h1>
+            ))
+          ) : (
+            <p className="whitespace-nowrap hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
+              No folder
+            </p>
+          )}
+        </div>
       </div>
       <div className="flex flex-col justify-center items-center gap-4">
         <div

@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext, ReactNode } from "react";
+import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
+import { Folder } from "./features/directories/folderSlice";
 
 type OpenComponentsState = {
   [key: string]: boolean;
@@ -7,6 +8,7 @@ type OpenComponentsState = {
 // Define types for AuthContext
 interface AuthContextType {
   isGridMode: boolean;
+  parentFolder:Folder| null;
   isAccountOpen: boolean;
   isAuthenticated: boolean;
   isOpenComponent: OpenComponentsState;
@@ -14,6 +16,7 @@ interface AuthContextType {
   signup: () => void;
   logout: () => void;
   setIsGridMode: (isGridMode: boolean) => void;
+  setParentFolder: (component: Folder) => void;
   toggleComponent: (component: string, isOpen?: boolean) => void;
   setIsAccountOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -28,12 +31,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAccountOpen, setIsAccountOpen] = useState<boolean>(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [isGridMode, setIsGridMode] = useState<boolean>(false);
+  const [parentFolder, setParentFolder] = useState<Folder | null>(null);
   const [isOpenComponent, setOpenComponent] = useState<OpenComponentsState>({
     share: false,
     newFolder: false,
     newExcel: false,
     newDocs: false,
   });
+ 
+  useEffect(() => {
+    const parentId = localStorage.getItem('parent_id');
+    if (parentId) {
+      setParentFolder((prev) => ({
+        ...prev,
+        id: parentId,
+      } as Folder));
+    }
+  }, []);
+
 
   const toggleComponent = (component: string, isOpen?: boolean) => {
     setOpenComponent((prevState) => ({
@@ -62,8 +77,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         signup,
         logout,
         isGridMode,
+        parentFolder,
         setIsGridMode,
         isAccountOpen,
+        setParentFolder,
         setIsAccountOpen,
         isOpenComponent,
         toggleComponent,

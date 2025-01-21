@@ -1,26 +1,49 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import apiClient from '../../services/apiClient';
+import apiClient, { getTokenIncludedConfig } from '../../services/apiClient';
 import { AxiosError } from 'axios';
 
 export interface FolderState {
-    seeds: string;
-    isAuthenticated: boolean | undefined;
-    isSeedsLoading: boolean;
-    isTokenLoading: boolean;
+    directory: Folder | null; 
+    directories: DirectoriesResponse | null; 
+    isLoading: boolean;
     error: string | undefined | null;
   }
 
 const initialState: FolderState = {
-    seeds: '',
-    isAuthenticated: false,
-    isSeedsLoading: false,
-    isTokenLoading: false,
+    directories: null,
+    directory: {
+        id: '',
+        name: '',
+        parent: null,
+        children: [],
+        files: [],
+        shared_with: [],
+      },
+    isLoading: false,
     error: "",
 }
 
+export interface Folder {
+    id: string;
+    name: string;
+    parent: string | null;
+    children: Folder[];
+    files: any[];
+    shared_with: any[];
+  }
+  
+
+export interface DirectoriesResponse {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: Folder[];
+  }
+
 export const getFolders = createAsyncThunk('folders/getFolders', async (_, { rejectWithValue }) => {
   try {
-    const response = await apiClient.post('directories/');
+    const response = await apiClient.get('directories/', getTokenIncludedConfig());
+    localStorage.setItem('parent_folder_id', response.data.results.id)
     return response.data; 
   } catch (error) {
     if(error instanceof AxiosError)
@@ -34,9 +57,22 @@ export const getFolders = createAsyncThunk('folders/getFolders', async (_, { rej
 
 export const createFolders = createAsyncThunk(
     'folders/createFolders',
-    async (pass_phrase: string, { rejectWithValue }) => {
+    async (body: object, { rejectWithValue }) => {
       try {
-        const response = await apiClient.post('/user/generate-token/', { pass_phrase });
+        const response = await apiClient.post('directories/', body, getTokenIncludedConfig());
+        return response.data; 
+      } catch (error) {
+        if(error instanceof AxiosError)
+        return rejectWithValue(error.response?.data);
+      }
+    }
+);
+
+export const getDirectory = createAsyncThunk(
+    'folders/getDirectory',
+    async (id: string, { rejectWithValue }) => {
+      try {
+        const response = await apiClient.get(`directories/${id}`, getTokenIncludedConfig());
         return response.data; 
       } catch (error) {
         if(error instanceof AxiosError)
@@ -46,37 +82,50 @@ export const createFolders = createAsyncThunk(
 );
   
 
-const authSlice = createSlice({
+const folderSlice = createSlice({
   name: 'folders',
   initialState,
   reducers: {}, 
   extraReducers: (builder) => {
 
     builder.addCase(getFolders.pending, (state) => {
-      state.isSeedsLoading = true;
+      state.isLoading = true;
       state.error = null;
     });
     builder.addCase(getFolders.fulfilled, (state, action) => {
-      state.isSeedsLoading = false;
-      state.seeds = action.payload;
+      state.isLoading = false;
+      state.directories = action.payload;
     });
     builder.addCase(getFolders.rejected, (state, action) => {
-      state.isSeedsLoading = false;
+      state.isLoading = false;
       state.error =  (typeof action.payload === 'string' || action.payload === null || action.payload === undefined) ? action.payload : 'Unkown Error';
     });
 
     builder.addCase(createFolders.pending, (state) => {
-      state.isTokenLoading = true;
+      state.isLoading = true;
       state.error = null;
     });
     builder.addCase(createFolders.fulfilled, (state) => {
-      state.isTokenLoading = false;
+      state.isLoading = false;
     });
     builder.addCase(createFolders.rejected, (state, action) => {
-      state.isTokenLoading = false;
+      state.isLoading = false;
       state.error = (typeof action.payload === 'string' || action.payload === null || action.payload === undefined) ? action.payload : 'Unkown Error';
     });
+
+      builder.addCase(getDirectory.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      });
+      builder.addCase(getDirectory.fulfilled, (state,action) => {
+        state.isLoading = false;
+        state.directory=action.payload;
+      });
+      builder.addCase(getDirectory.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = (typeof action.payload === 'string' || action.payload === null || action.payload === undefined) ? action.payload : 'Unkown Error';
+      });
   },
 });
 
-export default authSlice.reducer;
+export default folderSlice.reducer;
