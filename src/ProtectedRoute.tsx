@@ -1,8 +1,7 @@
-import React from "react";
 import { useAuth } from "./AuthContext";
 import { Navigate, useLocation } from "react-router-dom";
 
-const ProtectedRoute = ({ element }) => {
+const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({ element }) => {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
 
