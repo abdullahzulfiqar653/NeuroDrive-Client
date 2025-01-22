@@ -53,7 +53,7 @@ function Account({ className, profile, profileLoading }: AccountProps) {
     const formData = new FormData();
     formData.append("image", file);
     console.log(formData);
-    uploadPost({ url: "/user", payload: formData, method: "put" });
+    uploadPost({ url: "/user/profile/", payload: formData, method: "put" });
     console.log(uploadError);
     if (uploadError?.toString()) {
       toast.error("Falied to upload profile");
