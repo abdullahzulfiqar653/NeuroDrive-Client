@@ -1,11 +1,18 @@
 import { useState } from "react";
 import RegisterInfo from "../../Components/RegisterInfo";
 import RegisterSeeds from "../../Components/RegisterSeeds";
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../AuthContext";
 
 function Register() {
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
   const [acknowledged, setAcknowledged] = useState(false);
+  
 
-
+  if (isAuthenticated ) {
+    return <Navigate to="/" state={{ from: location }} replace />;
+  }
 
   return (
     <div className="bg-white">
