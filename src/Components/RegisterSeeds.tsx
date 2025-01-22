@@ -6,6 +6,7 @@ import {
   fetchSeeds,
   generateToken,
 } from "../features/authentication/authSlice";
+
 import { AppDispatch, RootState } from "../app/store";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -36,8 +37,8 @@ function RegisterSeeds() {
   const handleRegister = () => {
     dispatch(generateToken(seeds))
       .unwrap()
-      .then((res) => {
-        localStorage.setItem("access_token", res.access);
+      .then((response) => {
+        localStorage.setItem("access_token", response.access);
         toast.success("Successfully Registered");
         navigate("/");
         signup();

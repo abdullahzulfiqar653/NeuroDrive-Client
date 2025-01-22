@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Words from "../../assets/Seeds";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { generateToken } from "../../features/authentication/authSlice";
 import { ThreeDots } from "react-loader-spinner";
@@ -9,8 +9,9 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../AuthContext";
 
 function Login() {
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
   const { isTokenLoading } = useSelector((state: RootState) => state.auth);
   const [inputValue, setInputValue] = useState<string>("");
@@ -72,12 +73,17 @@ function Login() {
         toast.success("Login Successfully");
         navigate("/");
         login();
-        localStorage.setItem("access_token", res.data.access);
+        localStorage.setItem("access_token", res.access);
+        
       })
       .catch((error) => {
         console.error("Token generation failed:", error);
       });
   };
+
+  if (isAuthenticated) {
+    return <Navigate to="/" state={{ from: location }} replace />;
+  }
 
   return (
     <div className="bg-white">

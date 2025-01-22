@@ -1,32 +1,74 @@
+import { useState } from "react";
 import { Cross, Xcel } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../app/store";
+import { createFolders, getDirectory } from "../features/directories/folderSlice";
+import { toast } from "react-toastify";
+import { ThreeDots } from "react-loader-spinner";
 
 function CreateComponent() {
-  const { isOpenComponent, toggleComponent } = useAuth();
+  const { parentFolder, isOpenComponent, toggleComponent } = useAuth();
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const [loading, setLoading] = useState(false)
+  const [value, setValue] = useState({
+    name: "",
+    parent: "",
+  });
 
   const handleClose = () => {
     if (isOpenComponent.newExcel) {
-      toggleComponent('newExcel', false);
+      toggleComponent("newExcel", false);
     } else if (isOpenComponent.newDocs) {
-      toggleComponent('newDocs', false);
+      toggleComponent("newDocs", false);
     } else if (isOpenComponent.newFolder) {
-      toggleComponent('newFolder', false);
+      toggleComponent("newFolder", false);
     }
   };
-  
+
   const handleCreate = () => {
     if (isOpenComponent.newExcel) {
-      navigate('/text-file?type=excel');
-      setTimeout(() => toggleComponent('newExcel', false), 0);
+      navigate("/text-file?type=excel");
+      setTimeout(() => toggleComponent("newExcel", false), 0);
     } else if (isOpenComponent.newDocs) {
-      navigate('/text-file?type=word');
-      setTimeout(() => toggleComponent('newDocs', false), 0);
+      navigate("/text-file?type=word");
+      setTimeout(() => toggleComponent("newDocs", false), 0);
     } else {
-      alert('Please select a file type to create.');
-      handleClose(); 
+      alert("Please select a file type to create.");
+      handleClose();
     }
+  };
+
+  const handleChange = (newValue: string) => {
+    setValue((prev) => ({
+      ...prev,
+      name: newValue,
+    }));
+  };
+
+
+  const handleSubmit = () => {
+    const updatedValue = {
+      ...value,
+      parent: parentFolder?.id,
+    };
+    setLoading(true);
+    dispatch(createFolders(updatedValue))
+      .unwrap()
+      .then((res) => {
+        const parentFolderId = localStorage.getItem('parent_folder_id');
+        if (parentFolderId) {
+          dispatch(getDirectory(parentFolderId));
+        }
+        toast.success("Folder Created Successfully");
+        toggleComponent("newFolder", false);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Folder Creation failed:", error);
+      });
   };
 
   return (
@@ -38,7 +80,13 @@ function CreateComponent() {
         >
           <Cross className="w-[11px] h-[11px] md:w-3 md:h-3" color="#000000" />
         </span>
-        {isOpenComponent.newFolder && <img src="/folders.png" alt="Folder Icon" className="w-[49px] h-[40px] md:w-[83px] md:h-[77px]" />}
+        {isOpenComponent.newFolder && (
+          <img
+            src="/folders.png"
+            alt="Folder Icon"
+            className="w-[49px] h-[40px] md:w-[83px] md:h-[77px]"
+          />
+        )}
         {isOpenComponent.newDocs && <img src="/rich.png" alt="Word Icon" />}
         {isOpenComponent.newExcel && <Xcel />}
         <p className="text-[22px] text-[#202343]">
@@ -50,6 +98,8 @@ function CreateComponent() {
           <p className="font-sans">Enter Name</p>
           <div className="h-[36px] w-[97%] md:h-[54px] bg-[#ECECEC] rounded-md px-3">
             <input
+              value={value.name}
+              onChange={(e) => handleChange(e.target.value)}
               type="text"
               placeholder="Workspace"
               className="w-full h-full outline-none text-[12px] font-sans font-[600] md:text-[16px] bg-[#ffffff00] placeholder:text-[black]"
@@ -57,14 +107,20 @@ function CreateComponent() {
           </div>
         </div>
         <button
-          onClick={handleCreate}
+          onClick={handleSubmit}
           style={{
             background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
-            borderImageSource: "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)",
+            borderImageSource:
+              "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)",
           }}
-          className="w-[132px] h-[34px] md:w-[163px] md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5"
+          className="w-[132px] h-[34px] md:w-[163px] md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
         >
           Create
+           {loading && (
+                <span className="ml-2">
+                  <ThreeDots height="25" width="25" color="white" />
+                </span>
+              )}
         </button>
       </div>
     </div>
