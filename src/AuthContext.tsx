@@ -34,6 +34,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [parentFolder, setParentFolder] = useState<Folder | null>(null);
   const [isOpenComponent, setOpenComponent] = useState<OpenComponentsState>({
     share: false,
+    upload: false,
     newFolder: false,
     newExcel: false,
     newDocs: false,

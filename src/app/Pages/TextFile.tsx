@@ -13,8 +13,6 @@ function TextFile() {
   // const Type = queryParams.get('type');
   const { fileUrl, fileType, fileName } = useFileContext();
 
-  console.log("FileeeeTypeeeee", fileType);
-
   return (
     <div className="w-[100vw]">
       <div
