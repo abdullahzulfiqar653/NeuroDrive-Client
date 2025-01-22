@@ -11,6 +11,7 @@ import Register from "./app/Pages/Register";
 import TextFile from "./app/Pages/TextFile";
 import ProtectedRoute from "./ProtectedRoute";
 import { FileProvider } from "./FileContext";
+import UploadDocument from "./Components/UploadDocument";
 
 function App() {
   const { isOpenComponent } = useAuth();
@@ -41,6 +42,7 @@ function App() {
       </FileProvider>
 
       {isOpenComponent.share && <ShareFile />}
+      {isOpenComponent.upload && <UploadDocument />}
       {(isOpenComponent.newFolder ||
         isOpenComponent.newExcel ||
         isOpenComponent.newDocs) && <CreateComponent />}
