@@ -5,6 +5,7 @@ import { fetchData, resetState, postData } from '../features/ApiSlice';
 interface PostParams {
   url: string;
   payload: any;
+  method: "post" | "put" | "patch"
 }
 
 const useApi = () => {
@@ -15,15 +16,15 @@ const useApi = () => {
     dispatch(fetchData(url));
   };
 
-  const post = ({ url, payload }: PostParams) => {
-    dispatch(postData({ url, payload }));
+  const post = ({ url, payload, method }: PostParams) => {
+    dispatch(postData({ url, payload, method }));
   };
 
   const reset = () => {
     dispatch(resetState());
   };
 
-  return { isLoading, error, response, fetch, reset };
+  return { isLoading, error, response,post, fetch, reset };
 };
 
 export default useApi;
