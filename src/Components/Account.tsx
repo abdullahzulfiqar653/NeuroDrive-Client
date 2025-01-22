@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   CopyMail,
   Cross,
@@ -11,24 +11,27 @@ import {
 import { useAuth } from "../AuthContext";
 import useApi from "../Hooks/usiApi";
 import { ThreeCircles } from "react-loader-spinner";
+import { toast } from "react-toastify";
 interface AccountProps {
   className: string;
+  profile: string;
+  profileLoading: boolean;
+  // className?: string;
+  // profile: Dispatch<SetStateAction<string>>;
 }
 
-function Account({ className }: AccountProps) {
+function Account({ className, profile, profileLoading }: AccountProps) {
   const navigate = useNavigate();
   const { logout, setIsAccountOpen } = useAuth();
   const [copytext, setCopyText] = useState(false);
-  const { response, isLoading, fetch, reset, error } = useApi();
 
-  useEffect(() => {
-    fetch("/user/profile");
-    return () => reset();
-  }, []);
-
-  useEffect(() => {
-    console.log(response);
-  }, [response, error]);
+  const {
+    response: uploadResponse,
+    isLoading: uploadLoading,
+    post: uploadPost,
+    reset: uploadReset,
+    error: uploadError,
+  } = useApi();
 
   const mails = [
     { id: 1, mail: "example@gmail.com" },
@@ -44,7 +47,19 @@ function Account({ className }: AccountProps) {
     }, 700);
   };
 
-  const handleUpload = () => {};
+  const handleUpload = (event: any) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("image", file);
+    console.log(formData);
+    uploadPost({ url: "/user", payload: formData, method: "put" });
+    console.log(uploadError);
+    if (uploadError?.toString()) {
+      toast.error("Falied to upload profile");
+    } else toast.success("Profile changed Successfully");
+    return () => uploadReset();
+  };
 
   return (
     <div
@@ -63,11 +78,11 @@ function Account({ className }: AccountProps) {
       <div className="flex flex-col justify-center items-center gap-2 md:gap-4">
         <div className="w-[110px] h-[110px] relative bg-white rounded-full flex justify-center items-center">
           <div className=" h-[84px] w-[84px] rounded-full cursor-pointer  overflow-hidden">
-            {isLoading ? (
+            {profileLoading || uploadLoading ? (
               <ThreeCircles height="80" width="80" color="black" />
             ) : (
               <img
-                src="https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg"
+                src={String(profile)}
                 className="w-full h-full object-cover "
               />
             )}
@@ -76,10 +91,19 @@ function Account({ className }: AccountProps) {
             </p> */}
           </div>
           <div
-            onClick={handleUpload}
+            // onClick={handleUpload}
             className="absolute right-1 bottom-[2px] cursor-pointer"
           >
-            <Edit />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleUpload}
+              style={{ display: "none" }}
+              id="gallery-button"
+            />
+            <label htmlFor="gallery-button" className="cursor-pointer">
+              <Edit />
+            </label>
           </div>
         </div>
         <p className="text-[10px] md:text-[14px] flex items-center">
