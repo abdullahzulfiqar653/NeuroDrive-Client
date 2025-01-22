@@ -203,7 +203,7 @@ export const Add = ({ className, color }: IconsProps) => (
 
 export const Folder = () => (
   <svg
-    width="20"
+    width="35"
     height="20"
     viewBox="0 0 20 20"
     fill="none"
@@ -983,6 +983,25 @@ export const CheckMark = ({ className }: IconsProps) => (
     <path
       d="M9 14L12.5 17.5L19.5 10"
       stroke="#FCFCFC"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
+export const Upload = ({ className }: IconsProps) => (
+  <svg
+    width="47"
+    height="43"
+    viewBox="0 0 47 43"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    <path
+      d="M23.5 42V23.55M23.5 23.55L30.6591 30.725M23.5 23.55L16.3409 30.725M39.8636 32.9943C42.9195 31.7951 46 29.0624 46 23.55C46 15.35 39.1825 13.3 35.7727 13.3C35.7727 9.2 35.7727 1 23.5 1C11.2273 1 11.2273 9.2 11.2273 13.3C7.8175 13.3 1 15.35 1 23.55C1 29.0624 4.08045 31.7951 7.13636 32.9943"
+      stroke="black"
       stroke-width="1.5"
       stroke-linecap="round"
       stroke-linejoin="round"

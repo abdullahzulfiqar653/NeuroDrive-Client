@@ -43,14 +43,15 @@ function FilesList() {
             Create New Document
           </p>
           <button
+            onClick={() => toggleComponent("upload")}
             style={{
               background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
               borderImageSource:
                 "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)",
             }}
-            className="w-[79px] h-[31px] rounded-lg flex gap-1 items-center justify-center md:hidden text-white font-sans text-[10px]"
+            className="w-[79px] h-[31px] md:w-[108px] md:h-[42px] rounded-lg flex gap-1 items-center justify-center  text-white font-sans text-[10px] md:text-[14px]"
           >
-            <Add className={"w-4 h-4 mb-1"} color={"white"} /> Upload
+            <Add className={"w-4 h-4 md:w-5 md:h-5 mb-1 md:mb-0"} color={"white"} /> Upload
           </button>
         </div>
         <div className="flex gap-4 items-start  justify-start w-[96%]">

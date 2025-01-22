@@ -72,7 +72,8 @@ function Login() {
         toast.success("Login Successfully");
         navigate("/");
         login();
-        localStorage.setItem("access_token", res.data.access);
+        localStorage.setItem("access_token", res.access);
+        
       })
       .catch((error) => {
         console.error("Token generation failed:", error);

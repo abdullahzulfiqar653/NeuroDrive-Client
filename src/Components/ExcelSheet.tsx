@@ -11,8 +11,6 @@ interface ExcelSheetProps {
 const ExcelSheet: React.FC<ExcelSheetProps> = ({ fileUrl, fileName }) => {
   const spreadsheetRef = useRef<SpreadsheetComponent>(null);
 
-  console.log(fileUrl)
-
   const beforeSave = (args: any) => {
     args.needBlobData = true;
     args.isFullPost = false;
