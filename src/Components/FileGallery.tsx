@@ -93,7 +93,7 @@ function FileGallery() {
   return (
     <div className="h-full w-[100%] md:w-[96%]">
       {isGridMode ? (
-        <div className="flex flex-wrap justify-center gap-2 md:gap-4 my-2 md:my-4">
+        <div className="flex flex-wrap justify-center gap-4 md:gap-4 my-2 md:my-4">
           {parentFolder?.files?.map((item, index) => (
             <div
               key={index}
@@ -103,7 +103,7 @@ function FileGallery() {
               <div className="flex items-center justify-center h-[80%]  hover:bg-[#f2f3f3] bg-white rounded-[16px] md:rounded-[32px]">
                 {item?.name.split(".").pop() === "jpg" && (
                   <>
-                    <Gallery className="w-28 h-72" />
+                    <Gallery className="w-28 h-32" />
                   </>
                 )}
                 {item?.name.split(".").pop() === "text" && (
@@ -153,8 +153,8 @@ function FileGallery() {
           ))}
         </div>
       ) : (
-        <div className="container md:rounded-xl  md:border w-full h-full my-4">
-          <div className="h-full rounded-xl bg-[#F1F5FA]  w-[full] hidden md:flex flex-col ">
+        <div className="container md:rounded-xl md:border w-full h-full my-4">
+          <div className="h-full rounded-xl bg-[#F1F5FA]  w-[full] md:flex flex-col ">
             <div className="overflow-hidden rounded-xl  bg-[#F1F5FA] w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
               <p className="border w-[30%] gap-2 h-full flex items-center justify-start px-4">
                 <span
@@ -217,7 +217,6 @@ function FileGallery() {
                       <span className="ml-2">{file.name}</span>
                     </>
                   )}
-                  {/* You can handle other file extensions similarly */}
                 </p>
 
                 <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
@@ -236,16 +235,14 @@ function FileGallery() {
                   {file.size}
                 </p>
 
-                {/* Show file viewer if selected */}
                 {isSelected === index && (
                   <FileViewer
                     fileUrl={file.url}
                     fileType={file.fileType as "excel" | "word" | "pdf"}
-                    fileName={file.fileName}
+                    fileName={file.name}
                   />
                 )}
 
-                {/* Popup for actions */}
                 <Popup
                   trigger={
                     <p className="cursor-pointer border w-[10%] h-full flex items-center justify-start px-4">
