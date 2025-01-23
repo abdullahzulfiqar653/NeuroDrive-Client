@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Add, Box, List, Xcel, Recent, Filter, Starred } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
 import FileGallery from "./FileGallery";
@@ -51,7 +50,11 @@ function FilesList() {
             }}
             className="w-[79px] h-[31px] md:w-[108px] md:h-[42px] rounded-lg flex gap-1 items-center justify-center  text-white font-sans text-[10px] md:text-[14px]"
           >
-            <Add className={"w-4 h-4 md:w-5 md:h-5 mb-1 md:mb-0"} color={"white"} /> Upload
+            <Add
+              className={"w-4 h-4 md:w-5 md:h-5 mb-1 md:mb-0"}
+              color={"white"}
+            />{" "}
+            Upload
           </button>
         </div>
         <div className="flex gap-4 items-start  justify-start w-[96%]">
