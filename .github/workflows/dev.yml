@@ -1,0 +1,47 @@
+name: CI/CD > NeuroDrive Client > Dev
+
+on:
+  push:
+    branches:
+      - dev
+
+concurrency:
+  group: dev
+  cancel-in-progress: true
+
+jobs:
+  publish-images:
+    name: Connecting to server for deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure SSH
+        env:
+          SSH_USER: ${{ secrets.DEV_SSH_USER }}
+          SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
+          SSH_PRIVATE_KEY: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/github
+          chmod 600 ~/.ssh/github
+          cat >>~/.ssh/config <<END
+          Host target
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/github
+            LogLevel ERROR
+            StrictHostKeyChecking no
+          END
+
+      - name: Run Deploy
+        run: |
+          ssh target "\
+            export PATH=/root/.nvm/versions/node/v22.12.0/bin:\$PATH && \
+            cd Frontends/dev/NeuroDrive-Client/ && \
+            git fetch && \
+            git checkout dev && \
+            git pull && \
+            export PATH=\$PATH:/root/.npm/bin && \
+            npm install && \
+            npm run build && \
+            cp -r ./dist/* /var/www/dev/dev.neurodrive.xyz/html && \
+            systemctl reload nginx"
