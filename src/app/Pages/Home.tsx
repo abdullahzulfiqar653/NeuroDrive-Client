@@ -18,7 +18,6 @@ import { AppDispatch, RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getDirectory,
-  getFolders,
 } from "../../features/directories/folderSlice";
 
 // const folder = [

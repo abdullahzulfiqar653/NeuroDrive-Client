@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Cross, Xcel } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../app/store";
 import { createFolders, getDirectory } from "../features/directories/folderSlice";
@@ -10,7 +9,6 @@ import { ThreeDots } from "react-loader-spinner";
 
 function CreateComponent() {
   const { parentFolder, isOpenComponent, toggleComponent } = useAuth();
-  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false)
   const [value, setValue] = useState({
@@ -28,18 +26,18 @@ function CreateComponent() {
     }
   };
 
-  const handleCreate = () => {
-    if (isOpenComponent.newExcel) {
-      navigate("/text-file?type=excel");
-      setTimeout(() => toggleComponent("newExcel", false), 0);
-    } else if (isOpenComponent.newDocs) {
-      navigate("/text-file?type=word");
-      setTimeout(() => toggleComponent("newDocs", false), 0);
-    } else {
-      alert("Please select a file type to create.");
-      handleClose();
-    }
-  };
+  // const handleCreate = () => {
+  //   if (isOpenComponent.newExcel) {
+  //     navigate("/text-file?type=excel");
+  //     setTimeout(() => toggleComponent("newExcel", false), 0);
+  //   } else if (isOpenComponent.newDocs) {
+  //     navigate("/text-file?type=word");
+  //     setTimeout(() => toggleComponent("newDocs", false), 0);
+  //   } else {
+  //     alert("Please select a file type to create.");
+  //     handleClose();
+  //   }
+  // };
 
   const handleChange = (newValue: string) => {
     setValue((prev) => ({
@@ -57,7 +55,7 @@ function CreateComponent() {
     setLoading(true);
     dispatch(createFolders(updatedValue))
       .unwrap()
-      .then((res) => {
+      .then(() => {
         const parentFolderId = localStorage.getItem('parent_folder_id');
         if (parentFolderId) {
           dispatch(getDirectory(parentFolderId));

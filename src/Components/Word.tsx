@@ -3,6 +3,7 @@ import {
   DocumentEditorContainerComponent,
   Toolbar,
   CustomToolbarItemModel,
+  ToolbarItem,
 } from "@syncfusion/ej2-react-documenteditor";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -55,7 +56,7 @@ const Word = ({ fileUrl, fileName }: any) => {
     }
   }, [fileUrl]);
 
-  const toolbarItems: (string | CustomToolbarItemModel)[] = [
+  const toolbarItems: (ToolbarItem | CustomToolbarItemModel)[] = [
     "New",
     "Open",
     {

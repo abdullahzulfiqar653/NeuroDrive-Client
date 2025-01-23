@@ -5,7 +5,6 @@ import {
   Trash,
   Circle,
   Rename,
-  Gallery,
   Starred,
   Download,
   NoPerson,
