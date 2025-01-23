@@ -42,7 +42,7 @@ function Home() {
     isLoading: profileLoading,
     fetch: profileFetch,
     reset: profileReset,
-  } = useApi();
+  } = useApi("getProfile");
 
   const handleClickOutside = (event: MouseEvent | TouchEvent) => {
     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -50,12 +50,11 @@ function Home() {
     }
   };
   useEffect(() => {
-    profileFetch("/user/profile");
-    return () => profileReset();
+    profileFetch("/user/profile/");
   }, []);
 
   useEffect(() => {
-    setProfile(profileResponse.url);
+    setProfile(profileResponse?.url);
   }, [profileResponse, profileReset]);
 
   useEffect(() => {
@@ -300,14 +299,16 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
               <h1
                 onClick={() => handleClickFolder(child.id)}
                 key={child.id}
-                className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 font-sans"
+                className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 "
               >
                 <Folder />{" "}
-                <span className="truncate w-[60%]">{child.name}</span>
+                <span className="truncate w-[60%] font-sans ">
+                  {child.name}
+                </span>
               </h1>
             ))
           ) : (
-            <p className="whitespace-nowrap hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
+            <p className="whitespace-nowrap rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
               No folder
             </p>
           )}

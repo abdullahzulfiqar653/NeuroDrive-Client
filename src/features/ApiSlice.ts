@@ -1,64 +1,68 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import apiClient, { getTokenIncludedConfig } from '../services/apiClient';
 
-interface ApiState {
+interface ApiCallState {
   isLoading: boolean;
   error: string | null;
-  response: any; 
+  response: any;
+}
+
+interface ApiState {
+  calls: { [key: string]: ApiCallState }; // Keyed by API identifier
 }
 
 const initialState: ApiState = {
-  isLoading: false,
-  error: null,
-  response: {}, 
+  calls: {},
 };
 
-// Async Thunks for Fetch
-export const fetchData = createAsyncThunk<any, string, { rejectValue: string }>(
-  'api/fetchData',
-  async (url, { rejectWithValue }) => {
-    try {
-      const response = await apiClient.get(url, getTokenIncludedConfig());
-      return response.data; 
-    } catch (error: any) {
-      const errorMsg = error.response?.data?.message || error.message || 'Something went wrong';
-      return rejectWithValue(errorMsg );
-    }
+// Fetch Data Thunk
+export const fetchData = createAsyncThunk<
+  any,
+  { url: string; key: string }, // Add `key` to the argument type
+  { rejectValue: string }
+>('api/fetchData', async ({ url }, { rejectWithValue }) => {
+  try {
+    const response = await apiClient.get(url, getTokenIncludedConfig());
+    return response.data;
+  } catch (error: any) {
+    const errorMsg = error.response?.data?.message || error.message || 'Something went wrong';
+    return rejectWithValue(errorMsg);
   }
-);
+});
 
-export const postData = createAsyncThunk<any, { url: string; payload: any, method: "post" | "put" | "patch"  }, { rejectValue: string }>(
-  'api/postData',
-  async ({ url, payload, method}, { rejectWithValue }) => {
-    try {
-        let config = getTokenIncludedConfig();
+// Post Data Thunk
+export const postData = createAsyncThunk<
+  any,
+  { url: string; payload: any; method: 'post' | 'put' | 'patch'; key: string },
+  { rejectValue: string }
+>('api/postData', async ({ url, payload, method }, { rejectWithValue }) => {
+  try {
+    let config = getTokenIncludedConfig();
 
-       
-        if (payload instanceof FormData) {
-          config = {
-            headers: {
-          
-              accept: "application/json",
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-              'Content-Type': 'multipart/form-data',
-            },
-          };
-        }
-  
+    // Adjust headers if payload is a FormData object
+    if (payload instanceof FormData) {
+      config = {
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+    }
+
     const response = await apiClient({
-        method: method,  
-        url,
-        data: payload,   
-        ...config,       
-      });
+      method,
+      url,
+      data: payload,
+      ...config,
+    });
 
-      return response.data; 
-    } catch (error: any) {
-      const errorMsg = error.response ? error.response.data : error.message;
-      return rejectWithValue(errorMsg || 'Something went wrong');
-    }
+    return response.data;
+  } catch (error: any) {
+    const errorMsg = error.response ? error.response.data : error.message;
+    return rejectWithValue(errorMsg || 'Something went wrong');
   }
-);
+});
 
 // Slice Definition
 const apiSlice = createSlice({
@@ -66,44 +70,66 @@ const apiSlice = createSlice({
   initialState,
   reducers: {
     resetState: (state) => {
-      state.isLoading = false;
-      state.error = null;
-      state.response = {}; 
+      state.calls = {}; 
+    },
+    resetCallState: (state, action: PayloadAction<string>) => {
+      delete state.calls[action.payload];
     },
   },
   extraReducers: (builder) => {
     builder
-      // Fetch Thunk
-      .addCase(fetchData.pending, (state) => {
-        state.isLoading = true;
-        state.error = 'Something went wrong'
-        state.response = {}; 
+      .addCase(fetchData.pending, (state, action) => {
+        const key = action.meta.arg.key;
+        state.calls[key] = {
+          isLoading: true,
+          error: null,
+          response: null,
+        };
       })
-      .addCase(fetchData.fulfilled, (state, action: PayloadAction<any>) => {
-        state.isLoading = false;
-        state.response = action.payload;
+      .addCase(fetchData.fulfilled, (state, action) => {
+        const key = action.meta.arg.key;
+        state.calls[key] = {
+          isLoading: false,
+          error: null,
+          response: action.payload,
+        };
       })
-      .addCase(fetchData.rejected, (state, action: PayloadAction<string | undefined>) => {
-        state.isLoading = false;
-        state.error = action.payload || 'Something went wrong';
+      .addCase(fetchData.rejected, (state, action) => {
+        const key = action.meta.arg.key;
+        state.calls[key] = {
+          isLoading: false,
+          error: action.payload || 'Something went wrong',
+          response: null,
+        };
       })
-      // Post Thunk
-      .addCase(postData.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-        state.response = {}; 
+      // Handle Post Thunk
+      .addCase(postData.pending, (state, action) => {
+        const key = action.meta.arg.key; 
+        state.calls[key] = {
+          isLoading: true,
+          error: null,
+          response: null,
+        };
       })
-      .addCase(postData.fulfilled, (state, action: PayloadAction<any>) => {
-        state.isLoading = false;
-        state.response = action.payload; 
+      .addCase(postData.fulfilled, (state, action) => {
+        const key = action.meta.arg.key;
+        state.calls[key] = {
+          isLoading: false,
+          error: null,
+          response: action.payload,
+        };
       })
-      .addCase(postData.rejected, (state, action: PayloadAction<string | undefined>) => {
-        state.isLoading = false;
-        state.error = action.payload || 'Something went wrong';
+      .addCase(postData.rejected, (state, action) => {
+        const key = action.meta.arg.key;
+        state.calls[key] = {
+          isLoading: false,
+          error: action.payload || 'Something went wrong',
+          response: null,
+        };
       });
   },
 });
 
-export const { resetState } = apiSlice.actions;
+export const { resetState, resetCallState } = apiSlice.actions;
 
 export default apiSlice.reducer;

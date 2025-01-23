@@ -31,7 +31,7 @@ function Account({ className, profile, profileLoading }: AccountProps) {
     post: uploadPost,
     reset: uploadReset,
     error: uploadError,
-  } = useApi();
+  } = useApi("postProfile");
 
   const mails = [
     { id: 1, mail: "example@gmail.com" },
@@ -52,9 +52,7 @@ function Account({ className, profile, profileLoading }: AccountProps) {
     if (!file) return;
     const formData = new FormData();
     formData.append("image", file);
-    console.log(formData);
     uploadPost({ url: "/user/profile/", payload: formData, method: "put" });
-    console.log(uploadError);
     if (uploadError?.toString()) {
       toast.error("Falied to upload profile");
     } else toast.success("Profile changed Successfully");
