@@ -1,16 +1,27 @@
 import { useRef, useState } from "react";
 import { Cross, Upload } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
-import useApi from "../Hooks/usiApi";
+// import useApi from "../Hooks/usiApi";
 import { ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../app/store";
+import { getDirectory } from "../features/directories/folderSlice";
+import useApi from "../Hooks/usiApi";
 
 function UploadDocument() {
   const { toggleComponent } = useAuth();
   const [dragging, setDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const { post, isLoading, reset, response, error } = useApi("uploadFile");
+  const {
+    post,
+    isLoading,
+    response,
+    error: uploadError,
+  } = useApi("uploadFile");
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
@@ -45,22 +56,31 @@ function UploadDocument() {
 
   const handleSubmit = async () => {
     if (!file) return;
-
     const formData = new FormData();
     formData.append("file", file);
-    const parentFolderId = localStorage.getItem("parent_folder_id");
+    const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
     post({
       url: `/directories/${parentFolderId}/files/`,
       payload: formData,
       method: "post",
     });
-    if (!error) {
+    if (response) {
       toast.success("File uploaded successfully!");
+      toggleComponent("upload");
+      // console.log(data);
+      console.log(response);
+      dispatch(getDirectory(parentFolderId));
+      // dispatch(getDirectory(parentFolderId));
     }
-    if (error) {
+    if (uploadError) {
       toast.warning("Error uploading file!");
+      // console.log(error);
+      console.log(uploadError);
+
+      toggleComponent("upload");
     }
   };
+
   return (
     <>
       <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center">
@@ -146,3 +166,21 @@ function UploadDocument() {
 }
 
 export default UploadDocument;
+// function dispatch(
+//   arg0: AsyncThunkAction<
+//     any,
+//     string,
+//     {
+//       state?: unknown;
+//       dispatch?: ThunkDispatch<unknown, unknown, UnknownAction>;
+//       extra?: unknown;
+//       rejectValue?: unknown;
+//       serializedErrorType?: unknown;
+//       pendingMeta?: unknown;
+//       fulfilledMeta?: unknown;
+//       rejectedMeta?: unknown;
+//     }
+//   >
+// ) {
+//   throw new Error("Function not implemented.");
+// }
