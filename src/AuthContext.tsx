@@ -1,4 +1,10 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useEffect,
+} from "react";
 import { Folder } from "./features/directories/folderSlice";
 
 type OpenComponentsState = {
@@ -8,7 +14,7 @@ type OpenComponentsState = {
 // Define types for AuthContext
 interface AuthContextType {
   isGridMode: boolean;
-  parentFolder:Folder| null;
+  parentFolder: Folder | null;
   isAccountOpen: boolean;
   isAuthenticated: boolean;
   isOpenComponent: OpenComponentsState;
@@ -29,6 +35,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAccountOpen, setIsAccountOpen] = useState<boolean>(false);
+  const [reFetch, setReFetch] = useState<boolean>(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [isGridMode, setIsGridMode] = useState<boolean>(false);
   const [parentFolder, setParentFolder] = useState<Folder | null>(null);
@@ -39,17 +46,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     newExcel: false,
     newDocs: false,
   });
- 
+
   useEffect(() => {
-    const parentId = localStorage.getItem('parent_id');
+    const parentId = localStorage.getItem("parent_id");
     if (parentId) {
-      setParentFolder((prev) => ({
-        ...prev,
-        id: parentId,
-      } as Folder));
+      setParentFolder(
+        (prev) =>
+          ({
+            ...prev,
+            id: parentId,
+          } as Folder)
+      );
     }
   }, []);
-
 
   const toggleComponent = (component: string, isOpen?: boolean) => {
     setOpenComponent((prevState) => ({

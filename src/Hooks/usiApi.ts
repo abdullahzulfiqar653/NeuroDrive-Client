@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../app/store';
 import { fetchData, resetCallState, postData } from '../features/ApiSlice';
+import { useMemo } from 'react';
 
 interface PostParams {
   url: string;
@@ -11,13 +12,26 @@ interface PostParams {
 const useApi = (key: string) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { response, isLoading, error } = useSelector(
-    (state: RootState) => state.api.calls[key] || {
+  const defaultCallState = useMemo(
+    () => ({
       isLoading: false,
       error: null,
       response: null,
-    }
+    }),
+    []
   );
+
+  const { response, isLoading, error } = useSelector((state: RootState) => 
+    state.api.calls[key] || defaultCallState
+  );
+
+  // const { response, isLoading, error } = useSelector(
+  //   (state: RootState) => state.api.calls[key] || {
+  //     isLoading: false,
+  //     error: null,
+  //     response: null,
+  //   }
+  // );
 
   const fetch = (url: string) => {
     dispatch(fetchData({ url, key }));
@@ -35,3 +49,8 @@ const useApi = (key: string) => {
 };
 
 export default useApi;
+
+
+
+
+

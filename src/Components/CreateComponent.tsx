@@ -4,7 +4,10 @@ import { useAuth } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../app/store";
-import { createFolders, getDirectory } from "../features/directories/folderSlice";
+import {
+  createFolders,
+  getDirectory,
+} from "../features/directories/folderSlice";
 import { toast } from "react-toastify";
 import { ThreeDots } from "react-loader-spinner";
 
@@ -12,7 +15,7 @@ function CreateComponent() {
   const { parentFolder, isOpenComponent, toggleComponent } = useAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [value, setValue] = useState({
     name: "",
     parent: "",
@@ -48,7 +51,6 @@ function CreateComponent() {
     }));
   };
 
-
   const handleSubmit = () => {
     const updatedValue = {
       ...value,
@@ -58,7 +60,7 @@ function CreateComponent() {
     dispatch(createFolders(updatedValue))
       .unwrap()
       .then((res) => {
-        const parentFolderId = localStorage.getItem('parent_folder_id');
+        const parentFolderId = localStorage.getItem("parent_folder_id");
         if (parentFolderId) {
           dispatch(getDirectory(parentFolderId));
         }
@@ -116,11 +118,11 @@ function CreateComponent() {
           className="w-[132px] h-[34px] md:w-[163px] md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
         >
           Create
-           {loading && (
-                <span className="ml-2">
-                  <ThreeDots height="25" width="25" color="white" />
-                </span>
-              )}
+          {loading && (
+            <span className="ml-2">
+              <ThreeDots height="25" width="25" color="white" />
+            </span>
+          )}
         </button>
       </div>
     </div>
