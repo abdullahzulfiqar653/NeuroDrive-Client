@@ -74,7 +74,6 @@ function Login() {
         navigate("/");
         login();
         localStorage.setItem("access_token", res.access);
-        
       })
       .catch((error) => {
         console.error("Token generation failed:", error);
@@ -87,7 +86,7 @@ function Login() {
 
   return (
     <div className="bg-white">
-      <div className="relative flex w-full h-[100vh] p-4 justify-between">
+      <div className="relative flex w-full h-[90vh] p-4 justify-between">
         <div className="absolute flex items-center justify-center -left-[9vw] right-0 top-[8vh]">
           <p className="text-[14px] font-sans">
             Need Help?{" "}
@@ -117,7 +116,7 @@ function Login() {
             </div>
 
             <div className="relative">
-              <div className="w-[38vw] min-h-[172px] px-2.5 pb-2.5 pt-4 border border-[#BABABA] rounded-lg">
+              <div className="w-[38vw] h-auto px-2.5 pb-2.5 pt-4 border border-[#BABABA] rounded-lg">
                 <div
                   className={`${
                     seedsValue.length < 16 ? "border-b" : "border-none"
@@ -143,7 +142,7 @@ function Login() {
                       onChange={(e) => handleInputChange(e)}
                       onKeyDown={handleKeyDown}
                       placeholder="Enter your key seed..."
-                      className={`text-sm placeholder:text-[#00000036] mt-2 ml-1 bg-transparent font-sans outline-none `}
+                      className={`text-sm placeholder:text-[#00000036] mt-2 ml-1 bg-transparent font-sans outline-none w-au`}
                     />
                   )}
                 </div>
@@ -192,7 +191,7 @@ function Login() {
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
-            height: "100vh",
+            height: "90vh",
             width: "50vw",
           }}
           className="rounded-[22px] w-[50%] overflow-hidden "

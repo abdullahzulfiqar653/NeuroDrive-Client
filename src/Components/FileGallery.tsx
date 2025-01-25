@@ -24,6 +24,11 @@ function FileGallery() {
   const [isSelected, setIsSelected] = useState<number | null>(null);
   const [radioClick, setRadioClick] = useState(false);
   const { fetch, reset } = useApi("getSingleFile");
+  const [fileData, setFileData] = useState<{
+    fileUrl: string;
+    fileType: "excel" | "word" | "pdf" | "unknown";
+    fileName: string;
+  } | null>(null);
   const { response, error, isLoading } = useSelector((state: RootState) => {
     return (
       state.api.calls["getSingleFile"] ?? {
@@ -54,11 +59,11 @@ function FileGallery() {
     },
   ];
 
-  useEffect(() => {
+  const handleFileUplaod = (id: number) => {
+    fetch(`files/${id}/`);
     if (!response) {
       return;
     }
-
     const allowedExtensions = ["png", "jpg", "jpeg"];
     const fileExtension = response?.content_type
       ?.split("/")
@@ -76,16 +81,56 @@ function FileGallery() {
       const link = document.createElement("a");
       link.href = response.url;
       link.download = response.name;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      console.log(`File downloaded: ${response.name}`);
+      // document.body.appendChild(link);
+      // link.click();
+      // document.body.removeChild(link);
     } else {
-      alert(`This file type (${fileExtension}) is not supported for download.`);
-      console.warn("Unsupported file type:", fileExtension);
+      console.log(response.url);
+      setFileData({
+        fileUrl: response.url,
+        fileType: mapContentTypeToFileType(response.content_type),
+        fileName: response.name,
+      });
+      // alert(`This file type (${fileExtension}) is not supported for download.`);
+      // console.warn("Unsupported file type:", fileExtension);
     }
-  }, [response]);
+  };
+
+  // useEffect(() => {
+  //   if (!response) {
+  //     return;
+  //   }
+  //   const allowedExtensions = ["png", "jpg", "jpeg"];
+  //   const fileExtension = response?.content_type
+  //     ?.split("/")
+  //     .pop()
+  //     ?.toLowerCase();
+
+  //   if (!fileExtension) {
+  //     console.error(
+  //       "Unable to determine the file extension from the response."
+  //     );
+  //     return;
+  //   }
+
+  //   if (allowedExtensions.includes(fileExtension)) {
+  //     const link = document.createElement("a");
+  //     link.href = response.url;
+  //     link.download = response.name;
+  //     // document.body.appendChild(link);
+  //     // link.click();
+  //     // document.body.removeChild(link);
+  //   } else {
+  //     console.log(response.url);
+  //     setFileData({
+  //       fileUrl: response.url,
+  //       fileType: mapContentTypeToFileType(response.content_type),
+  //       fileName: response.name,
+  //     });
+  //     // alert(`This file type (${fileExtension}) is not supported for download.`);
+  //     console.warn("Unsupported file type:", fileExtension);
+  //   }
+  // }, [fetch]);
 
   return (
     <div className="h-full w-[100%] md:w-[96%]">
@@ -138,11 +183,13 @@ function FileGallery() {
                 <span>
                   <ThreeDots />
                 </span>
-                {isSelected === index && (
+                {fileData && (
                   <FileViewer
-                    fileUrl={item.url}
-                    fileType={item.fileType as "excel" | "word" | "pdf"}
-                    fileName={item.name}
+                    fileUrl={
+                      "https://neuroservices.lon1.digitaloceanspaces.com/neuropyservices/neurodrive/1516bBXJf22umAL/CV.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00N87PJKGNJTGMNEMZ%2F20250125%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250125T154419Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=6a8cc0f1b0c6376961c476b934e59369720b5fd5acf258891a1cf2372e215453"
+                    }
+                    fileType={"pdf"}
+                    fileName={"faf"}
                   />
                 )}
               </div>
@@ -176,7 +223,8 @@ function FileGallery() {
             {parentFolder?.files.map((file, index) => (
               <div
                 key={index}
-                onClick={() => fetch(`files/${file.id}/`)}
+                onClick={() => handleFileUplaod(file.id)}
+                // onClick={() => fetch(`files/${file.id}/`)}
                 className="overflow-hidden cursor-pointer bg-white hover:bg-[#f2f3f3] w-[full] text-[14px] h-[57px] font-sans flex justify-between items-center"
               >
                 <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
@@ -196,29 +244,46 @@ function FileGallery() {
 
                   {file?.name.split(".").pop() === "xls" && (
                     <>
-                      {" "}
                       <Xcel className="w-4 h-4" />
-                      <span className="ml-2">{file.name}</span>
+                      <span className="ml-2">
+                        {file?.name.length > 12
+                          ? `${file.name.slice(0, 12)}...${file.name
+                              .split(".")
+                              .pop()}`
+                          : file.name}
+                      </span>
                     </>
                   )}
                   {file?.name.split(".").pop() === "txt" && (
                     <>
                       {" "}
                       <img src="rich.png" alt="" className="w-4 h-4" />{" "}
-                      <span className="ml-2">{file.name}</span>
+                      {file?.name.length > 12
+                        ? `${file.name.slice(0, 12)}...${file.name
+                            .split(".")
+                            .pop()}`
+                        : file.name}
                     </>
                   )}
                   {file?.name.split(".").pop() === "jpg" && (
                     <>
                       {" "}
                       <Gallery />
-                      <span className="ml-2">{file.name}</span>
+                      {file?.name.length > 12
+                        ? `${file.name.slice(0, 12)}...${file.name
+                            .split(".")
+                            .pop()}`
+                        : file.name}
                     </>
                   )}
                   {file?.name.split(".").pop() === "pdf" && (
                     <>
                       <img src="/pdf.png" className="w-3 h-3 md:w-4 md:h-4" />
-                      <span className="ml-2">{file.name}</span>
+                      {file?.name.length > 12
+                        ? `${file.name.slice(0, 12)}...${file.name
+                            .split(".")
+                            .pop()}`
+                        : file.name}
                     </>
                   )}
                 </p>
@@ -239,11 +304,16 @@ function FileGallery() {
                   {file.size}
                 </p>
 
-                {isSelected === index && (
+                {fileData && (
                   <FileViewer
-                    fileUrl={file.url}
-                    fileType={file.fileType as "excel" | "word" | "pdf"}
-                    fileName={file.name}
+                    fileUrl={
+                      "https://neuroservices.lon1.digitaloceanspaces.com/neuropyservices/neurodrive/1516bBXJf22umAL/CV.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00N87PJKGNJTGMNEMZ%2F20250125%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250125T154419Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=6a8cc0f1b0c6376961c476b934e59369720b5fd5acf258891a1cf2372e215453"
+                    }
+                    fileType={"pdf"}
+                    fileName={"faf"}
+                    // fileUrl={fileData?.fileUrl}
+                    // fileType={fileData.fileType as "excel" | "word" | "pdf"}
+                    // fileName={fileData?.fileName}
                   />
                 )}
 
@@ -294,3 +364,27 @@ function FileGallery() {
 }
 
 export default FileGallery;
+// function mapContentTypeToFileType(
+//   content_type: any
+// ): "excel" | "word" | "pdf" | "unknown" {
+//   throw new Error("Function not implemented.");
+// }
+function mapContentTypeToFileType(
+  contentType: string
+): "excel" | "word" | "pdf" | "unknown" {
+  if (contentType.includes("pdf")) {
+    return "pdf";
+  } else if (
+    contentType.includes("msword") ||
+    contentType.includes("wordprocessingml")
+  ) {
+    return "word";
+  } else if (
+    contentType.includes("excel") ||
+    contentType.includes("spreadsheetml")
+  ) {
+    return "excel";
+  } else {
+    return "unknown";
+  }
+}

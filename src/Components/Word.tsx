@@ -32,7 +32,11 @@ const Word = ({ fileUrl, fileName }: any) => {
 
     axios
       .post("http://localhost:5000/api", sfdt, {
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          "Content-Type": "application/json",
+        },
       })
       .then((response) => {
         // setSavedData(response.data);

@@ -94,14 +94,18 @@ function RegisterSeeds() {
                 key Seed
               </label>
               <div className="flex flex-wrap w-full gap-3 p-2">
-                {seeds?.split(" ").map((seeds, index) => (
-                  <span
-                    key={index}
-                    className="group min-w-[50px] cursor-pointer  md:min-w-[69px] h-[20px] px-1 md:h-[27px] text-[12px] md:text-[16px] border-[1px] border-[#9F42FF] flex justify-center items-center rounded-[4px] md:rounded-[6px] font-sans"
-                  >
-                    {seeds}
-                  </span>
-                ))}
+                {seeds?.split(" ").map((seeds, index) =>
+                  seeds.length === 0 ? (
+                    ""
+                  ) : (
+                    <span
+                      key={index}
+                      className="group min-w-[50px] cursor-pointer  md:min-w-[69px] h-[20px] px-1 md:h-[27px] text-[12px] md:text-[16px] border-[1px] border-[#9F42FF] flex justify-center items-center rounded-[4px] md:rounded-[6px] font-sans"
+                    >
+                      {seeds}
+                    </span>
+                  )
+                )}
               </div>
             </div>
 
