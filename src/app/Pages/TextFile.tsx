@@ -1,7 +1,13 @@
-
 import { useAuth } from "../../AuthContext";
 import Account from "../../Components/Account";
-import { Arrow, Download, Invite, Print, SixDots, Xcel } from "../../assets/Icons";
+import {
+  Arrow,
+  Download,
+  Invite,
+  Print,
+  SixDots,
+  Xcel,
+} from "../../assets/Icons";
 import Word from "../../Components/Word";
 import ExcelSheet from "../../Components/ExcelSheet";
 import { useFileContext } from "../../FileContext";
@@ -90,6 +96,8 @@ function TextFile() {
                 className={
                   "left-[-220px] md:left-[-230px] top-[42px] md:top-[50px]"
                 }
+                profile={""}
+                profileLoading={false}
               />
             )}
           </div>

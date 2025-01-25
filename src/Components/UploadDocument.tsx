@@ -71,16 +71,11 @@ function UploadDocument() {
     if (response) {
       toast.success("File uploaded successfully!");
       toggleComponent("upload");
-      // console.log(data);
-      console.log(response);
       dispatch(getDirectory(parentFolderId));
-      // dispatch(getDirectory(parentFolderId));
     }
     if (error) {
       toast.warning("Error uploading file!");
-      // console.log(error);
       console.log(error);
-
       toggleComponent("upload");
     }
   };

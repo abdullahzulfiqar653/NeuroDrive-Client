@@ -39,10 +39,12 @@ const PDF = ({ fileUrl, fileName }: any) => {
           formData.append("file", blob, fileName);
           const response = await axios.post("/api/upload-pdf", formData, {
             headers: {
-              "Content-Type": "multipart/form-data",
+              accept: "application/json",
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+              "Content-Type": "application/json",
             },
           });
-          console.log(response, "response");
+          console.log(response, "response******************");
           toast.success("PDF sent to the backend successfully!");
         } catch (error) {
           console.error("Error sending the PDF:", error);
