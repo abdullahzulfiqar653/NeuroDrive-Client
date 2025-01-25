@@ -27,6 +27,19 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+const isTokenValid = () => {
+  const token = localStorage.getItem("access_token");
+  if (!token) return false;
+  try {
+    const { exp } = JSON.parse(atob(token.split(".")[1]));
+    const currentTime = Math.floor(Date.now() / 1000);
+    return exp > currentTime;
+  } catch (error) {
+    return false;
+  }
+};
+
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAccountOpen, setIsAccountOpen] = useState<boolean>(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
@@ -40,6 +53,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     newDocs: false,
   });
  
+  useEffect(() => {
+    if (isTokenValid()) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, []);
+
   useEffect(() => {
     const parentId = localStorage.getItem('parent_id');
     if (parentId) {
