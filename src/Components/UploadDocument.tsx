@@ -4,8 +4,8 @@ import { useAuth } from "../AuthContext";
 // import useApi from "../Hooks/usiApi";
 import { ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../app/store";
 import { getDirectory } from "../features/directories/folderSlice";
 import useApi from "../Hooks/usiApi";
 
@@ -14,12 +14,16 @@ function UploadDocument() {
   const [dragging, setDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const {
-    post,
-    isLoading,
-    response,
-    error: uploadError,
-  } = useApi("uploadFile");
+  const { post } = useApi("uploadFile");
+  const { response, error, isLoading } = useSelector((state: RootState) => {
+    return (
+      state.api.calls["uploadFile"] ?? {
+        response: null,
+        error: null,
+        isLoading: false,
+      }
+    );
+  });
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -72,10 +76,10 @@ function UploadDocument() {
       dispatch(getDirectory(parentFolderId));
       // dispatch(getDirectory(parentFolderId));
     }
-    if (uploadError) {
+    if (error) {
       toast.warning("Error uploading file!");
       // console.log(error);
-      console.log(uploadError);
+      console.log(error);
 
       toggleComponent("upload");
     }

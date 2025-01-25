@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Xcel,
   Copy,
@@ -16,64 +16,27 @@ import {
 import { FileViewer } from "../Hooks/FileViewer";
 import Popup from "reactjs-popup";
 import { useAuth } from "../AuthContext";
+import useApi from "../Hooks/usiApi";
+import { useSelector } from "react-redux";
+import { RootState } from "../app/store";
 
 function FileGallery() {
   const { isGridMode, parentFolder } = useAuth();
   const [isSelected, setIsSelected] = useState<number | null>(null);
   const [radioClick, setRadioClick] = useState(false);
+  const { fetch, reset } = useApi("getSingleFile");
+  const { response, error, isLoading } = useSelector((state: RootState) => {
+    return (
+      state.api.calls["getSingleFile"] ?? {
+        response: null,
+        error: null,
+        isLoading: false,
+      }
+    );
+  });
   const handleClick = (index: number) => {
-    setIsSelected(index);
+    setIsSelected((prev) => (prev === index ? null : index));
   };
-  // const data = [
-  //   {
-  //     url: "https://neuroservices.lon1.digitaloceanspaces.com/neuroservices/test/testfile.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00N87PJKGNJTGMNEMZ%2F20250113%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250113T151436Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=b140bdf773453729f4e224cc0275d1fc7e5c40e70d02ff9c9ac8f052f80fb9f0",
-  //     fileName: "Excel sheet",
-  //     extension: "xls",
-  //     fileType: "excel",
-  //     personName: "",
-  //     size: "3.0 GB",
-  //     time: "1h ago",
-  //   },
-  //   {
-  //     url: "https://neuroservices.lon1.digitaloceanspaces.com/neuroservices/test/sample_cv.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00N87PJKGNJTGMNEMZ%2F20250110%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250110T124857Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=2e2d2395c212d7a8d85df881568f4aa8efbea4bd885dfbef68432c40904a8376",
-  //     fileName: "Resume",
-  //     fileType: "pdf",
-  //     extension: "pdf",
-  //     personName: "Richard",
-  //     size: "3.0 GB",
-  //     time: "1h ago",
-  //   },
-  //   {
-  //     url: "https://neuroservices.lon1.digitaloceanspaces.com/neuroservices/test/Terms-Conditions.docx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00N87PJKGNJTGMNEMZ%2F20250111%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250111T093053Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=0e10715451eec58d550707f73e4d6bac1ccd2fc9cb9a3bccdafa7df46cdb4a45",
-  //     fileName: "NeuroDocs",
-  //     fileType: "word",
-  //     extension: "doc",
-  //     personName: "Roanldo",
-  //     size: "3.0 GB",
-  //     time: "1h ago",
-  //   },
-  //   // {
-  //   //   fileName: "Butterfly",
-  //   //   extension: "png",
-  //   //   personName: "Richard",
-  //   //   size: "3.0 GB",
-  //   //   time: "1h ago",
-  //   // },
-  //   // {
-  //   //   fileName: "Workspace",
-  //   //   extension: "doc",
-  //   //   personName: "Richard",
-  //   //   size: "3.0 GB",
-  //   //   time: "1h ago",
-  //   // },
-  //   // {
-  //   //   fileName: "Butterfly",
-  //   //   extension: "png",
-  //   //   personName: "",
-  //   //   size: "3.0 GB",
-  //   //   time: "1h ago",
-  //   // },
-  // ];
   const actions = [
     { icon: <Copy />, label: "Copy" },
     {
@@ -91,6 +54,40 @@ function FileGallery() {
       label: "Move to Trash",
     },
   ];
+
+  useEffect(() => {
+    if (!response) {
+      return;
+    }
+
+    const allowedExtensions = ["png", "jpg", "jpeg"];
+    const fileExtension = response?.content_type
+      ?.split("/")
+      .pop()
+      ?.toLowerCase();
+
+    if (!fileExtension) {
+      console.error(
+        "Unable to determine the file extension from the response."
+      );
+      return;
+    }
+
+    if (allowedExtensions.includes(fileExtension)) {
+      const link = document.createElement("a");
+      link.href = response.url;
+      link.download = response.name;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      console.log(`File downloaded: ${response.name}`);
+    } else {
+      alert(`This file type (${fileExtension}) is not supported for download.`);
+      console.warn("Unsupported file type:", fileExtension);
+    }
+  }, [response]);
+
   return (
     <div className="h-full w-[100%] md:w-[96%]">
       {isGridMode ? (
@@ -180,15 +177,22 @@ function FileGallery() {
             {parentFolder?.files.map((file, index) => (
               <div
                 key={index}
+                onClick={() => fetch(`files/${file.id}/`)}
                 className="overflow-hidden cursor-pointer bg-white hover:bg-[#f2f3f3] w-[full] text-[14px] h-[57px] font-sans flex justify-between items-center"
-                onClick={() => handleClick(index)}
               >
                 <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
                   <span
-                    onClick={() => setRadioClick((prev) => !prev)}
+                    // onClick={() => setRadioClick((prev) => !prev)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleClick(index);
+                    }}
                     className="w-auto text-start mr-4 cursor-pointer"
                   >
-                    <Circle color={radioClick ? "#2676ff" : "none"} />
+                    <Circle
+                      // onClick={() => handleClick(index)}
+                      color={isSelected === index ? "#2676ff" : "none"}
+                    />
                   </span>
 
                   {file?.name.split(".").pop() === "xls" && (

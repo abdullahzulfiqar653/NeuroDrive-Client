@@ -38,13 +38,16 @@ function Home() {
   const [isLeftBar, setLeftBar] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
-  const {
-    response: profileResponse,
-    isLoading: profileLoading,
-    fetch: profileFetch,
-    reset: profileReset,
-  } = useApi("getProfile");
-
+  const { fetch: profileFetch, reset: profileReset } = useApi("getProfile");
+  const { response, error, isLoading } = useSelector((state: RootState) => {
+    return (
+      state.api.calls["getProfile"] ?? {
+        response: null,
+        error: null,
+        isLoading: false,
+      }
+    );
+  });
   const handleClickOutside = (event: MouseEvent | TouchEvent) => {
     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
       setLeftBar(false);
@@ -55,8 +58,8 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    setProfile(profileResponse?.url);
-  }, [profileResponse, profileReset]);
+    setProfile(response?.url);
+  }, [response, profileReset]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -109,7 +112,7 @@ function Home() {
                   className="flex items-center cursor-pointer gap-2 bg-[#F8FAFC] border border-[#BFBFBF57] p-2 h-[42px] rounded-[12px]"
                 >
                   <div className=" h-[35px] w-[35px] rounded-full cursor-pointer  overflow-hidden">
-                    {profileLoading ? (
+                    {isLoading ? (
                       <ThreeCircles height="30" width="30" color="black" />
                     ) : (
                       <img
@@ -128,7 +131,7 @@ function Home() {
                 {isAccountOpen && (
                   <Account
                     profile={profile}
-                    profileLoading={profileLoading}
+                    profileLoading={isLoading}
                     className={
                       "left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"
                     }
@@ -166,7 +169,7 @@ function Home() {
                 {isAccountOpen && (
                   <Account
                     profile={profile}
-                    profileLoading={profileLoading}
+                    profileLoading={isLoading}
                     className={
                       "left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"
                     }
