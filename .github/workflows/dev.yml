@@ -40,8 +40,5 @@ jobs:
             git fetch && \
             git checkout dev && \
             git pull && \
-            export PATH=\$PATH:/root/.npm/bin && \
-            npm install && \
-            npm run build && \
             cp -r ./dist/* /var/www/dev/dev.neurodrive.xyz/html && \
             systemctl reload nginx"
