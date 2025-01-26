@@ -115,11 +115,11 @@ function Login() {
             </div>
 
             <div className="relative">
-              <div className="w-[38vw] min-h-[172px] px-2.5 pb-2.5 pt-4 border border-[#BABABA] rounded-lg">
+              <div className="w-[38vw] h-auto px-2.5 pb-2.5 pt-4 border border-[#BABABA] rounded-lg">
                 <div
                   className={`${
                     seedsValue.length < 16 ? "border-b" : "border-none"
-                  } flex flex-wrap w-full gap-1 border-[#BABABA4D] pb-2`}
+                  } flex flex-wrap w-full gap-2 border-[#BABABA4D] pb-2`}
                 >
                   {seedsValue?.map((seed, index) => (
                     <span
@@ -141,7 +141,7 @@ function Login() {
                       onChange={(e) => handleInputChange(e)}
                       onKeyDown={handleKeyDown}
                       placeholder="Enter your key seed..."
-                      className={`text-sm placeholder:text-[#00000036] mt-2 ml-1 bg-transparent font-sans outline-none w-au`}
+                      className={`text-sm placeholder:text-[#00000036] w-full mt-2 ml-1 bg-transparent font-sans outline-none`}
                     />
                   )}
                 </div>
