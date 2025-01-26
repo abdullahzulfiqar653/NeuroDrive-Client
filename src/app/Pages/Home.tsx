@@ -39,15 +39,7 @@ function Home() {
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   const { fetch: profileFetch, reset: profileReset } = useApi("getProfile");
-  const { response, error, isLoading } = useSelector((state: RootState) => {
-    return (
-      state.api.calls["getProfile"] ?? {
-        response: null,
-        error: null,
-        isLoading: false,
-      }
-    );
-  });
+  const data = useSelector((state: RootState) => state.api.calls?.getProfile);
   const handleClickOutside = (event: MouseEvent | TouchEvent) => {
     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
       setLeftBar(false);
@@ -58,8 +50,8 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    setProfile(response?.url);
-  }, [response, profileReset]);
+    setProfile(data?.response?.data.url);
+  }, [data, profileReset]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -113,11 +105,11 @@ function Home() {
                   className="flex items-center cursor-pointer gap-2 bg-[#F8FAFC] border border-[#BFBFBF57] p-2 h-[42px] rounded-[12px]"
                 >
                   <div className="h-[35px] w-[35px] rounded-full cursor-pointer overflow-hidden">
-                    {isLoading ? (
+                    {data?.isLoading ? (
                       <ThreeCircles height="30" width="30" color="black" />
-                    ) : response?.url ? (
+                    ) : data?.response?.data?.url ? (
                       <img
-                        src={String(response?.url)}
+                        src={String(data?.response?.data?.url)}
                         className="w-full h-full object-cover"
                       />
                     ) : (
@@ -134,7 +126,7 @@ function Home() {
                 </div>
                 {isAccountOpen && (
                   <Account
-                    profileLoading={isLoading}
+                    profileLoading={data?.isLoading}
                     className={
                       "left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"
                     }
@@ -165,13 +157,19 @@ function Home() {
                 onClick={() => setIsAccountOpen((prev) => !prev)}
                 className=" h-[35px] w-[35px] rounded-full cursor-pointer overflow-hidden"
               >
-                <img
-                  src={String(response?.url)}
-                  className="w-full h-full object-cover "
-                />
+                {data?.isLoading ? (
+                  <ThreeCircles height="30" width="30" color="black" />
+                ) : data?.response?.data.url ? (
+                  <img
+                    src={String(data?.response?.data.url)}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <CiUser className="h-9 w-8" />
+                )}
                 {isAccountOpen && (
                   <Account
-                    profileLoading={isLoading}
+                    profileLoading={data?.isLoading}
                     className={
                       "left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"
                     }
