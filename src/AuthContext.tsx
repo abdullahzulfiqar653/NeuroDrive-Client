@@ -13,6 +13,7 @@ type OpenComponentsState = {
 
 // Define types for AuthContext
 interface AuthContextType {
+  profile: string;
   isGridMode: boolean;
   parentFolder: Folder | null;
   isAccountOpen: boolean;
@@ -21,6 +22,7 @@ interface AuthContextType {
   login: () => void;
   signup: () => void;
   logout: () => void;
+  setProfile: any;
   setIsGridMode: (isGridMode: boolean) => void;
   setParentFolder: (component: Folder) => void;
   toggleComponent: (component: string, isOpen?: boolean) => void;
@@ -35,7 +37,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAccountOpen, setIsAccountOpen] = useState<boolean>(false);
-  const [reFetch, setReFetch] = useState<boolean>(false);
+  const [profile, setProfile] = useState<string>("");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [isGridMode, setIsGridMode] = useState<boolean>(false);
   const [parentFolder, setParentFolder] = useState<Folder | null>(null);
@@ -86,6 +88,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         login,
         signup,
         logout,
+        profile,
+        setProfile,
         isGridMode,
         parentFolder,
         setIsGridMode,

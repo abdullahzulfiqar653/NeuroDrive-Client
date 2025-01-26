@@ -14,7 +14,8 @@ import { useFileContext } from "../../FileContext";
 import PDF from "../../Components/PDF";
 
 function TextFile() {
-  const { isAccountOpen, setIsAccountOpen, toggleComponent } = useAuth();
+  const { isAccountOpen, setIsAccountOpen, toggleComponent, profile } =
+    useAuth();
   // const queryParams = new URLSearchParams(location.search);
   // const Type = queryParams.get('type');
   const { fileUrl, fileType, fileName } = useFileContext();
@@ -79,10 +80,7 @@ function TextFile() {
               className="flex items-center cursor-pointer gap-2 md:bg-[#F8FAFC] md:border border-[#BFBFBF57] md:p-2 h-[42px] rounded-[12px]"
             >
               <div className=" h-[35px] w-[35px] rounded-full cursor-pointer  overflow-hidden">
-                <img
-                  src="https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg"
-                  className="w-full h-full object-cover "
-                />
+                <img src={profile} className="w-full h-full object-cover " />
               </div>
               <span className="md:flex items-center justify-center gap-1 hidden">
                 <p className="text-[#40566D] text-[12px] font-[600] font-sans text-right leading-[18px]">
@@ -96,7 +94,6 @@ function TextFile() {
                 className={
                   "left-[-220px] md:left-[-230px] top-[42px] md:top-[50px]"
                 }
-                profile={""}
                 profileLoading={false}
               />
             )}

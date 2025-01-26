@@ -59,7 +59,7 @@ const Word = ({ fileUrl, fileName }: any) => {
     }
   }, [fileUrl]);
 
-  const toolbarItems: (string | CustomToolbarItemModel)[] = [
+  const toolbarItems: (any | CustomToolbarItemModel)[] = [
     "New",
     "Open",
     {
