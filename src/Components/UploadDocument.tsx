@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Cross, Upload } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
 // import useApi from "../Hooks/usiApi";
@@ -14,16 +14,8 @@ function UploadDocument() {
   const [dragging, setDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const { post } = useApi("uploadFile");
-  const { response, error, isLoading } = useSelector((state: RootState) => {
-    return (
-      state.api.calls["uploadFile"] ?? {
-        response: null,
-        error: null,
-        isLoading: false,
-      }
-    );
-  });
+  const { post, reset } = useApi("uploadFile");
+  const res = useSelector((state: RootState) => state.api.calls?.uploadFile);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -68,17 +60,23 @@ function UploadDocument() {
       payload: formData,
       method: "post",
     });
-    if (response) {
+    reset();
+  };
+
+  useEffect(() => {
+    console.log("Current state:", res); // Check state after reset
+  }, [res]);
+  useEffect(() => {
+    if (res?.response?.status === 201) {
       toast.success("File uploaded successfully!");
       toggleComponent("upload");
-      dispatch(getDirectory(parentFolderId));
     }
-    if (error) {
+    // dispatch(getDirectory(parentFolderId));
+    if (res?.error) {
       toast.warning("Error uploading file!");
-      console.log(error);
       toggleComponent("upload");
     }
-  };
+  }, [handleSubmit]);
 
   return (
     <>
@@ -156,7 +154,9 @@ function UploadDocument() {
             }`}
           >
             Upload
-            {isLoading && <ThreeDots height="30" width="30" color="black" />}
+            {res?.isLoading && (
+              <ThreeDots height="30" width="30" color="black" />
+            )}
           </button>
         </div>
       </div>

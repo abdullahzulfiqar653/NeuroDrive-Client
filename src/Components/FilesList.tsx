@@ -1,8 +1,11 @@
-import { Add, Box, List, Xcel, Recent, Filter, Starred } from "../assets/Icons";
+import { useState } from "react";
+import { Add, Box, List, Xcel, Recent, Filter } from "../assets/Icons";
+import { CiStar } from "react-icons/ci";
 import { useAuth } from "../AuthContext";
 import FileGallery from "./FileGallery";
 
 function FilesList() {
+  const [showStarredOnly, setShowStarredOnly] = useState<boolean>(false);
   const { isGridMode, setIsGridMode, toggleComponent } = useAuth();
   const newDocuments = [
     {
@@ -87,8 +90,18 @@ function FilesList() {
             <button className="flex items-center justify-start  pl-2 md:pl-3 gap-1 md:gap-2  w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl font-sans border border-[#BFBFBF57]">
               <Recent /> Recent
             </button>
-            <button className="flex items-center justify-start pl-2 md:pl-3 gap-1 md:gap-2 w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl  font-sans border border-[#BFBFBF57]">
-              <Starred /> Starred
+            <button
+              onClick={() => setShowStarredOnly((prev) => !prev)}
+              className="flex items-center justify-start pl-2 md:pl-3 gap-1 md:gap-2 w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl  font-sans border border-[#BFBFBF57]"
+            >
+              <CiStar
+                className={
+                  showStarredOnly
+                    ? "text-yellow-400 text-2xl"
+                    : "text-black text-2xl"
+                }
+              />{" "}
+              Starred
             </button>
           </div>
           <div className="flex gap-4 items-center">
@@ -116,7 +129,7 @@ function FilesList() {
             </button>
           </div>
         </div>
-        <FileGallery />
+        <FileGallery showStarredOnly={showStarredOnly} />
       </div>
     </div>
   );

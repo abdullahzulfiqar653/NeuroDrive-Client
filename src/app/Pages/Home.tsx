@@ -14,13 +14,14 @@ import {
 } from "../../assets/Icons";
 import FilesList from "../../Components/FilesList";
 import { useAuth } from "../../AuthContext";
+import { CiUser } from "react-icons/ci";
+import useApi from "../../Hooks/usiApi";
+import { ThreeCircles } from "react-loader-spinner";
 import { AppDispatch, RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getDirectory,
 } from "../../features/directories/folderSlice";
-import useApi from "../../Hooks/usiApi";
-import { ThreeCircles } from "react-loader-spinner";
 
 // const folder = [
 //   // "Workspace",
@@ -32,8 +33,8 @@ import { ThreeCircles } from "react-loader-spinner";
 // ];
 
 function Home() {
-  const { isAccountOpen, setIsAccountOpen, toggleComponent } = useAuth();
-  const [profile, setProfile] = useState<string>("");
+  const { isAccountOpen, setIsAccountOpen, toggleComponent, setProfile } =
+    useAuth();
   const [isLeftBar, setLeftBar] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -71,6 +72,7 @@ function Home() {
     <>
       <div className="flex w-[100vw] relative bg-[#f6f8fc] h-screen overflow-x-hidden">
         {/* left side bar  */}
+
         <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl overflow-hidden flex-[0.2]  h-[100vh] min-h-[600px] desktop-view-table hidden md:flex flex-col justify-between">
           <LeftBar />
         </div>
@@ -110,16 +112,19 @@ function Home() {
                   onClick={() => setIsAccountOpen((prev) => !prev)}
                   className="flex items-center cursor-pointer gap-2 bg-[#F8FAFC] border border-[#BFBFBF57] p-2 h-[42px] rounded-[12px]"
                 >
-                  <div className=" h-[35px] w-[35px] rounded-full cursor-pointer  overflow-hidden">
+                  <div className="h-[35px] w-[35px] rounded-full cursor-pointer overflow-hidden">
                     {isLoading ? (
                       <ThreeCircles height="30" width="30" color="black" />
-                    ) : (
+                    ) : response?.url ? (
                       <img
-                        src={String(profile)}
-                        className="w-full h-full object-cover "
+                        src={String(response?.url)}
+                        className="w-full h-full object-cover"
                       />
+                    ) : (
+                      <CiUser className="h-9 w-8" />
                     )}
                   </div>
+
                   <span className="flex items-center justify-center gap-1">
                     <p className="text-[#40566D] text-[12px] font-[600] font-sans text-right leading-[18px]">
                       Kevin
@@ -129,7 +134,6 @@ function Home() {
                 </div>
                 {isAccountOpen && (
                   <Account
-                    profile={profile}
                     profileLoading={isLoading}
                     className={
                       "left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"
@@ -162,12 +166,11 @@ function Home() {
                 className=" h-[35px] w-[35px] rounded-full cursor-pointer overflow-hidden"
               >
                 <img
-                  src={String(profile)}
+                  src={String(response?.url)}
                   className="w-full h-full object-cover "
                 />
                 {isAccountOpen && (
                   <Account
-                    profile={profile}
                     profileLoading={isLoading}
                     className={
                       "left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"
@@ -210,7 +213,8 @@ type LeftBarProps = {
 function LeftBar({ setLeftBar }: LeftBarProps) {
   const dispatch = useDispatch<AppDispatch>();
   const { directory } = useSelector((state: RootState) => state.folders);
-  const { toggleComponent, parentFolder, setParentFolder } = useAuth();
+  const { toggleComponent, parentFolder, setParentFolder, isAuthenticated } =
+    useAuth();
 
   useEffect(() => {
     if (!parentFolder) {
@@ -225,6 +229,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         });
     }
   }, []);
+  console.log(directory);
 
   const handleClickFolder = (folder_id: string) => {
     dispatch(getDirectory(folder_id))

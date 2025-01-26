@@ -11,26 +11,6 @@ interface PostParams {
 const useApi = (key: string) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  // const defaultCallState = useMemo(
-  //   () => ({
-  //     isLoading: false,
-  //     error: null,
-  //     response: null,
-  //   }),
-  //   []
-  // );
-
-  // const { response, isLoading, error } = useSelector((state: RootState) => 
-  //   state.api.calls[key] || defaultCallState
-  // );
-
-  // const { response, isLoading, error } = useSelector(
-  //   (state: RootState) => state.api.calls[key] || {
-  //     isLoading: false,
-  //     error: null,
-  //     response: null,
-  //   }
-  // );
 
   const fetch = (url: string) => {
     dispatch(fetchData({ url, key }));
@@ -41,6 +21,7 @@ const useApi = (key: string) => {
   };
 
   const reset = () => {
+    console.log("Resetting state for key:", key);
     dispatch(resetCallState(key)); // Reset only the state for the specified key
   };
 
@@ -48,8 +29,6 @@ const useApi = (key: string) => {
 };
 
 export default useApi;
-
-
 
 
 
