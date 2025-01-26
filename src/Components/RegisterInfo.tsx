@@ -8,7 +8,7 @@ function RegisterInfo({ setAcknowledged }: RegisterInfoProps) {
   const navigate = useNavigate();
 
   return (
-    <div className="relative flex w-full h-[100vh] p-4 justify-between">
+    <div className="relative flex justify-between">
       <div className="absolute flex items-center justify-center -left-[9vw] right-0 top-[8vh]">
         <p className="text-[14px] font-sans">
           Need Help?{" "}
@@ -25,8 +25,8 @@ function RegisterInfo({ setAcknowledged }: RegisterInfoProps) {
         </span>
         <div className="flex flex-col items-center justify-center h-full w-full gap-12">
           <div className="flex flex-col items-center gap-1">
-            <h1 className="text-[#202343] text-[48px]">Register Account</h1>
-            <p className="text-[#202343] text-[18px] font-sans">
+            <h1 className="text-[#202343] text-[38px] text-center w-full">Register Account</h1>
+            <p className="text-[#202343] text-[16px] font-sans">
               Don’t have any account?{" "}
               <span
                 onClick={() => navigate("/login")}
@@ -63,14 +63,8 @@ function RegisterInfo({ setAcknowledged }: RegisterInfoProps) {
         style={{
           background:
             "linear-gradient(155.35deg, #3984FF -4.35%, #6860FE 32.93%, #8C44FD 62.55%, #B325FC 94.21%)",
-          // backgroundImage: `url('/login-bg.svg')`,
-          backgroundSize: "cover", // Makes the image cover the entire area
-          backgroundPosition: "center", // Ensures the image is centered
-          backgroundRepeat: "no-repeat", // Prevents tiling
-          height: "100vh", // Makes the height 100% of the viewport
-          width: "50vw",
         }}
-        className="rounded-[22px] w-[50%] overflow-hidden "
+        className="rounded-[22px] h-[100vh] w-[50vw] overflow-hidden "
       >
         <img
           src="/regis-bg.svg"

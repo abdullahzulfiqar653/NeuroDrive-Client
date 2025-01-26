@@ -49,7 +49,7 @@ function RegisterSeeds() {
   };
 
   return (
-    <div className="relative flex w-full h-[100vh] p-4 justify-between">
+    <div className="relative flex  justify-between">
       <div className="absolute flex items-center justify-center -left-[9vw] right-0 top-[8vh]">
         <p className="text-[14px] font-sans">
           Need Help?{" "}
@@ -57,19 +57,19 @@ function RegisterSeeds() {
         </p>
         <img src="/img2.png" alt="" className="w-20 h-20" />
       </div>
-      <div className="flex flex-col w-[40vw] gap-3">
+      <div className="flex flex-col w-[40vw] gap-3 p-4">
         <span className="flex gap-2 md:pr-7 items-center md:border-r border-white">
           <img src="/logo.svg" alt="" className="w-7 h-6" />
           <p className="font-chakra text-[16px] md:text-[22px] text-black">
             NeuroDrive
           </p>
         </span>
-        <div className="flex flex-col items-center justify-center h-full w-full gap-12">
+        <div className="flex flex-col items-center justify-center h-full w-full gap-[5vh]">
           <div className="flex flex-col items-center gap-1">
-            <img src="seeds.svg" alt="" />
-            <h1 className="text-[#202343] text-[48px]">Your Seed</h1>
-            <p className="text-[#202343] text-[18px] font-sans">
-              Don’t have any account?{" "}
+            <img src="seeds.svg" alt="" className="w-17 h-17"/>
+            <h1 className="text-[#202343] text-[38px]">Your Seed</h1>
+            <p className="text-[#202343] text-[16px] font-sans">
+              Don’t have any account?
               <span
                 onClick={() => navigate("/login")}
                 className="text-blue-600 cursor-pointer"
@@ -87,14 +87,14 @@ function RegisterSeeds() {
                 <CheckMark className="h-6 w-6" />
               )}
             </span>
-            <div className="w-full min-h-[172px] px-2.5 pb-2.5 pt-4 border border-[#BABABA] rounded-lg">
+            <div className="w-full h-auto px-2 pb-1 pt-3 border border-[#BABABA] rounded-lg">
               <label
                 htmlFor="key"
                 className="absolute text-lg font-sans text-black dark:text-gray-400  transform -translate-y-4 ml-2 scale-75 top-1 z-10 origin-[0] bg-white dark:bg-gray-900 px-2  start-1"
               >
                 key Seed
               </label>
-              <div className="flex flex-wrap w-full gap-3 p-2">
+              <div className="flex flex-wrap w-full gap-2 p-2">
                 {seeds?.split(" ").map((seeds, index) =>
                   seeds.length === 0 ? (
                     ""
