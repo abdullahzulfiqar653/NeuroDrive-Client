@@ -19,6 +19,7 @@ import { useAuth } from "../AuthContext";
 import useApi from "../Hooks/usiApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
+import { toast } from "react-toastify";
 
 function FileGallery({ showStarredOnly }: any) {
   const { isGridMode, parentFolder } = useAuth();
@@ -109,6 +110,11 @@ function FileGallery({ showStarredOnly }: any) {
       method: "put",
     });
   };
+  useEffect(() => {
+    if (starData?.response?.status === 200) {
+      toast.success("File uploaded successfully!");
+    }
+  }, []);
   const handleDeleteClick = (id: number) => {
     deletePost({
       url: `/files/${id}/`,
@@ -117,7 +123,7 @@ function FileGallery({ showStarredOnly }: any) {
     });
   };
 
-  console.log(deleteRes);
+  // console.log(deleteRes);
   return (
     <div className="h-full w-[100%] md:w-[96%]">
       {isGridMode ? (
@@ -345,7 +351,7 @@ function FileGallery({ showStarredOnly }: any) {
                     }}
                     className="popup-content"
                   >
-                    <div className="flex flex-col gap-2 p-2 pr-4 font-sans text-[14px]">
+                    <div className="flex flex-col gap-2 p-2 pr-4 font-sans text-[14px] ">
                       {actions.map((action, index) => (
                         <div
                           key={index}
@@ -356,7 +362,7 @@ function FileGallery({ showStarredOnly }: any) {
                               ? () => handleDeleteClick(file?.id) // Trigger delete operation
                               : undefined
                           }
-                          className="flex gap-2 items-center text-black whitespace-nowrap"
+                          className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
                         >
                           {/* Conditionally apply class for the star icon */}
                           <div

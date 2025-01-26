@@ -35,7 +35,7 @@ function Account({ className, profileLoading }: AccountProps) {
     { id: 2, mail: "example2@gmail.com" },
     { id: 3, mail: "example3@gmail.com" },
   ];
-
+  console.log(data?.response?.data);
   const copyToClipBoard = () => {
     setCopyText(true);
     navigator.clipboard.writeText("Hello");
@@ -55,21 +55,19 @@ function Account({ className, profileLoading }: AccountProps) {
 
     return () => uploadReset();
   };
-  // useEffect(() => {
+  useEffect(() => {
+    if (data?.response?.status === 200) {
+      toast.error("Failed to upload profile");
+    }
+  }, [handleUpload]);
+
+  // if (data !== undefined) {
   //   if (data?.error) {
   //     toast.error("Failed to upload profile");
-  //   } else if (data?.response) {
+  //   } else if (data?.response?.data) {
   //     toast.success("Profile changed successfully");
   //   }
-  // }, [handleUpload]);
-
-  if (data !== undefined) {
-    if (data?.error) {
-      toast.error("Failed to upload profile");
-    } else if (data?.response) {
-      toast.success("Profile changed successfully");
-    }
-  }
+  // }
 
   return (
     <div
