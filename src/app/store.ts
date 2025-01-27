@@ -1,14 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from "../features/authentication/authSlice"
-import folderReducer from "../features/directories/folderSlice"
 import apiReducer from "../features/ApiSlice"
+import folderReducer from "../features/directories/folderSlice"
+
 
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    api: apiReducer,
     folders: folderReducer,
-    api: apiReducer
   }, devTools: window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), 
 });
 
