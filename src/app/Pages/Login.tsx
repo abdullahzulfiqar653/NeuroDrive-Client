@@ -166,12 +166,13 @@ function Login() {
             </div>
             <button
               onClick={handleLogin}
+              disabled={seedsValue.length === 0}
               style={{
                 background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
                 borderImageSource:
                   "linear-gradient(357.47deg, #005EFF 12.36%, rgba(53, 90, 153, 0) 97.89%)",
               }}
-              className="w-[202px] h-[48px] flex justify-center items-center text-white hover:shadow-lg shadow-black border-[1.16px] rounded-[13px] text-[15px] font-sans text-center"
+              className="w-[202px] h-[48px] disabled:opacity-75 disabled:cursor-not-allowed flex justify-center items-center text-white hover:shadow-lg shadow-black border-[1.16px] rounded-[13px] text-[15px] font-sans text-center"
             >
               Login Now
               {isTokenLoading && (

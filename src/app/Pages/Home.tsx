@@ -226,9 +226,15 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         .catch((error) => {
           console.error("Error fetching folder details:", error);
         });
-    }
+    } 
   }, []);
-  console.log(directory);
+
+  useEffect(() => {
+   if (directory) {
+      setParentFolder(directory);
+    }
+  }, [directory, getDirectory])
+  
 
   const handleClickFolder = (folder_id: string) => {
     dispatch(getDirectory(folder_id))

@@ -8,13 +8,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { getDirectory } from "../features/directories/folderSlice";
 import useApi from "../Hooks/usiApi";
+import { postData } from "../features/ApiSlice";
 
 function UploadDocument() {
   const { toggleComponent } = useAuth();
   const [dragging, setDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const { post, reset } = useApi("uploadFile");
+  // const { post, reset } = useApi("uploadFile");
   const res = useSelector((state: RootState) => state.api.calls?.uploadFile);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -52,31 +53,32 @@ function UploadDocument() {
 
   const handleSubmit = async () => {
     if (!file) return;
-    const formData = new FormData();
-    formData.append("file", file);
-    const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
-    post({
-      url: `/directories/${parentFolderId}/files/`,
-      payload: formData,
-      method: "post",
-    });
-    reset();
-  };
+  
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
+  
+      await dispatch(
+        postData({
+          url: `/directories/${parentFolderId}/files/`,
+          payload: formData,
+          method: "post",
+          key: "uploadFile", 
+        })
+      ).unwrap();
+      dispatch(getDirectory(parentFolderId));
+      toast.success("Fille Upload Successful");
+      toggleComponent("upload");
 
-  useEffect(() => {
-    console.log("Current state:", res); // Check state after reset
-  }, [res]);
-  useEffect(() => {
-    if (res?.response?.status === 201) {
-      toast.success("File uploaded successfully!");
+    } catch (error) {
+      toast.error("Error uploading file");
       toggleComponent("upload");
     }
-    // dispatch(getDirectory(parentFolderId));
-    if (res?.error) {
-      toast.warning("Error uploading file!");
-      toggleComponent("upload");
-    }
-  }, [handleSubmit]);
+  };
+  
+
+ 
 
   return (
     <>
@@ -155,7 +157,7 @@ function UploadDocument() {
           >
             Upload
             {res?.isLoading && (
-              <ThreeDots height="30" width="30" color="black" />
+              <ThreeDots height="30" width="30" color="white" />
             )}
           </button>
         </div>
@@ -165,21 +167,4 @@ function UploadDocument() {
 }
 
 export default UploadDocument;
-// function dispatch(
-//   arg0: AsyncThunkAction<
-//     any,
-//     string,
-//     {
-//       state?: unknown;
-//       dispatch?: ThunkDispatch<unknown, unknown, UnknownAction>;
-//       extra?: unknown;
-//       rejectValue?: unknown;
-//       serializedErrorType?: unknown;
-//       pendingMeta?: unknown;
-//       fulfilledMeta?: unknown;
-//       rejectedMeta?: unknown;
-//     }
-//   >
-// ) {
-//   throw new Error("Function not implemented.");
-// }
+
