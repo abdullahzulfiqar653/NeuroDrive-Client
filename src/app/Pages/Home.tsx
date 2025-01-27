@@ -19,9 +19,7 @@ import useApi from "../../Hooks/usiApi";
 import { ThreeCircles } from "react-loader-spinner";
 import { AppDispatch, RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getDirectory,
-} from "../../features/directories/folderSlice";
+import { getDirectory } from "../../features/directories/folderSlice";
 
 // const folder = [
 //   // "Workspace",
@@ -65,7 +63,7 @@ function Home() {
       <div className="flex w-[100vw] relative bg-[#f6f8fc] h-screen overflow-x-hidden">
         {/* left side bar  */}
 
-        <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl overflow-hidden flex-[0.2]  h-[100vh] min-h-[600px] desktop-view-table hidden md:flex flex-col justify-between">
+        <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl overflow-hidden flex-[0.2]  h-[100vh] min-h-[600px] desktop-view-table hidden md:flex flex-col justify">
           <LeftBar />
         </div>
         {/* content main  */}
@@ -211,8 +209,7 @@ type LeftBarProps = {
 function LeftBar({ setLeftBar }: LeftBarProps) {
   const dispatch = useDispatch<AppDispatch>();
   const { directory } = useSelector((state: RootState) => state.folders);
-  const { toggleComponent, parentFolder, setParentFolder } =
-    useAuth();
+  const { toggleComponent, parentFolder, setParentFolder } = useAuth();
 
   useEffect(() => {
     if (!parentFolder) {
@@ -225,15 +222,14 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         .catch((error) => {
           console.error("Error fetching folder details:", error);
         });
-    } 
+    }
   }, []);
 
   useEffect(() => {
-   if (directory) {
+    if (directory) {
       setParentFolder(directory);
     }
-  }, [directory, getDirectory])
-  
+  }, [directory, getDirectory]);
 
   const handleClickFolder = (folder_id: string) => {
     dispatch(getDirectory(folder_id))
@@ -321,7 +317,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             ))
           ) : (
             <p className="whitespace-nowrap rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
-              No folder
+              No folders
             </p>
           )}
         </div>
@@ -339,7 +335,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
           </span> */}
           <Arrow className={"w-[8px] h-[22px]"} />
         </div>
-        <div
+        {/* <div
           style={{
             background: "linear-gradient(180deg, #1D203E 0%, #4D55A4 130.53%)",
           }}
@@ -361,7 +357,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
           >
             ⚡️ Buy more space
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

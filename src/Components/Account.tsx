@@ -133,7 +133,7 @@ function Account({ className, profileLoading }: AccountProps) {
                 className="h-[18.52px] w-[18.52px] md:h-[24px] md:w-[24px]"
               />
             </span>
-            Add email address
+            Add more space
           </p>
           <VerticalLine />
           <p
@@ -150,7 +150,7 @@ function Account({ className, profileLoading }: AccountProps) {
           </p>
         </div>
       </div>
-      {mails && (
+      {/* {mails && (
         <div className="flex flex-col justify-start relative  gap-2 mt-1 md:mt-0">
           <p className="text-[10px] md:text-[12px] font-[500] top-[287px] md:top-[377px]">
             Other Email Address
@@ -170,7 +170,7 @@ function Account({ className, profileLoading }: AccountProps) {
             </p>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 }

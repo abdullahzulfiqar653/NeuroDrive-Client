@@ -33,7 +33,7 @@ function FileGallery({ showStarredOnly }: any) {
     fileUrl: string;
     fileType: "excel" | "word" | "pdf" | "unknown";
     fileName: string;
-  } | null>(null); 
+  } | null>(null);
   const dispatch = useDispatch<AppDispatch>();
 
   // const data = useSelector(
@@ -43,6 +43,16 @@ function FileGallery({ showStarredOnly }: any) {
   // const deleteRes = useSelector(
   //   (state: RootState) => state.api.calls?.deleteFile
   // );
+
+  const formatFileSize = (sizeInBytes: number) => {
+    if (sizeInBytes < 1024 ** 2) {
+      return `${(sizeInBytes / 1024).toFixed(2)} KB`;
+    } else if (sizeInBytes < 1024 ** 3) {
+      return `${(sizeInBytes / 1024 ** 2).toFixed(2)} MB`;
+    } else {
+      return `${(sizeInBytes / 1024 ** 3).toFixed(2)} GB`;
+    }
+  };
 
   const handleClick = (index: number) => {
     setIsSelected((prev) => (prev === index ? null : index));
@@ -67,21 +77,22 @@ function FileGallery({ showStarredOnly }: any) {
 
   const handleFileOpen = async (id: number) => {
     try {
+      const result = await dispatch(
+        fetchData({ url: `files/${id}/`, key: "fileFetch" })
+      ).unwrap();
 
-      const result = await dispatch(fetchData({ url: `files/${id}/`, key: "fileFetch" })).unwrap();
-  
       if (result && result.data) {
-        console.log("result",result.data);
+        console.log("result", result.data);
         const { content_type, url, name } = result.data;
 
         const allowedExtensions = ["png", "jpg", "jpeg"];
         const fileExtension = content_type?.split("/")?.pop()?.toLowerCase();
-  
+
         if (!fileExtension) {
           alert("Invalid file type. Unable to process.");
           return;
         }
-  
+
         if (allowedExtensions.includes(fileExtension)) {
           const link = document.createElement("a");
           link.href = url;
@@ -104,25 +115,21 @@ function FileGallery({ showStarredOnly }: any) {
       reset();
     }
   };
-  
 
   const handleStarClick = (name: string, id: number) => {
-    console.log(name, id);
-    try{
-    const paylod = {
-      name: name,
-      is_starred: true,
-    };
-    post({
-      url: `/files/${id}/`,
-      payload: paylod,
-      method: "put",
-    })
-    toast.success("File is getting stared");
-    
-  }
-    catch(error){
-
+    try {
+      const paylod = {
+        name: name,
+        is_starred: true,
+      };
+      post({
+        url: `/files/${id}/`,
+        payload: paylod,
+        method: "put",
+      });
+      toast.success("File is getting stared");
+    } catch (error) {
+      toast.warning("Error is getting stared");
     }
   };
 
@@ -140,13 +147,12 @@ function FileGallery({ showStarredOnly }: any) {
     });
   };
 
-  // console.log(deleteRes);
   return (
     <div className="h-full w-[100%] md:w-[96%]">
       {isGridMode ? (
         <div className="flex flex-wrap justify-center gap-4 md:gap-4 my-2 md:my-4">
           {parentFolder?.files
-            ?.filter((item) => (showStarredOnly ? item.is_starred : true))
+            ?.filter((item) => (showStarredOnly ? item?.is_starred : true))
             .map((item, index) => (
               <div
                 key={index}
@@ -155,21 +161,29 @@ function FileGallery({ showStarredOnly }: any) {
                 className="w-[109px] cursor-pointer h-[117px] md:w-[207px] md:h-[213px] flex flex-col "
               >
                 <div className="flex items-center justify-center h-[80%]  hover:bg-[#f2f3f3] bg-white rounded-[16px] md:rounded-[32px]">
-                  {["jpg", "png"].includes(item?.name.split(".").pop() || "") && (
+                  {["jpg", "png"].includes(
+                    item?.name.split(".").pop() || ""
+                  ) && (
                     <>
-                      <Gallery className={"w-[32px] h-[41px] md:w-[77px] md:h-[79px]"} />
+                      <Gallery
+                        className={"w-[32px] h-[41px] md:w-[77px] md:h-[79px]"}
+                      />
                     </>
                   )}
-                  {["xls", "xlsx"].includes(item?.name.split(".").pop() || "") && (
+                  {["xls", "xlsx"].includes(
+                    item?.name.split(".").pop() || ""
+                  ) && (
                     <>
-                      <Xcel className={"w-[32px] h-[41px] md:w-[77px] md:h-[79px]"} />
+                      <Xcel
+                        className={"w-[32px] h-[41px] md:w-[77px] md:h-[79px]"}
+                      />
                     </>
                   )}
                   {item?.name.split(".").pop() === "text" && (
-                     <img
-                     src="/doc.svg"
-                     className={"w-[40px] h-[40px] md:w-[77px] md:h-[77px]"}
-                   />
+                    <img
+                      src="/doc.svg"
+                      className={"w-[40px] h-[40px] md:w-[77px] md:h-[77px]"}
+                    />
                   )}
                   {item?.name.split(".").pop() === "pdf" && (
                     <img
@@ -177,11 +191,13 @@ function FileGallery({ showStarredOnly }: any) {
                       className={"w-[32px] h-[41px] md:w-[77px] md:h-[79px]"}
                     />
                   )}
-                  {["doc", "docx"].includes(item?.name.split(".").pop() || "") && (
-                   <img
-                   src="/rich.png"
-                   className={"w-[40px] h-[40px] md:w-[77px] md:h-[77px]"}
-                 /> 
+                  {["doc", "docx"].includes(
+                    item?.name.split(".").pop() || ""
+                  ) && (
+                    <img
+                      src="/rich.png"
+                      className={"w-[40px] h-[40px] md:w-[77px] md:h-[77px]"}
+                    />
                   )}
                 </div>
                 <div className="flex items-center justify-between mt-1 px-2">
@@ -203,7 +219,7 @@ function FileGallery({ showStarredOnly }: any) {
                             : item.name}</span>
                       <span className="text-[#00000069]">
                         {item?.name.split(".").pop()} .{" "}
-                        {(item.size / 1024 ** 2).toFixed(2)} GB
+                        {formatFileSize(item?.size)}
                       </span>
                     </p>
                   </div>
@@ -246,7 +262,7 @@ function FileGallery({ showStarredOnly }: any) {
             </div>
 
             {parentFolder?.files
-              .filter((item) => (showStarredOnly ? item.is_starred : true))
+              .filter((item) => (showStarredOnly ? item?.is_starred : true))
               .map((file, index) => (
                 <div
                   key={index}
@@ -269,7 +285,9 @@ function FileGallery({ showStarredOnly }: any) {
                       />
                     </span>
 
-                    {["xls", "xlsx"].includes(file?.name.split(".").pop() || "") && (
+                    {["xls", "xlsx"].includes(
+                      file?.name.split(".").pop() || ""
+                    ) && (
                       <>
                         <Xcel className="w-4 h-4" />
                         <p className="whitespace-nowrap">
@@ -281,7 +299,9 @@ function FileGallery({ showStarredOnly }: any) {
                         </p>
                       </>
                     )}
-                    {["doc", "docx"].includes(file?.name.split(".").pop() || "") && (
+                    {["doc", "docx"].includes(
+                      file?.name.split(".").pop() || ""
+                    ) && (
                       <>
                         <ShortRich />
                         <p className="whitespace-nowrap">
@@ -298,34 +318,40 @@ function FileGallery({ showStarredOnly }: any) {
                         {" "}
                         <img src="rich.png" alt="" className="w-4 h-4" />{" "}
                         <p className="whitespace-nowrap">
-                        {file?.name.length > 10
-                          ? `${file.name.slice(0, 10)}...${file.name
-                              .split(".")
-                              .pop()}`
-                          : file.name}</p>
+                          {file?.name.length > 10
+                            ? `${file.name.slice(0, 10)}...${file.name
+                                .split(".")
+                                .pop()}`
+                            : file.name}
+                        </p>
                       </>
                     )}
-                    {["jpg", "png"].includes(file?.name.split(".").pop() || "") && (
+                    {["jpg", "png"].includes(
+                      file?.name.split(".").pop() || ""
+                    ) && (
                       <>
-                       <div><Gallery className="w-3 h-3 md:w-4 md:h-4"/></div> 
-                       <p className="whitespace-nowrap">{file?.name.length > 10
-                          ? `${file.name.slice(0, 10)}...${file.name
-                              .split(".")
-                              .pop()}`
-                          : file.name}</p>
-                        
+                        <div>
+                          <Gallery className="w-3 h-3 md:w-4 md:h-4" />
+                        </div>
+                        <p className="whitespace-nowrap">
+                          {file?.name.length > 10
+                            ? `${file.name.slice(0, 10)}...${file.name
+                                .split(".")
+                                .pop()}`
+                            : file.name}
+                        </p>
                       </>
                     )}
                     {file?.name.split(".").pop() === "pdf" && (
                       <>
                         <img src="/pdf.png" className="w-3 h-3 md:w-4 md:h-4" />
                         <p className="whitespace-nowrap">
-                        {file?.name.length > 10
-                          ? `${file.name.slice(0, 10)}...${file.name
-                              .split(".")
-                              .pop()}`
-                          : file.name}
-                          </p>
+                          {file?.name.length > 10
+                            ? `${file.name.slice(0, 10)}...${file.name
+                                .split(".")
+                                .pop()}`
+                            : file.name}
+                        </p>
                       </>
                     )}
                   </p>
@@ -344,7 +370,7 @@ function FileGallery({ showStarredOnly }: any) {
                   </p>
 
                   <p className="border w-[30%] h-full flex items-center justify-start px-4">
-                    {(file.size / 1024 ** 2).toFixed(2)} GB
+                    {formatFileSize(file?.size)}
                   </p>
 
                   {fileData && (
@@ -386,17 +412,16 @@ function FileGallery({ showStarredOnly }: any) {
                           key={index}
                           onClick={
                             action.label === "Starred"
-                              ? () => handleStarClick(file?.name, file?.id) // Trigger star toggle
-                              : action.label === "Delete"
-                              ? () => handleDeleteClick(file?.id) // Trigger delete operation
+                              ? () => handleStarClick(file?.name, file?.id)
+                              : action.label === "Move to Trash"
+                              ? () => handleDeleteClick(file?.id)
                               : undefined
                           }
                           className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
                         >
-                          {/* Conditionally apply class for the star icon */}
                           <div
                             className={`${
-                              action.label === "Starred" && file?.starred
+                              action.label === "Starred" && file?.is_starred
                                 ? "text-yellow-400"
                                 : "text-black"
                             }`}
