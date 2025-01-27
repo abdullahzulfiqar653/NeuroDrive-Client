@@ -11,6 +11,7 @@ import {
   ShortRich,
   ShortXcel,
   ThreeDots,
+  Gallery,
 } from "../assets/Icons";
 import { FileViewer } from "../Hooks/FileViewer";
 import Popup from "reactjs-popup";

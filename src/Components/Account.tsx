@@ -137,7 +137,10 @@ function Account({ className, profileLoading }: AccountProps) {
           </p>
           <VerticalLine />
           <p
-            onClick={logout}
+            onClick={() => {
+              navigate("/login", { replace: true });
+              logout();
+            }}
             className="text-[9px] md:text-[11px] cursor-pointer flex items-center w-[45%] md:w-[50%] ml-4"
           >
             <span className="mr-2">

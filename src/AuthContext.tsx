@@ -99,9 +99,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = () => {
-    setParentFolder(null);
-    setIsAccountOpen(false);
-    setIsAuthenticated(false);
+    window.location.reload();
     localStorage.removeItem("access_token");
   };
 
