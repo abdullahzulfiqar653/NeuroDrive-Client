@@ -211,7 +211,7 @@ type LeftBarProps = {
 function LeftBar({ setLeftBar }: LeftBarProps) {
   const dispatch = useDispatch<AppDispatch>();
   const { directory } = useSelector((state: RootState) => state.folders);
-  const { toggleComponent, parentFolder, setParentFolder, isAuthenticated } =
+  const { toggleComponent, parentFolder, setParentFolder } =
     useAuth();
 
   useEffect(() => {

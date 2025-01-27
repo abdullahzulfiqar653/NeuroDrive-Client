@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Cross, Upload } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
 // import useApi from "../Hooks/usiApi";
@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { getDirectory } from "../features/directories/folderSlice";
-import useApi from "../Hooks/usiApi";
 import { postData } from "../features/ApiSlice";
 
 function UploadDocument() {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Xcel,
   Copy,
@@ -17,8 +17,8 @@ import { FileViewer } from "../Hooks/FileViewer";
 import Popup from "reactjs-popup";
 import { useAuth } from "../AuthContext";
 import useApi from "../Hooks/usiApi";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../app/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../app/store";
 import { toast } from "react-toastify";
 import { fetchData } from "../features/ApiSlice";
 
@@ -26,22 +26,24 @@ function FileGallery({ showStarredOnly }: any) {
   const { isGridMode, parentFolder } = useAuth();
   const [isSelected, setIsSelected] = useState<number | null>(null);
   const [radioClick, setRadioClick] = useState(false);
-  const { fetch, reset } = useApi("getSingleFile");
+  const { reset } = useApi("getSingleFile");
   const { post } = useApi("starFile");
   const { post: deletePost } = useApi("deleteFile");
   const [fileData, setFileData] = useState<{
     fileUrl: string;
     fileType: "excel" | "word" | "pdf" | "unknown";
     fileName: string;
-  } | null>(null);
+  } | null>(null); 
+  const dispatch = useDispatch<AppDispatch>();
+
   // const data = useSelector(
   //   (state: RootState) => state.api.calls?.getSingleFile
   // );
-  const dispatch = useDispatch<AppDispatch>();
-  const starData = useSelector((state: RootState) => state.api.calls?.starFile);
+  // const starData = useSelector((state: RootState) => state.api.calls?.starFile);
   // const deleteRes = useSelector(
   //   (state: RootState) => state.api.calls?.deleteFile
   // );
+
   const handleClick = (index: number) => {
     setIsSelected((prev) => (prev === index ? null : index));
   };
