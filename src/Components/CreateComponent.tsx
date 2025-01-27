@@ -3,14 +3,17 @@ import { Cross, Xcel } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../app/store";
-import { createFolders, getDirectory } from "../features/directories/folderSlice";
+import {
+  createFolders,
+  getDirectory,
+} from "../features/directories/folderSlice";
 import { toast } from "react-toastify";
 import { ThreeDots } from "react-loader-spinner";
 
 function CreateComponent() {
   const { parentFolder, isOpenComponent, toggleComponent } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [value, setValue] = useState({
     name: "",
     parent: "",
@@ -46,27 +49,28 @@ function CreateComponent() {
     }));
   };
 
-
   const handleSubmit = () => {
-    const updatedValue = {
-      ...value,
-      parent: parentFolder?.id,
-    };
-    setLoading(true);
-    dispatch(createFolders(updatedValue))
-      .unwrap()
-      .then(() => {
-        const parentFolderId = localStorage.getItem('parent_folder_id');
-        if (parentFolderId) {
-          dispatch(getDirectory(parentFolderId));
-        }
-        toast.success("Folder Created Successfully");
-        toggleComponent("newFolder", false);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Folder Creation failed:", error);
-      });
+    if (isOpenComponent.newFolder) {
+      const updatedValue = {
+        ...value,
+        parent: parentFolder?.id,
+      };
+      setLoading(true);
+      dispatch(createFolders(updatedValue))
+        .unwrap()
+        .then(() => {
+          const parentFolderId = localStorage.getItem("parent_folder_id");
+          if (parentFolderId) {
+            dispatch(getDirectory(parentFolderId));
+          }
+          toast.success("Folder Created Successfully");
+          toggleComponent("newFolder", false);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Folder Creation failed:", error);
+        });
+    }
   };
 
   return (
@@ -106,19 +110,20 @@ function CreateComponent() {
         </div>
         <button
           onClick={handleSubmit}
+          disabled={value.name === ""}
           style={{
             background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
             borderImageSource:
               "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)",
           }}
-          className="w-[132px] h-[34px] md:w-[163px] md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
+          className="w-[132px] h-[34px] disabled:opacity-75 disabled:cursor-not-allowed md:w-[163px] md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
         >
           Create
-           {loading && (
-                <span className="ml-2">
-                  <ThreeDots height="25" width="25" color="white" />
-                </span>
-              )}
+          {loading && (
+            <span className="ml-2">
+              <ThreeDots height="25" width="25" color="white" />
+            </span>
+          )}
         </button>
       </div>
     </div>

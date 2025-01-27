@@ -14,6 +14,9 @@ import {
 } from "../../assets/Icons";
 import FilesList from "../../Components/FilesList";
 import { useAuth } from "../../AuthContext";
+import { CiUser } from "react-icons/ci";
+import useApi from "../../Hooks/usiApi";
+import { ThreeCircles } from "react-loader-spinner";
 import { AppDispatch, RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -30,15 +33,25 @@ import {
 // ];
 
 function Home() {
-  const { isAccountOpen, setIsAccountOpen, toggleComponent } = useAuth();
+  const { isAccountOpen, setIsAccountOpen, toggleComponent, setProfile } =
+    useAuth();
   const [isLeftBar, setLeftBar] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
+  const { fetch: profileFetch, reset: profileReset } = useApi("getProfile");
+  const data = useSelector((state: RootState) => state.api.calls?.getProfile);
   const handleClickOutside = (event: MouseEvent | TouchEvent) => {
     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
       setLeftBar(false);
     }
   };
+  useEffect(() => {
+    profileFetch("/user/profile/");
+  }, []);
+
+  useEffect(() => {
+    setProfile(data?.response?.data.url);
+  }, [data, profileReset]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -51,6 +64,7 @@ function Home() {
     <>
       <div className="flex w-[100vw] relative bg-[#f6f8fc] h-screen overflow-x-hidden">
         {/* left side bar  */}
+
         <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl overflow-hidden flex-[0.2]  h-[100vh] min-h-[600px] desktop-view-table hidden md:flex flex-col justify-between">
           <LeftBar />
         </div>
@@ -90,12 +104,19 @@ function Home() {
                   onClick={() => setIsAccountOpen((prev) => !prev)}
                   className="flex items-center cursor-pointer gap-2 bg-[#F8FAFC] border border-[#BFBFBF57] p-2 h-[42px] rounded-[12px]"
                 >
-                  <div className=" h-[35px] w-[35px] rounded-full cursor-pointer  overflow-hidden">
-                    <img
-                      src="https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg"
-                      className="w-full h-full object-cover "
-                    />
+                  <div className="h-[35px] w-[35px] rounded-full cursor-pointer overflow-hidden">
+                    {data?.isLoading ? (
+                      <ThreeCircles height="30" width="30" color="black" />
+                    ) : data?.response?.data?.url ? (
+                      <img
+                        src={String(data?.response?.data?.url)}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <CiUser className="h-9 w-8" />
+                    )}
                   </div>
+
                   <span className="flex items-center justify-center gap-1">
                     <p className="text-[#40566D] text-[12px] font-[600] font-sans text-right leading-[18px]">
                       Kevin
@@ -105,6 +126,7 @@ function Home() {
                 </div>
                 {isAccountOpen && (
                   <Account
+                    profileLoading={data?.isLoading}
                     className={
                       "left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"
                     }
@@ -135,12 +157,19 @@ function Home() {
                 onClick={() => setIsAccountOpen((prev) => !prev)}
                 className=" h-[35px] w-[35px] rounded-full cursor-pointer overflow-hidden"
               >
-                <img
-                  src="https://s3-alpha-sig.figma.com/img/5298/20ef/398885b3c44f2931c974eeab97452589?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gN2NdKafXBlh4NOklHHV1eMk5pPgM~xzInElAs6jU43hBLK1ZqyuFdVoaaAzSzJT35DEQIT702OG~38L5UL9QTt8vQPXaNa3OeRLdVgCdTCbbG6Mkiu~nrG3CdZjQllT4cZvq~pEPeHhdwKuBLJ~dWRP1X~mbGHgXTVIkyXyBkY1XEz8VBFmqnP6cQ7Pg1fl96tzu2PFVIET7I10KKdq3ddZFMFYLrrJcy6nXs8OCNl2qjz5NQt0F9~A6BtdCmPsne-a~xpOt6pJCzsBPz9VmItNEdCfyO17bdhhUQmLiwttWqiveWZ1YFLf4bHEXmjuWO0mhvKQ063l5E0G-YZL6Q__"
-                  className="w-full h-full object-cover "
-                />
+                {data?.isLoading ? (
+                  <ThreeCircles height="30" width="30" color="black" />
+                ) : data?.response?.data.url ? (
+                  <img
+                    src={String(data?.response?.data.url)}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <CiUser className="h-9 w-8" />
+                )}
                 {isAccountOpen && (
                   <Account
+                    profileLoading={data?.isLoading}
                     className={
                       "left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"
                     }
@@ -182,7 +211,8 @@ type LeftBarProps = {
 function LeftBar({ setLeftBar }: LeftBarProps) {
   const dispatch = useDispatch<AppDispatch>();
   const { directory } = useSelector((state: RootState) => state.folders);
-  const { toggleComponent, parentFolder, setParentFolder } = useAuth();
+  const { toggleComponent, parentFolder, setParentFolder, isAuthenticated } =
+    useAuth();
 
   useEffect(() => {
     if (!parentFolder) {
@@ -195,8 +225,15 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         .catch((error) => {
           console.error("Error fetching folder details:", error);
         });
-    }
+    } 
   }, []);
+
+  useEffect(() => {
+   if (directory) {
+      setParentFolder(directory);
+    }
+  }, [directory, getDirectory])
+  
 
   const handleClickFolder = (folder_id: string) => {
     dispatch(getDirectory(folder_id))
@@ -274,14 +311,16 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
               <h1
                 onClick={() => handleClickFolder(child.id)}
                 key={child.id}
-                className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 font-sans"
+                className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 "
               >
                 <Folder />{" "}
-                <span className="truncate w-[60%]">{child.name}</span>
+                <span className="truncate w-[60%] font-sans ">
+                  {child.name}
+                </span>
               </h1>
             ))
           ) : (
-            <p className="whitespace-nowrap hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
+            <p className="whitespace-nowrap rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
               No folder
             </p>
           )}

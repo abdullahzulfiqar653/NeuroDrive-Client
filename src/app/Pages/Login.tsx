@@ -74,7 +74,6 @@ function Login() {
         navigate("/");
         login();
         localStorage.setItem("access_token", res.access);
-        
       })
       .catch((error) => {
         console.error("Token generation failed:", error);
@@ -86,8 +85,7 @@ function Login() {
   }
 
   return (
-    <div className="bg-white">
-      <div className="relative flex w-full h-[100vh] p-4 justify-between">
+      <div className="relative bg-white flex w-full h-[100vh] justify-between">
         <div className="absolute flex items-center justify-center -left-[9vw] right-0 top-[8vh]">
           <p className="text-[14px] font-sans">
             Need Help?{" "}
@@ -95,7 +93,7 @@ function Login() {
           </p>
           <img src="/img2.png" alt="" className="w-20 h-20" />
         </div>
-        <div className="flex flex-col w-[40vw]">
+        <div className="flex flex-col w-[40vw] p-4">
           <span className="flex gap-2 md:pr-7 items-center md:border-r border-white">
             <img src="/logo.svg" alt="" className="w-7 h-6" />
             <p className="font-chakra text-[16px] md:text-[22px] text-black">
@@ -104,8 +102,8 @@ function Login() {
           </span>
           <div className="flex flex-col items-center justify-center h-full w-full gap-12">
             <div className="flex flex-col items-center gap-1">
-              <h1 className="text-[#202343] text-[48px]">Login Account</h1>
-              <p className="text-[#202343] text-[18px] font-sans">
+              <h1 className="text-[#202343] text-[38px]">Login Account</h1>
+              <p className="text-[#202343] text-[16px] font-sans">
                 Don’t have any account?{" "}
                 <span
                   onClick={() => navigate("/register")}
@@ -117,11 +115,11 @@ function Login() {
             </div>
 
             <div className="relative">
-              <div className="w-[38vw] min-h-[172px] px-2.5 pb-2.5 pt-4 border border-[#BABABA] rounded-lg">
+              <div className="w-[38vw] h-auto px-2.5 pb-2.5 pt-4 border border-[#BABABA] rounded-lg">
                 <div
                   className={`${
                     seedsValue.length < 16 ? "border-b" : "border-none"
-                  } flex flex-wrap w-full gap-1 border-[#BABABA4D] pb-2`}
+                  } flex flex-wrap w-full gap-2 border-[#BABABA4D] pb-2`}
                 >
                   {seedsValue?.map((seed, index) => (
                     <span
@@ -143,7 +141,7 @@ function Login() {
                       onChange={(e) => handleInputChange(e)}
                       onKeyDown={handleKeyDown}
                       placeholder="Enter your key seed..."
-                      className={`text-sm placeholder:text-[#00000036] mt-2 ml-1 bg-transparent font-sans outline-none `}
+                      className={`text-sm placeholder:text-[#00000036] w-full mt-2 ml-1 bg-transparent font-sans outline-none`}
                     />
                   )}
                 </div>
@@ -168,12 +166,13 @@ function Login() {
             </div>
             <button
               onClick={handleLogin}
+              disabled={seedsValue.length === 0}
               style={{
                 background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
                 borderImageSource:
                   "linear-gradient(357.47deg, #005EFF 12.36%, rgba(53, 90, 153, 0) 97.89%)",
               }}
-              className="w-[202px] h-[48px] flex justify-center items-center text-white hover:shadow-lg shadow-black border-[1.16px] rounded-[13px] text-[15px] font-sans text-center"
+              className="w-[202px] h-[48px] disabled:opacity-75 disabled:cursor-not-allowed flex justify-center items-center text-white hover:shadow-lg shadow-black border-[1.16px] rounded-[13px] text-[15px] font-sans text-center"
             >
               Login Now
               {isTokenLoading && (
@@ -188,10 +187,6 @@ function Login() {
           style={{
             background:
               "linear-gradient(155.35deg, #3984FF -4.35%, #6860FE 32.93%, #8C44FD 62.55%, #B325FC 94.21%)",
-            // backgroundImage: `url('/login-bg.svg')`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
             height: "100vh",
             width: "50vw",
           }}
@@ -203,14 +198,13 @@ function Login() {
             className="w-full h-full object-cover"
           />
         </div>
-      </div>
-      <div className="flex items-end  w-full font-sans text-[#1E1E1E66] pl-2 pb-1 text-[14px]">
+        <div className="flex items-end bottom-0 absolute  w-full font-sans text-[#1E1E1E66] pl-2 pb-1 text-[14px]">
         <p className="pr-3 border-r-[1.17px] border-[#1E1E1E66]">
           Terms & Conditions
         </p>
         <p className="pl-3">Privacy Policy</p>
       </div>
-    </div>
+      </div>
   );
 }
 

@@ -1,20 +1,33 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Cross, Upload } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
+// import useApi from "../Hooks/usiApi";
+import { ThreeDots } from "react-loader-spinner";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../app/store";
+import { getDirectory } from "../features/directories/folderSlice";
+import useApi from "../Hooks/usiApi";
+import { postData } from "../features/ApiSlice";
 
 function UploadDocument() {
   const { toggleComponent } = useAuth();
   const [dragging, setDragging] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  // const { post, reset } = useApi("uploadFile");
+  const res = useSelector((state: RootState) => state.api.calls?.uploadFile);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      console.log("Selected file:", file);
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile); // Store the file in state
     }
   };
 
@@ -31,11 +44,41 @@ function UploadDocument() {
     event.preventDefault();
     setDragging(false);
 
-    const file = event.dataTransfer.files[0];
-    if (file) {
-      console.log("Dropped file:", file);
+    const droppedFile = event.dataTransfer.files[0];
+    if (droppedFile) {
+      setFile(droppedFile); // Store the dropped file in state
+      // console.log("Dropped file:", droppedFile);
     }
   };
+
+  const handleSubmit = async () => {
+    if (!file) return;
+  
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
+  
+      await dispatch(
+        postData({
+          url: `/directories/${parentFolderId}/files/`,
+          payload: formData,
+          method: "post",
+          key: "uploadFile", 
+        })
+      ).unwrap();
+      dispatch(getDirectory(parentFolderId));
+      toast.success("Fille Upload Successful");
+      toggleComponent("upload");
+
+    } catch (error) {
+      toast.error("Error uploading file");
+      toggleComponent("upload");
+    }
+  };
+  
+
+ 
 
   return (
     <>
@@ -62,18 +105,29 @@ function UploadDocument() {
             onDrop={handleDrop}
           >
             <Upload />
-            <p className="text-[16px] font-sans font-[500]">
-              Drag and drop files here
-            </p>
-            <p className="text-[16px] font-sans font-[500] text-[#0000004D]">
-              OR
-            </p>
-            <button
-              onClick={handleButtonClick}
-              className="w-[239px] h-[43px] rounded-md border border-[#A9A9A9] hover:bg-[#e9e9e968] hover:shadow-xl font-sans text-[14px] text-[#5160F3]"
-            >
-              Click here to upload
-            </button>
+            {file ? (
+              <p className="text-[16px] font-sans font-[500] text-blue-600">
+                {file.name}
+              </p>
+            ) : (
+              <>
+                <p className="text-[16px] font-sans font-[500]">
+                  Drag and drop files here
+                </p>
+                <p className="text-[16px] font-sans font-[500] text-[#0000004D]">
+                  OR
+                </p>
+                <button
+                  onClick={handleButtonClick}
+                  className="w-[239px] h-[43px] rounded-md border border-[#A9A9A9] hover:bg-[#e9e9e968] hover:shadow-xl font-sans text-[14px] text-[#5160F3]"
+                >
+                  Click here to upload
+                </button>
+              </>
+            )}
+            {/* {!file && (
+            )} */}
+
             <input
               type="file"
               accept=".pdf, .doc, .docx, .xls, .xlsx, .png, .jpg, .jpeg"
@@ -87,14 +141,24 @@ function UploadDocument() {
             </p>
           </div>
           <button
+            onClick={handleSubmit}
+            disabled={!file}
             style={{
-              background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
-              borderImageSource:
-                "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)",
+              background: file
+                ? "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)"
+                : "linear-gradient(180deg, #CCCCCC 0%, #AAAAAA 100%)",
+              borderImageSource: file
+                ? "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)"
+                : "linear-gradient(0deg, #CCCCCC 0%, rgba(170, 170, 170, 0) 100%)",
             }}
-            className="w-[132px] h-[34px] md:w-[163px]  md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-1"
+            className={`w-[132px] h-[34px] md:w-[163px] md:h-[42px] flex gap-3 justify-center items-center rounded-xl text-white font-sans text-[13px] mt-1 ${
+              file ? "cursor-pointer" : "cursor-not-allowed"
+            }`}
           >
-            Done
+            Upload
+            {res?.isLoading && (
+              <ThreeDots height="30" width="30" color="white" />
+            )}
           </button>
         </div>
       </div>
@@ -103,3 +167,4 @@ function UploadDocument() {
 }
 
 export default UploadDocument;
+

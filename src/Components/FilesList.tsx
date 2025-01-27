@@ -1,8 +1,11 @@
-import { Add, Box, List, Xcel, Recent, Filter, Starred } from "../assets/Icons";
+import { useState } from "react";
+import { Add, Box, List, Xcel, Recent, Filter } from "../assets/Icons";
+import { CiStar } from "react-icons/ci";
 import { useAuth } from "../AuthContext";
 import FileGallery from "./FileGallery";
 
 function FilesList() {
+  const [showStarredOnly, setShowStarredOnly] = useState<boolean>(false);
   const { isGridMode, setIsGridMode, toggleComponent } = useAuth();
   const newDocuments = [
     {
@@ -50,7 +53,11 @@ function FilesList() {
             }}
             className="w-[79px] h-[31px] md:w-[108px] md:h-[42px] rounded-lg flex gap-1 items-center justify-center  text-white font-sans text-[10px] md:text-[14px]"
           >
-            <Add className={"w-4 h-4 md:w-5 md:h-5 mb-1 md:mb-0"} color={"white"} /> Upload
+            <Add
+              className={"w-4 h-4 md:w-5 md:h-5 mb-1 md:mb-0"}
+              color={"white"}
+            />{" "}
+            Upload
           </button>
         </div>
         <div className="flex gap-4 items-start  justify-start w-[96%]">
@@ -83,22 +90,36 @@ function FilesList() {
             <button className="flex items-center justify-start  pl-2 md:pl-3 gap-1 md:gap-2  w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl font-sans border border-[#BFBFBF57]">
               <Recent /> Recent
             </button>
-            <button className="flex items-center justify-start pl-2 md:pl-3 gap-1 md:gap-2 w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl  font-sans border border-[#BFBFBF57]">
-              <Starred /> Starred
+            <button
+              onClick={() => setShowStarredOnly((prev) => !prev)}
+              className="flex items-center justify-start pl-2 md:pl-3 gap-1 md:gap-2 w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl  font-sans border border-[#BFBFBF57]"
+            >
+              <CiStar
+                className={
+                  showStarredOnly
+                    ? "text-yellow-400 text-2xl"
+                    : "text-black text-2xl"
+                }
+              />{" "}
+              Starred
             </button>
           </div>
           <div className="flex gap-4 items-center">
             {isGridMode ? (
               <span
                 className="cursor-pointer"
-                onClick={() => setIsGridMode(false)}
+                onClick={() => {
+                  setIsGridMode(false), console.log("bye");
+                }}
               >
                 <Box />{" "}
               </span>
             ) : (
               <span
-                className="cursor-pointer"
-                onClick={() => setIsGridMode(true)}
+                className="cursor-pointer z-10 flex"
+                onClick={() => {
+                  setIsGridMode(true), console.log("heelo");
+                }}
               >
                 <List />
               </span>
@@ -108,7 +129,7 @@ function FilesList() {
             </button>
           </div>
         </div>
-        <FileGallery />
+        <FileGallery showStarredOnly={showStarredOnly} />
       </div>
     </div>
   );
