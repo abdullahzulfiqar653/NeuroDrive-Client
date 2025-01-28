@@ -27,20 +27,20 @@ const ExcelSheet: React.FC<ExcelSheetProps> = ({ fileUrl, fileName }) => {
       try {
         const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
         const formData = new FormData();
-  
-        // Check if the blobData is already a Blob
+    
         let blobData = args.blobData;
         if (!(blobData instanceof Blob)) {
-          // If it's not a Blob, convert it into a Blob
+  
           blobData = new Blob([args.blobData], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         }
-  
-        // Ensure the file name has the .xlsx extension
-        formData.append('FileName', fileName ? `${fileName}.xlsx` : 'Sample.xlsx');
+    
+   
+        const fileName = 'jhjkh.xlsx';
+
+    
         formData.append('saveType', 'Xlsx');
-        formData.append('file', blobData, fileName ? `${fileName}.xlsx` : 'Sample.xlsx');
-  
-        // Send the file to the backend
+        formData.append('file', blobData, fileName);
+ 
         await dispatch(
           postData({
             url: `/directories/${parentFolderId}/files/`,
@@ -50,7 +50,6 @@ const ExcelSheet: React.FC<ExcelSheetProps> = ({ fileUrl, fileName }) => {
           })
         ).unwrap();
   
-        // Refresh directory after upload
         dispatch(getDirectory(parentFolderId));
         toast.success("File Upload Successful");
         navigate('/')
@@ -62,6 +61,9 @@ const ExcelSheet: React.FC<ExcelSheetProps> = ({ fileUrl, fileName }) => {
       toast.error("No file data provided");
     }
   };
+  
+  
+  
   
   
 

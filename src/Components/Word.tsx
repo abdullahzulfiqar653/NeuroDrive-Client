@@ -28,43 +28,35 @@ const Word = ({ fileUrl, fileName }: any) => {
     viewerRef,
   });
 
-  const save = async () => {
-    if (!viewerRef.current) return;
-  
-    const sfdt = viewerRef.current.documentEditor.serialize();
-    console.log("Serialized SFDT data:", sfdt); // Debug serialized content
-  
-    try {
-      const formData = new FormData();
-      const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
-  
-      const fileBlob = new Blob([sfdt], { type: "application/json" }); 
-      formData.append("file", fileBlob, "document2.doc");
-  
-      // Debug: Log the Blob content before sending
-      fileBlob.text().then((content) => {
-        console.log("Content of the Blob being sent to the backend:", content);
-      });
-  
-      await dispatch(
-        postData({
-          url: `/directories/${parentFolderId}/files/`,
-          payload: formData,
-          method: "post",
-          key: "uploadFile",
-        })
-      ).unwrap();
-  
-      dispatch(getDirectory(parentFolderId));
-      toast.success("File Upload Successful");
-      navigate('/')
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      toast.error("Error uploading file");
+const save = async () => {
+  try {
+    if (!viewerRef.current) {
+      toast.error("Document editor is not initialized.");
+      return;
     }
-  };
-  
-  
+
+    const docxBlob = await viewerRef.current.documentEditor.saveAsBlob("Docx");
+
+    const formData = new FormData();
+    const parentFolderId = localStorage.getItem("parent_folder_id") || "";
+    formData.append("file", docxBlob, "ExportedDocument543.docx");
+
+    await dispatch(
+      postData({
+        url: `/directories/${parentFolderId}/files/`, 
+        payload: formData,
+        method: "post",
+        key: "uploadFile",
+      })
+    ).unwrap();
+
+    dispatch(getDirectory(parentFolderId));
+    toast.success("Document saved successfully!");
+    navigate('/')
+  } catch (error) {
+    toast.error("Failed to save document.");
+  }
+};
 
   const onToolbarClick = (args: any): void => {
     if (args.item.id === "save") save();
@@ -133,6 +125,7 @@ const Word = ({ fileUrl, fileName }: any) => {
   }, []);
 
   return (
+<>
     <DocumentEditorContainerComponent
       created={() => {
         const handleResize = () => {
@@ -154,7 +147,7 @@ const Word = ({ fileUrl, fileName }: any) => {
       toolbarItems={toolbarItems}
       toolbarClick={onToolbarClick}
       enableToolbar={true}
-    />
+    /></>
   );
 };
 
