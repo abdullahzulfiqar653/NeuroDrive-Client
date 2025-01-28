@@ -2,10 +2,17 @@ import { useState } from "react";
 import { Cross, Xcel } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
 import { FileViewer } from "../Hooks/FileViewer";
+import { AppDispatch } from "../app/store";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { createFolders, getDirectory } from "../features/directories/folderSlice";
+import { ThreeDots } from "react-loader-spinner";
 
 function CreateComponent() {
-  const { isOpenComponent, toggleComponent } = useAuth();
   const [createFile, setCreateFile] = useState(false);
+  const { parentFolder, isOpenComponent, toggleComponent } = useAuth();
+  const dispatch = useDispatch<AppDispatch>();
+  const [loading, setLoading] = useState(false);
   const [value, setValue] = useState({
     name: "",
     parent: "",
@@ -59,7 +66,25 @@ function CreateComponent() {
     } else if (isOpenComponent.newDocs) {
       createBlankFile("word");
     } else if (isOpenComponent.newFolder) {
-      createBlankFile("pdf");
+      const updatedValue = {
+        ...value,
+        parent: parentFolder?.id,
+      };
+      setLoading(true);
+      dispatch(createFolders(updatedValue))
+        .unwrap()
+        .then(() => {
+          const parentFolderId = localStorage.getItem("parent_folder_id");
+          if (parentFolderId) {
+            dispatch(getDirectory(parentFolderId));
+          }
+          toast.success("Folder Created Successfully");
+          toggleComponent("newFolder", false);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Folder Creation failed:", error);
+        });
     }
     setCreateFile(true);
   };
@@ -94,9 +119,13 @@ function CreateComponent() {
               value={value.name}
               onChange={(e) => handleChange(e.target.value)}
               type="text"
-              placeholder="Workspace"
-              className="w-full h-full outline-none text-[12px] font-sans font-[600] md:text-[16px] bg-[#ffffff00] placeholder:text-[black]"
-            />
+              placeholder={
+                isOpenComponent.newFolder
+                  ? "Enter your folder name"
+                  : "Enter your file name"
+              }
+              className={`w-full h-full outline-none text-[12px] font-sans font-[600] md:text-[16px] bg-[#ffffff00] placeholder:text-[#000000ac] placeholder:font-[500] placeholder:text-[black]`}
+              />
           </div>
         </div>
         <button
@@ -110,6 +139,11 @@ function CreateComponent() {
           className="w-[132px] h-[34px] disabled:opacity-75 disabled:cursor-not-allowed md:w-[163px] md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
         >
           Create
+          {loading && (
+            <span className="ml-2">
+              <ThreeDots height="25" width="25" color="white" />
+            </span>
+          )}
         </button>
 
         {createFile && fileData && (

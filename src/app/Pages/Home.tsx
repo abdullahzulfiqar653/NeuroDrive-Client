@@ -353,47 +353,45 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
           className="text-[#40566D] text-[14px] pl-4 pr-4 flex font-sans justify-between md:hidden items-start w-full"
         >
           {/* <span className="flex items-center  gap-2">
-            <MobileWallet />
-            My Wallets
-          </span> */}
+          <MobileWallet />
+          My Wallets
+        </span> */}
           <Arrow className={"w-[8px] h-[22px]"} />
         </div>
         {/* <div
+        style={{
+          background: "linear-gradient(180deg, #1D203E 0%, #4D55A4 130.53%)",
+        }}
+        className="w-[75vw]  md:w-full py-2 text-[#FFFFFF] rounded-tr-2xl rounded-tl-2xl flex flex-col justify-center items-center"
+      >
+        <div className="flex justify-between w-[90%]">
+          <p className="text-[16px] font-[600]">Available Space</p>
+          <p className="text-[16px]">30%</p>
+        </div>
+        <p className="text-[#FFFFFF80] text-[10px] text-start w-[90%]">
+          Expire on: 12.12.24
+        </p>
+        <img src="progressbar.svg" />
+        <div
           style={{
-            background: "linear-gradient(180deg, #1D203E 0%, #4D55A4 130.53%)",
+            background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
           }}
-          className="w-[75vw]  md:w-full py-2 text-[#FFFFFF] rounded-tr-2xl rounded-tl-2xl flex flex-col justify-center items-center"
+          className="flex justify-center items-center mt-2 w-[90%] text-[white] text-[14px] rounded-xl h-[39px]"
         >
-          <div className="flex justify-between w-[90%]">
-            <p className="text-[16px] font-[600]">Available Space</p>
-            <p className="text-[16px]">30%</p>
-          </div>
-          <p className="text-[#FFFFFF80] text-[10px] text-start w-[90%]">
-            Expire on: 12.12.24
-          </p>
-          <img src="progressbar.svg" />
-          <div
-            style={{
-              background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
-            }}
-            className="flex justify-center items-center mt-2 w-[90%] text-[white] text-[14px] rounded-xl h-[39px]"
-          >
-            ⚡️ Buy more space
-          </div>
-        </div> */}
+          ⚡️ Buy more space
+        </div>
+      </div> */}
 
         <div
-          className="hidden md:block"
+          className="md:block w-[75vw]  md:w-full py-2 text-[#FFFFFF] rounded-tr-2xl rounded-tl-2xl flex flex-col justify-center items-center"
           style={{
-            // backgroundColor: "#4D55A4",
             background: "linear-gradient(to top, #4D55A4, #1D203E)",
             borderTopLeftRadius: "15px",
             borderTopRightRadius: "15px",
             // padding: "20px"
             // borderRadius: "10px",
-            marginLeft: "10px",
-            width: "97%",
-            height: "230px",
+            width: "100%",
+            height: "100%",
           }}
         >
           <GaugeComponent
@@ -423,15 +421,15 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
               color: "white",
             }}
           />
-          <div
-            style={{
-              background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
-              borderImageSource:
-                "linear-gradient(357.47deg, #005EFF 12.36%, rgba(53, 90, 153, 0) 97.89%)",
-            }}
-            className="flex top-[92%] left-7 absolute gap-2 cursor-pointer m-auto mb-3 w-[199px] h-[42px] rounded-[12px] border borderImage items-center justify-center"
-          >
-            <p className="text-[14px] text-[white]"> Buy more space</p>
+          <div className="flex justify-center">
+            <div
+              style={{
+                background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
+              }}
+              className="flex justify-center items-center mt-2 w-[90%] text-[white] text-[14px] rounded-xl h-[39px]"
+            >
+              ⚡️ Buy more space
+            </div>
           </div>
         </div>
       </div>

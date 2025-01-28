@@ -51,16 +51,6 @@ function FileGallery({ showStarredOnly }: any) {
     }
   };
 
-  const formatFileSize = (sizeInBytes: number) => {
-    if (sizeInBytes < 1024 ** 2) {
-      return `${(sizeInBytes / 1024).toFixed(2)} KB`;
-    } else if (sizeInBytes < 1024 ** 3) {
-      return `${(sizeInBytes / 1024 ** 2).toFixed(2)} MB`;
-    } else {
-      return `${(sizeInBytes / 1024 ** 3).toFixed(2)} GB`;
-    }
-  };
-
   const handleClick = (index: number) => {
     setIsSelected((prev) => (prev === index ? null : index));
   };
