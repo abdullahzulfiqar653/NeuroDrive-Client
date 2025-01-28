@@ -24,15 +24,13 @@ import { AppDispatch } from "../app/store";
 import { toast } from "react-toastify";
 import { fetchData, postData } from "../features/ApiSlice";
 import { getDirectory } from "../features/directories/folderSlice";
-
-interface PopupProps {
-  close: () => void;
-}
+import ReNameFile from "./ReNameFile";
 
 function FileGallery({ showStarredOnly }: any) {
   const { isGridMode, parentFolder, isOpenComponent, toggleComponent } =
     useAuth();
   const [isSelected, setIsSelected] = useState<number | null>(null);
+  const [toggleReName, settoggleReName] = useState(false);
   const [radioClick, setRadioClick] = useState(false);
   const { reset } = useApi("getSingleFile");
   const { post } = useApi("starFile");
@@ -57,23 +55,6 @@ function FileGallery({ showStarredOnly }: any) {
   const handleClick = (index: number) => {
     setIsSelected((prev) => (prev === index ? null : index));
   };
-  const actions = [
-    { icon: <Copy />, label: "Copy" },
-    {
-      icon: <NoPerson className="w-4 h-4" />,
-      label: "Share",
-    },
-    { icon: <Download />, label: "Download" },
-    { icon: <Rename />, label: "Rename" },
-    {
-      icon: <Starred className="w-4 h-4" />,
-      label: "Starred",
-    },
-    {
-      icon: <Trash className="w-4 h-4" />,
-      label: "Move to Trash",
-    },
-  ];
 
   const handleFileOpen = async (id: number) => {
     try {
@@ -194,7 +175,12 @@ function FileGallery({ showStarredOnly }: any) {
       reset();
     }
   };
-
+  console.log(parentFolder);
+  console.log(
+    parentFolder?.files.map((item) => {
+      return item?.name;
+    })
+  );
   return (
     <div className="h-full w-[100%] md:w-[96%]">
       {isGridMode ? (
@@ -450,34 +436,6 @@ function FileGallery({ showStarredOnly }: any) {
                     }}
                     className="popup-content"
                   >
-                    {/* <div className="flex flex-col gap-2 p-2 pr-4 font-sans text-[14px] ">
-                      {actions.map((action, index) => (
-                        <div
-                          key={index}
-                          onClick={
-                            action.label === "Starred"
-                              ? () => handleStarClick(file?.name, file?.id)
-                              : action.label === "Move to Trash"
-                              ? () => handleDeleteClick(file?.id)
-                              : action.label === "Download"
-                              ? () => handleDownloadClick(file?.id)
-                              : undefined
-                          }
-                          className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
-                        >
-                          <div
-                            className={`${
-                              action.label === "Starred" && file?.is_starred
-                                ? "text-yellow-400"
-                                : "text-black"
-                            }`}
-                          >
-                            {action.icon}
-                          </div>
-                          {action.label}
-                        </div>
-                      ))}
-                    </div> */}
                     <div className="flex flex-col gap-2 p-2 pr-4 font-sans text-[14px] ">
                       <div
                         // onClick={() => handleDownloadClick(file?.id)}
@@ -506,12 +464,18 @@ function FileGallery({ showStarredOnly }: any) {
                         </div>
                       )}
                       <div
-                        onClick={() => toggleComponent("reName")}
+                        onClick={() => settoggleReName(true)}
                         className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
                       >
                         <Rename />
                         Rename
                       </div>
+                      {toggleReName && (
+                        <ReNameFile
+                          fileId={file?.id}
+                          settoggleReName={settoggleReName}
+                        />
+                      )}
                       <div
                         onClick={() => handleDownloadClick(file?.id)}
                         className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"

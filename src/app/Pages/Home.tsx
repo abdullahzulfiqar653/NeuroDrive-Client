@@ -55,8 +55,6 @@ function Home() {
     profileFetch("/user/profile/");
   }, [reGetProfile]);
 
-  console.log(data?.response?.data?.features_data);
-
   const size = data?.response?.data?.features_data;
 
   const average = size?.total_size / size?.size_allowed;
