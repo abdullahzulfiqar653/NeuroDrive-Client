@@ -49,24 +49,24 @@ export const postData = createAsyncThunk<
         },
       };
     }
-    const response = await apiClient({
-      method,
-      url,
-      data: payload,
-      ...config,
-    });
-    // const options: any = {
+    // const response = await apiClient({
     //   method,
     //   url,
+    //   data: payload,
     //   ...config,
-    // };
+    // });
+    const options: any = {
+      method,
+      url,
+      ...config,
+    };
 
     // Only include payload if method is not `delete`
-    // if (method !== 'delete') {
-    //   options.data = payload;
-    // }
+    if (method !== 'delete') {
+      options.data = payload;
+    }
 
-    // const response = await apiClient(options);
+    const response = await apiClient(options);
     return { data: response.data, status: response.status }; 
   } catch (error: any) {
     const errorMsg = error.response ? error.response.data : error.message;
