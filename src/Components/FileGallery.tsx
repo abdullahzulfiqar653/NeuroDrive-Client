@@ -1,4 +1,6 @@
 import { useState } from "react";
+import React from "react";
+import "reactjs-popup/dist/index.css";
 import {
   Xcel,
   Copy,
@@ -22,6 +24,10 @@ import { AppDispatch } from "../app/store";
 import { toast } from "react-toastify";
 import { fetchData, postData } from "../features/ApiSlice";
 import { getDirectory } from "../features/directories/folderSlice";
+
+interface PopupProps {
+  close: () => void;
+}
 
 function FileGallery({ showStarredOnly }: any) {
   const { isGridMode, parentFolder } = useAuth();
@@ -83,7 +89,6 @@ function FileGallery({ showStarredOnly }: any) {
       ).unwrap();
 
       if (result && result.data) {
-        console.log("result", result.data);
         const { content_type, url, name } = result.data;
 
         const allowedExtensions = ["png", "jpg", "jpeg"];
@@ -163,8 +168,7 @@ function FileGallery({ showStarredOnly }: any) {
           key: "deleteFile",
         })
       ).unwrap();
-      console.log(response);
-      if (response?.status === 200) {
+      if (response?.status === 204) {
         toast.success("Successsfully uploaded profile");
         dispatch(getDirectory(parentFolderId));
       } else {
@@ -508,13 +512,74 @@ function FileGallery({ showStarredOnly }: any) {
                           Starred
                         </div>
                       )}
-                      <div
+                      <Popup
+                        trigger={
+                          <button className="flex gap-2 items-center focus:outline-none">
+                            <Rename /> Rename
+                          </button>
+                        }
+                        position="center center"
+                        modal
+                        closeOnDocumentClick={true}
+                        className="popup-content"
+                        contentStyle={{
+                          borderRadius: "15px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          height: "30%",
+                        }}
+                      >
+                        <div
+                          className="rounded-lg w-full relative"
+                          onClick={(e) => e.stopPropagation()} // Prevent click events inside the popup from closing it
+                        >
+                          {/* Title */}
+                          <h2 className="text-lg font-semibold mb-4">
+                            Rename File
+                          </h2>
+                          {/* Input Field */}
+                          <input
+                            type="text"
+                            placeholder="Enter new name"
+                            className="w-full border border-gray-300 rounded p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                          {/* Close Button */}
+                          <button
+                            className="absolute top-2 right-2 text-xl font-bold hover:text-gray-800"
+                            onClick={close}
+                          >
+                            ✕
+                          </button>
+                          {/* Action Buttons */}
+                          <div className="flex gap-4">
+                            <button
+                              className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 focus:outline-none"
+                              onClick={close}
+                            >
+                              Close
+                            </button>
+                            <button
+                              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none"
+                              onClick={() => {
+                                // Handle submit logic here
+                                console.log("Submitted");
+                                close(); // Close the popup
+                              }}
+                            >
+                              Submit
+                            </button>
+                          </div>
+                        </div>
+                      </Popup>
+
+                      {/* <div
                         // onClick={() => handleDownloadClick(file?.id)}
                         className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
                       >
                         <Rename />
                         Rename
-                      </div>
+ls                      </div> */}
                       <div
                         onClick={() => handleDownloadClick(file?.id)}
                         className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
