@@ -1,23 +1,20 @@
 import { useState } from "react";
 import { Cross, Xcel } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../app/store";
-import {
-  createFolders,
-  getDirectory,
-} from "../features/directories/folderSlice";
-import { toast } from "react-toastify";
-import { ThreeDots } from "react-loader-spinner";
+import { FileViewer } from "../Hooks/FileViewer";
 
 function CreateComponent() {
-  const { parentFolder, isOpenComponent, toggleComponent } = useAuth();
-  const dispatch = useDispatch<AppDispatch>();
-  const [loading, setLoading] = useState(false);
+  const { isOpenComponent, toggleComponent } = useAuth();
+  const [createFile, setCreateFile] = useState(false);
   const [value, setValue] = useState({
     name: "",
     parent: "",
   });
+  const [fileData, setFileData] = useState<{
+    fileUrl: string;
+    fileType: "excel" | "word" | "pdf";
+    fileName: string;
+  } | null>(null);
 
   const handleClose = () => {
     if (isOpenComponent.newExcel) {
@@ -29,19 +26,6 @@ function CreateComponent() {
     }
   };
 
-  // const handleCreate = () => {
-  //   if (isOpenComponent.newExcel) {
-  //     navigate("/text-file?type=excel");
-  //     setTimeout(() => toggleComponent("newExcel", false), 0);
-  //   } else if (isOpenComponent.newDocs) {
-  //     navigate("/text-file?type=word");
-  //     setTimeout(() => toggleComponent("newDocs", false), 0);
-  //   } else {
-  //     alert("Please select a file type to create.");
-  //     handleClose();
-  //   }
-  // };
-
   const handleChange = (newValue: string) => {
     setValue((prev) => ({
       ...prev,
@@ -49,28 +33,35 @@ function CreateComponent() {
     }));
   };
 
-  const handleSubmit = () => {
-    if (isOpenComponent.newFolder) {
-      const updatedValue = {
-        ...value,
-        parent: parentFolder?.id,
-      };
-      setLoading(true);
-      dispatch(createFolders(updatedValue))
-        .unwrap()
-        .then(() => {
-          const parentFolderId = localStorage.getItem("parent_folder_id");
-          if (parentFolderId) {
-            dispatch(getDirectory(parentFolderId));
-          }
-          toast.success("Folder Created Successfully");
-          toggleComponent("newFolder", false);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Folder Creation failed:", error);
-        });
+  const createBlankFile = (type: "excel" | "word" | "pdf") => {
+    const fileName = `${value.name || "New File"}.${type}`;
+    let fileUrl = "";
+
+    if (type === "excel") {
+      fileUrl = type; // can change url as we want
+    } else if (type === "word") {
+      fileUrl = type;
+    } else if (type === "pdf") {
+      fileUrl = type;
     }
+
+    setFileData({ fileUrl, fileType: type, fileName });
+    setTimeout(() => {
+      toggleComponent("newDocs", false);
+      toggleComponent("newFolder", false);
+      toggleComponent("newExcel", false);
+    }, 100);
+  };
+
+  const handleSubmit = () => {
+    if (isOpenComponent.newExcel) {
+      createBlankFile("excel");
+    } else if (isOpenComponent.newDocs) {
+      createBlankFile("word");
+    } else if (isOpenComponent.newFolder) {
+      createBlankFile("pdf");
+    }
+    setCreateFile(true);
   };
 
   return (
@@ -119,12 +110,15 @@ function CreateComponent() {
           className="w-[132px] h-[34px] disabled:opacity-75 disabled:cursor-not-allowed md:w-[163px] md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
         >
           Create
-          {loading && (
-            <span className="ml-2">
-              <ThreeDots height="25" width="25" color="white" />
-            </span>
-          )}
         </button>
+
+        {createFile && fileData && (
+          <FileViewer
+            fileUrl={fileData.fileUrl}
+            fileType={fileData.fileType}
+            fileName={fileData.fileName}
+          />
+        )}
       </div>
     </div>
   );

@@ -393,7 +393,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             // borderRadius: "10px",
             marginLeft: "10px",
             width: "97%",
-            height: "100%",
+            height: "230px",
           }}
         >
           <GaugeComponent
@@ -424,16 +424,13 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             }}
           />
           <div
-            // onClick={() => toggleComponent("share")}
             style={{
               background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
               borderImageSource:
                 "linear-gradient(357.47deg, #005EFF 12.36%, rgba(53, 90, 153, 0) 97.89%)",
             }}
-            className="flex gap-2 cursor-pointer m-auto mb-3 w-[199px] h-[42px] rounded-[12px] border borderImage items-center justify-center"
+            className="flex top-[92%] left-7 absolute gap-2 cursor-pointer m-auto mb-3 w-[199px] h-[42px] rounded-[12px] border borderImage items-center justify-center"
           >
-            {/* <Invite /> */}
-            {/* <flashStar /> */}
             <p className="text-[14px] text-[white]"> Buy more space</p>
           </div>
         </div>
