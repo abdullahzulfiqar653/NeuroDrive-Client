@@ -5,7 +5,7 @@ import { fetchData, resetCallState, postData } from '../features/ApiSlice';
 interface PostParams {
   url: string;
   payload: any;
-  method: 'post' | 'put' | 'patch';
+  method: 'post' | 'put' | 'patch' | 'delete';
 }
 
 const useApi = (key: string) => {

@@ -15,9 +15,11 @@ type OpenComponentsState = {
 interface AuthContextType {
   profile: string;
   isGridMode: boolean;
+  usedStorage: number;
   parentFolder: Folder | null;
   isAccountOpen: boolean;
   isAuthenticated: boolean;
+  reGetProfile: boolean;
   isOpenComponent: OpenComponentsState;
   login: () => void;
   signup: () => void;
@@ -25,7 +27,9 @@ interface AuthContextType {
   setProfile: any;
   setIsGridMode: (isGridMode: boolean) => void;
   setParentFolder: (component: Folder) => void;
+  setUsedStorage: React.Dispatch<React.SetStateAction<number>>;
   toggleComponent: (component: string, isOpen?: boolean) => void;
+  setReGetProfile: React.Dispatch<React.SetStateAction<boolean>>;
   setIsAccountOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -47,10 +51,11 @@ const isTokenValid = () => {
   }
 };
 
-
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAccountOpen, setIsAccountOpen] = useState<boolean>(false);
   const [profile, setProfile] = useState<string>("");
+  const [usedStorage, setUsedStorage] = useState<number>(0);
+  const [reGetProfile, setReGetProfile] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [isGridMode, setIsGridMode] = useState<boolean>(false);
   const [parentFolder, setParentFolder] = useState<Folder | null>(null);
@@ -71,7 +76,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    const parentId = localStorage.getItem('parent_id');
+    const parentId = localStorage.getItem("parent_id");
     if (parentId) {
       setParentFolder(
         (prev) =>
@@ -112,9 +117,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         profile,
         setProfile,
         isGridMode,
+        usedStorage,
+        setUsedStorage,
         parentFolder,
         setIsGridMode,
         isAccountOpen,
+        reGetProfile,
+        setReGetProfile,
         setParentFolder,
         setIsAccountOpen,
         isOpenComponent,

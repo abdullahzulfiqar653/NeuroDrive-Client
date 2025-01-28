@@ -20,7 +20,8 @@ import useApi from "../Hooks/usiApi";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../app/store";
 import { toast } from "react-toastify";
-import { fetchData } from "../features/ApiSlice";
+import { fetchData, postData } from "../features/ApiSlice";
+import { getDirectory } from "../features/directories/folderSlice";
 
 function FileGallery({ showStarredOnly }: any) {
   const { isGridMode, parentFolder } = useAuth();
@@ -28,7 +29,7 @@ function FileGallery({ showStarredOnly }: any) {
   const [radioClick, setRadioClick] = useState(false);
   const { reset } = useApi("getSingleFile");
   const { post } = useApi("starFile");
-  const { post: deletePost } = useApi("deleteFile");
+  const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
   const [fileData, setFileData] = useState<{
     fileUrl: string;
     fileType: "excel" | "word" | "pdf" | "unknown";
@@ -128,23 +129,73 @@ function FileGallery({ showStarredOnly }: any) {
         method: "put",
       });
       toast.success("File is getting stared");
+      dispatch(getDirectory(parentFolderId));
     } catch (error) {
       toast.warning("Error is getting stared");
     }
   };
+  const handleUnStarClick = (name: string, id: number) => {
+    try {
+      const paylod = {
+        name: name,
+        is_starred: false,
+      };
+      post({
+        url: `/files/${id}/`,
+        payload: paylod,
+        method: "put",
+      });
+      toast.success("File is getting unstared");
+      dispatch(getDirectory(parentFolderId));
+    } catch (error) {
+      toast.warning("Error is getting unstared");
+    }
+  };
 
-  // useEffect(() => {
-  //   if (starData?.response?.status === 200) {
-  //     toast.success("File uploaded successfully!");
-  //   }
-  // }, []);
+  const handleDeleteClick = async (id: number) => {
+    console.log(id);
+    try {
+      const response = await dispatch(
+        postData({
+          url: `/files/${id}/`,
+          payload: "",
+          method: "delete",
+          key: "deleteFile",
+        })
+      ).unwrap();
+      console.log(response);
+      if (response?.status === 200) {
+        toast.success("Successsfully uploaded profile");
+        dispatch(getDirectory(parentFolderId));
+      } else {
+        toast.error("Failed to uploaded profile");
+      }
+    } catch (error) {}
+    console.log("Prfile upload error");
+  };
 
-  const handleDeleteClick = (id: number) => {
-    deletePost({
-      url: `/files/${id}/`,
-      payload: id,
-      method: "put",
-    });
+  const handleDownloadClick = async (id: number) => {
+    try {
+      const result = await dispatch(
+        fetchData({ url: `files/${id}/`, key: "fileFetch" })
+      ).unwrap();
+
+      if (result && result.data) {
+        const { url, name } = result.data;
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = name;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        toast.success("file Downloaded Successfully");
+      }
+    } catch (error) {
+      toast.error("Failed to open the file. Please try again.");
+    } finally {
+      reset();
+    }
   };
 
   return (
@@ -402,7 +453,7 @@ function FileGallery({ showStarredOnly }: any) {
                     }}
                     className="popup-content"
                   >
-                    <div className="flex flex-col gap-2 p-2 pr-4 font-sans text-[14px] ">
+                    {/* <div className="flex flex-col gap-2 p-2 pr-4 font-sans text-[14px] ">
                       {actions.map((action, index) => (
                         <div
                           key={index}
@@ -411,6 +462,8 @@ function FileGallery({ showStarredOnly }: any) {
                               ? () => handleStarClick(file?.name, file?.id)
                               : action.label === "Move to Trash"
                               ? () => handleDeleteClick(file?.id)
+                              : action.label === "Download"
+                              ? () => handleDownloadClick(file?.id)
                               : undefined
                           }
                           className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
@@ -427,6 +480,55 @@ function FileGallery({ showStarredOnly }: any) {
                           {action.label}
                         </div>
                       ))}
+                    </div> */}
+                    <div className="flex flex-col gap-2 p-2 pr-4 font-sans text-[14px] ">
+                      <div
+                        // onClick={() => handleDownloadClick(file?.id)}
+                        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
+                      >
+                        <NoPerson className="w-4 h-4" />
+                        Share
+                      </div>
+                      {file?.is_starred ? (
+                        <div
+                          onClick={() =>
+                            handleUnStarClick(file?.name, file?.id)
+                          }
+                          className="flex gap-2 items-center whitespace-nowrap cursor-pointer"
+                        >
+                          <Starred className="w-4 h-4 fill-yellow-300" />
+                          Unstarred
+                        </div>
+                      ) : (
+                        <div
+                          onClick={() => handleStarClick(file?.name, file?.id)}
+                          className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
+                        >
+                          <Starred className="w-4 h-4" />
+                          Starred
+                        </div>
+                      )}
+                      <div
+                        // onClick={() => handleDownloadClick(file?.id)}
+                        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
+                      >
+                        <Rename />
+                        Rename
+                      </div>
+                      <div
+                        onClick={() => handleDownloadClick(file?.id)}
+                        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
+                      >
+                        <Download />
+                        Download
+                      </div>
+                      <div
+                        onClick={() => handleDeleteClick(file?.id)}
+                        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
+                      >
+                        <Trash className="w-4 h-4" />
+                        Move to Trash
+                      </div>
                     </div>
                   </Popup>
                 </div>

@@ -1,5 +1,6 @@
 import Account from "../../Components/Account";
 import { useEffect, useRef, useState } from "react";
+import { GaugeComponent } from "react-gauge-component";
 import {
   Add,
   Line,
@@ -11,6 +12,7 @@ import {
   Invite,
   Search,
   SixDots,
+  flashStar,
 } from "../../assets/Icons";
 import FilesList from "../../Components/FilesList";
 import { useAuth } from "../../AuthContext";
@@ -31,8 +33,14 @@ import { getDirectory } from "../../features/directories/folderSlice";
 // ];
 
 function Home() {
-  const { isAccountOpen, setIsAccountOpen, toggleComponent, setProfile } =
-    useAuth();
+  const {
+    isAccountOpen,
+    setIsAccountOpen,
+    toggleComponent,
+    setProfile,
+    reGetProfile,
+    setUsedStorage,
+  } = useAuth();
   const [isLeftBar, setLeftBar] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -45,7 +53,16 @@ function Home() {
   };
   useEffect(() => {
     profileFetch("/user/profile/");
-  }, []);
+  }, [reGetProfile]);
+
+  console.log(data?.response?.data?.features_data);
+
+  const size = data?.response?.data?.features_data;
+
+  const average = size?.total_size / size?.size_allowed;
+
+  // Handle cases where size_allowed is 0 to avoid division by zero
+  setUsedStorage(size?.size_allowed !== 0 ? average : 0);
 
   useEffect(() => {
     setProfile(data?.response?.data.url);
@@ -63,7 +80,7 @@ function Home() {
       <div className="flex w-[100vw] relative bg-[#f6f8fc] h-screen overflow-x-hidden">
         {/* left side bar  */}
 
-        <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl overflow-hidden flex-[0.2]  h-[100vh] min-h-[600px] desktop-view-table hidden md:flex flex-col justify">
+        <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl overflow-hidden flex-[0.2]  h-[100vh] min-h-[600px] desktop-view-table hidden md:flex flex-col">
           <LeftBar />
         </div>
         {/* content main  */}
@@ -208,8 +225,10 @@ type LeftBarProps = {
 };
 function LeftBar({ setLeftBar }: LeftBarProps) {
   const dispatch = useDispatch<AppDispatch>();
+  const [setFolderName, setsetFolderName] = useState<string>("");
   const { directory } = useSelector((state: RootState) => state.folders);
-  const { toggleComponent, parentFolder, setParentFolder } = useAuth();
+  const { toggleComponent, parentFolder, setParentFolder, usedStorage } =
+    useAuth();
 
   useEffect(() => {
     if (!parentFolder) {
@@ -253,7 +272,10 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         {/* <Line className={"my-1 md:hidden block"} /> */}
         <div className="flex flex-col gap-2 md:pl-1 pl-5 mt-3">
           <div
-            onClick={() => handleClickFolder("main")}
+            onClick={() => {
+              handleClickFolder("main");
+              // setFolderName("");
+            }}
             className="cursor-pointer bg-[#3984FF] w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center shadow-md"
           >
             <div className="flex items-center gap-3">
@@ -292,7 +314,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             <span>
               <Arrow color="#9F9F9F" />
             </span>
-            FOLDERS
+            {setFolderName !== "" ? setFolderName : "FOLDERS"}
           </h1>
           <span
             onClick={() => toggleComponent("newFolder")}
@@ -305,7 +327,10 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
           {directory?.children && directory.children.length > 0 ? (
             directory.children.map((child) => (
               <h1
-                onClick={() => handleClickFolder(child.id)}
+                onClick={() => {
+                  handleClickFolder(child.id);
+                  setsetFolderName(child.name);
+                }}
                 key={child.id}
                 className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 "
               >
@@ -358,6 +383,61 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             ⚡️ Buy more space
           </div>
         </div> */}
+
+        <div
+          className="hidden md:block"
+          style={{
+            // backgroundColor: "#4D55A4",
+            background: "linear-gradient(to top, #4D55A4, #1D203E)",
+            borderTopLeftRadius: "15px",
+            borderTopRightRadius: "15px",
+            // padding: "20px",
+            // borderRadius: "10px",
+            width: "95%",
+            height: "100%",
+          }}
+        >
+          <GaugeComponent
+            value={usedStorage}
+            type="radial"
+            labels={{
+              tickLabels: {
+                type: "inner",
+                ticks: [
+                  { value: 20 },
+                  { value: 40 },
+                  { value: 60 },
+                  { value: 80 },
+                  { value: 100 },
+                ],
+              },
+            }}
+            arc={{
+              colorArray: ["#3983FF", "#B325FC"],
+              subArcs: [{ limit: 10 }, { limit: 30 }, {}, {}, {}],
+              padding: 0.02,
+              width: 0.3,
+            }}
+            pointer={{
+              elastic: true,
+              animationDelay: 0,
+              color: "white",
+            }}
+          />
+          <div
+            // onClick={() => toggleComponent("share")}
+            style={{
+              background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
+              borderImageSource:
+                "linear-gradient(357.47deg, #005EFF 12.36%, rgba(53, 90, 153, 0) 97.89%)",
+            }}
+            className="flex gap-2 cursor-pointer m-auto mb-3 w-[199px] h-[42px] rounded-[12px] border borderImage items-center justify-center"
+          >
+            {/* <Invite /> */}
+            {/* <flashStar /> */}
+            <p className="text-[14px] text-[white]"> Buy more space</p>
+          </div>
+        </div>
       </div>
     </>
   );
