@@ -7,8 +7,11 @@ import {
 } from "@syncfusion/ej2-react-documenteditor";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axios from "axios";
 import useFileLoader from "../Hooks/useFileLoader";
+import { postData } from "../features/ApiSlice";
+import { getDirectory } from "../features/directories/folderSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../app/store";
 
 DocumentEditorContainerComponent.Inject(Toolbar);
 
@@ -16,6 +19,7 @@ const Word = ({ fileUrl, fileName }: any) => {
   // const [savedData, setSavedData] = useState(null);
   const viewerRef = useRef<DocumentEditorContainerComponent>(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   const { loadFile } = useFileLoader({
     fileType: "word",
@@ -24,31 +28,43 @@ const Word = ({ fileUrl, fileName }: any) => {
     viewerRef,
   });
 
-  const save = () => {
+  const save = async () => {
     if (!viewerRef.current) return;
-
-    const sfdt = { content: viewerRef.current.documentEditor.serialize() };
-    console.log("Sending JSON data to backend:", JSON.stringify(sfdt));
-
-    axios
-      .post("http://localhost:5000/api", sfdt, {
-        headers: {
-          accept: "application/json",
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        // setSavedData(response.data);
-        navigate("/");
-        console.log(response, "response");
-        toast.success("Document saved successfully!");
-      })
-      .catch((error) => {
-        console.error("Save error:", error);
-        toast.error("Error saving document!");
+  
+    const sfdt = viewerRef.current.documentEditor.serialize();
+    console.log("Serialized SFDT data:", sfdt); // Debug serialized content
+  
+    try {
+      const formData = new FormData();
+      const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
+  
+      const fileBlob = new Blob([sfdt], { type: "application/json" }); 
+      formData.append("file", fileBlob, "document2.doc");
+  
+      // Debug: Log the Blob content before sending
+      fileBlob.text().then((content) => {
+        console.log("Content of the Blob being sent to the backend:", content);
       });
+  
+      await dispatch(
+        postData({
+          url: `/directories/${parentFolderId}/files/`,
+          payload: formData,
+          method: "post",
+          key: "uploadFile",
+        })
+      ).unwrap();
+  
+      dispatch(getDirectory(parentFolderId));
+      toast.success("File Upload Successful");
+      navigate('/')
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      toast.error("Error uploading file");
+    }
   };
+  
+  
 
   const onToolbarClick = (args: any): void => {
     if (args.item.id === "save") save();

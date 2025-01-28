@@ -196,7 +196,11 @@ function FileGallery({ showStarredOnly }: any) {
                       />
                     )}
                     <p className="text-[10px] md:text-[12px] font-sans flex flex-col">
-                      <span>{item.name}</span>
+                      <span className="whitespace-nowrap">{item?.name.length > 12
+                            ? `${item.name.slice(0, 12)}...${item.name
+                                .split(".")
+                                .pop()}`
+                            : item.name}</span>
                       <span className="text-[#00000069]">
                         {item?.name.split(".").pop()} .{" "}
                         {(item.size / 1024 ** 2).toFixed(2)} GB
@@ -281,8 +285,8 @@ function FileGallery({ showStarredOnly }: any) {
                       <>
                         <ShortRich />
                         <p className="whitespace-nowrap">
-                          {file?.name.length > 12
-                            ? `${file.name.slice(0, 12)}...${file.name
+                          {file?.name.length > 10
+                            ? `${file.name.slice(0, 10)}...${file.name
                                 .split(".")
                                 .pop()}`
                             : file.name}

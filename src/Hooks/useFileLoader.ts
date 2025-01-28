@@ -35,9 +35,9 @@ const useFileLoader = ({ fileType, fileUrl, fileName, viewerRef }: UseFileLoader
             const base64String = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
             viewerRef.current.documentEditor.open(base64String);
             toast.success("Document loaded successfully!");
-            // const sfdtContent = viewerRef.current.documentEditor.serialize();
-            // console.log("SFDT Content:", sfdtContent);
-            // toast.success("Document converted to SFDT!");
+            const sfdtContent = viewerRef.current.documentEditor.serialize();
+            console.log("SFDT Content:", sfdtContent);
+            toast.success("Document converted to SFDT!");
           }
         }
       },

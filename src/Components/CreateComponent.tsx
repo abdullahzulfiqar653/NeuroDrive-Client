@@ -9,11 +9,16 @@ import {
 } from "../features/directories/folderSlice";
 import { toast } from "react-toastify";
 import { ThreeDots } from "react-loader-spinner";
+import { FileViewer } from "../Hooks/FileViewer";
 
 function CreateComponent() {
   const { parentFolder, isOpenComponent, toggleComponent } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
+  const [isFile, setIsFile] = useState({
+    fileName: "",
+    fileType: "",
+  });
   const [value, setValue] = useState({
     name: "",
     parent: "",
@@ -43,10 +48,17 @@ function CreateComponent() {
   // };
 
   const handleChange = (newValue: string) => {
-    setValue((prev) => ({
-      ...prev,
-      name: newValue,
-    }));
+    if (isOpenComponent.newFolder) {
+      setValue((prev) => ({
+        ...prev,
+        name: newValue,
+      }));
+    } else if (isOpenComponent.newExcel) {
+      setIsFile((prev) => ({
+        ...prev,
+        fileName: newValue,
+      }));
+    }
   };
 
   const handleSubmit = () => {
@@ -70,6 +82,11 @@ function CreateComponent() {
         .catch((error) => {
           console.error("Folder Creation failed:", error);
         });
+    } else if (isOpenComponent.newExcel) {
+      setIsFile((prev) => ({
+        ...prev,
+        fileType: "excel",
+      }));
     }
   };
 
@@ -100,17 +117,21 @@ function CreateComponent() {
           <p className="font-sans">Enter Name</p>
           <div className="h-[36px] w-[97%] md:h-[54px] bg-[#ECECEC] rounded-md px-3">
             <input
-              value={value.name}
+              value={value.name || isFile.fileName}
               onChange={(e) => handleChange(e.target.value)}
               type="text"
-              placeholder="Workspace"
-              className="w-full h-full outline-none text-[12px] font-sans font-[600] md:text-[16px] bg-[#ffffff00] placeholder:text-[black]"
+              placeholder={
+                isOpenComponent.newFolder
+                  ? "Enter your folder name"
+                  : "Enter your file name"
+              }
+              className={`w-full h-full outline-none text-[12px] font-sans font-[600] md:text-[16px] bg-[#ffffff00] placeholder:text-[#000000ac] placeholder:font-[500] placeholder:text-[black]`}
             />
           </div>
         </div>
         <button
           onClick={handleSubmit}
-          disabled={value.name === ""}
+          disabled={isOpenComponent.newFolder ? value.name === "" : isFile.fileName === ""}
           style={{
             background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
             borderImageSource:
@@ -126,6 +147,12 @@ function CreateComponent() {
           )}
         </button>
       </div>
+    {isFile &&
+        <FileViewer
+          fileUrl={""}
+          fileType={isFile.fileType as "excel" | "word" | "pdf"}
+          fileName={isFile?.fileName}
+        />}
     </div>
   );
 }

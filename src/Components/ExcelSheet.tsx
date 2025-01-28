@@ -2,6 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import { SpreadsheetComponent } from '@syncfusion/ej2-react-spreadsheet';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { postData } from '../features/ApiSlice';
+import { getDirectory } from '../features/directories/folderSlice';
+import { AppDispatch } from '../app/store';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 interface ExcelSheetProps {
   fileUrl: any;
@@ -10,34 +15,55 @@ interface ExcelSheetProps {
 
 const ExcelSheet: React.FC<ExcelSheetProps> = ({ fileUrl, fileName }) => {
   const spreadsheetRef = useRef<SpreadsheetComponent>(null);
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const beforeSave = (args: any) => {
     args.needBlobData = true;
     args.isFullPost = false;
   };
 
-  const saveComplete = (args: any) => {
+  const saveComplete = async (args: any) => {
     if (args.blobData) {
-      const formData = new FormData();
-      formData.append('FileName', fileName || 'Sample');
-      formData.append('saveType', 'Xlsx');
-      formData.append('FileData', args.blobData, fileName || 'Sample');
-      console.log(formData, 'FormData');
-      axios.post('https://your-backend-url/save', formData)
-        .then((response) => {
-          if (response.status === 200) {
-            toast.success("Data Saved Successfully!");
-          } else {
-            console.error("Error saving data:", response.statusText);
-            toast.error("Failed to save data!");
-          }
-        })
-        .catch((error) => {
-          console.error("Error sending data:", error);
-          toast.error("Failed to save data!");
-        });
+      try {
+        const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
+        const formData = new FormData();
+  
+        // Check if the blobData is already a Blob
+        let blobData = args.blobData;
+        if (!(blobData instanceof Blob)) {
+          // If it's not a Blob, convert it into a Blob
+          blobData = new Blob([args.blobData], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        }
+  
+        // Ensure the file name has the .xlsx extension
+        formData.append('FileName', fileName ? `${fileName}.xlsx` : 'Sample.xlsx');
+        formData.append('saveType', 'Xlsx');
+        formData.append('file', blobData, fileName ? `${fileName}.xlsx` : 'Sample.xlsx');
+  
+        // Send the file to the backend
+        await dispatch(
+          postData({
+            url: `/directories/${parentFolderId}/files/`,
+            payload: formData,
+            method: "post",
+            key: "uploadFile",
+          })
+        ).unwrap();
+  
+        // Refresh directory after upload
+        dispatch(getDirectory(parentFolderId));
+        toast.success("File Upload Successful");
+        navigate('/')
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        toast.error("Error uploading file");
+      }
+    } else {
+      toast.error("No file data provided");
     }
   };
+  
+  
 
 
   const fetchData = async () => {

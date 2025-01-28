@@ -2,6 +2,7 @@ import { useAuth } from "../../AuthContext";
 import Account from "../../Components/Account";
 import {
   Arrow,
+  BackArrow,
   Download,
   Invite,
   Print,
@@ -12,8 +13,10 @@ import Word from "../../Components/Word";
 import ExcelSheet from "../../Components/ExcelSheet";
 import { useFileContext } from "../../FileContext";
 import PDF from "../../Components/PDF";
+import { useNavigate } from "react-router-dom";
 
 function TextFile() {
+  const navigate =useNavigate();
   const { isAccountOpen, setIsAccountOpen, toggleComponent, profile } =
     useAuth();
   // const queryParams = new URLSearchParams(location.search);
@@ -26,9 +29,10 @@ function TextFile() {
         style={{
           background: "linear-gradient(90deg, #1D203E 0%, #4D55A4 100%)",
         }}
-        className="flex w-full h-[10vh] min-h-[68px] items-center justify-between md:pl-4 px-2 md:pr-5"
+        className="flex w-full h-[10vh] min-h-[68px] items-center justify-between md:pl-3 px-2 md:pr-5"
       >
         <div className="flex items-center">
+         <span className="cursor-pointer mr-3" onClick={()=>navigate('/')}><BackArrow className={"w-6 h-8"}/></span> 
           <span className="flex gap-2 md:pr-7 items-center md:border-r border-white">
             <img src="/logo.svg" alt="" className="w-7 h-6" />
             <p className="font-chakra text-[16px] md:text-[22px] text-white">
