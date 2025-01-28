@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Add, Box, List, Xcel, Recent, Filter } from "../assets/Icons";
+import { Add, Box, List, Xcel, Recent, Filter, Starred } from "../assets/Icons";
 import { CiStar } from "react-icons/ci";
 import { useAuth } from "../AuthContext";
 import FileGallery from "./FileGallery";
@@ -94,13 +94,14 @@ function FilesList() {
               onClick={() => setShowStarredOnly((prev) => !prev)}
               className="flex items-center justify-start pl-2 md:pl-3 gap-1 md:gap-2 w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl  font-sans border border-[#BFBFBF57]"
             >
-              <CiStar
+              <Starred
                 className={
                   showStarredOnly
-                    ? "text-yellow-400 text-2xl"
+                    ? " text-2xl fill-yellow-300"
                     : "text-black text-2xl"
                 }
-              />{" "}
+              />
+              {/* <CiStar /> */}
               Starred
             </button>
           </div>
