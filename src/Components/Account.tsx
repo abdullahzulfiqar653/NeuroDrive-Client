@@ -32,11 +32,12 @@ function Account({ className, profileLoading }: AccountProps) {
   // const { post: uploadPost, reset: uploadReset } = useApi("postProfile");
   const data = useSelector((state: RootState) => state.api.calls?.postProfile);
 
-  const mails = [
-    { id: 1, mail: "example@gmail.com" },
-    { id: 2, mail: "example2@gmail.com" },
-    { id: 3, mail: "example3@gmail.com" },
-  ];
+  // const mails = [
+  //   { id: 1, mail: "example@gmail.com" },
+  //   { id: 2, mail: "example2@gmail.com" },
+  //   { id: 3, mail: "example3@gmail.com" },
+  // ];
+  
   // console.log(data?.response?.data);
   const copyToClipBoard = () => {
     setCopyText(true);

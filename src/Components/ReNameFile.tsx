@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Cross, Xcel } from "../assets/Icons";
-import { useAuth } from "../AuthContext";
+import { Cross } from "../assets/Icons";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { toast } from "react-toastify";
@@ -14,7 +13,6 @@ type ReNameFileProps = {
 };
 
 function ReNameFile({ fileId, settoggleReName }: ReNameFileProps) {
-  const { toggleComponent } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
   const [value, setValue] = useState("");
 
@@ -26,7 +24,7 @@ function ReNameFile({ fileId, settoggleReName }: ReNameFileProps) {
       name: value,
     };
     try {
-      const response = await dispatch(
+       await dispatch(
         postData({
           url: `files/${fileId}/`,
           payload: paylod,

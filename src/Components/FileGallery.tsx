@@ -1,8 +1,7 @@
-import { useState } from "react";     
+import { useState } from "react";
 import "reactjs-popup/dist/index.css";
 import {
   Xcel,
-  Copy,
   Trash,
   Circle,
   Rename,
@@ -26,8 +25,7 @@ import { getDirectory } from "../features/directories/folderSlice";
 import ReNameFile from "./ReNameFile";
 
 function FileGallery({ showStarredOnly }: any) {
-  const { isGridMode, parentFolder, isOpenComponent, toggleComponent } =
-    useAuth();
+  const { isGridMode, parentFolder } = useAuth();
   const [isSelected, setIsSelected] = useState<number | null>(null);
   const [toggleReName, settoggleReName] = useState(false);
   const [radioClick, setRadioClick] = useState(false);
@@ -244,11 +242,13 @@ function FileGallery({ showStarredOnly }: any) {
                       />
                     )}
                     <p className="text-[10px] md:text-[12px] font-sans flex flex-col">
-                      <span className="whitespace-nowrap">{item?.name.length > 12
-                            ? `${item.name.slice(0, 12)}...${item.name
-                                .split(".")
-                                .pop()}`
-                            : item.name}</span>
+                      <span className="whitespace-nowrap">
+                        {item?.name.length > 12
+                          ? `${item.name.slice(0, 12)}...${item.name
+                              .split(".")
+                              .pop()}`
+                          : item.name}
+                      </span>
                       <span className="text-[#00000069]">
                         {item?.name.split(".").pop()} .{" "}
                         {formatFileSize(item?.size)}
@@ -752,8 +752,12 @@ function FileGallery({ showStarredOnly }: any) {
               ))}
           </div>
           {parentFolder?.files
-              .filter((item) => (showStarredOnly ? item.is_starred : true))
-              .map((file, index) => ( <div   onClick={() => handleFileOpen(file.id)} className="w-full h-[74px] my-2  rounded-tl-[12px] rounded-tr-[12px] bg-[#FFFFFF] md:hidden flex flex-col items-center">
+            .filter((item) => (showStarredOnly ? item.is_starred : true))
+            .map((file) => (
+              <div
+                onClick={() => handleFileOpen(file.id)}
+                className="w-full h-[74px] my-2  rounded-tl-[12px] rounded-tr-[12px] bg-[#FFFFFF] md:hidden flex flex-col items-center"
+              >
                 <div className="h-[50%] w-full bg-[#F1F5FA] rounded-tl-[12px] rounded-tr-[12px] px-2 pr-4 flex justify-between items-center">
                   <p className="flex items-center font-sans text-[11px]">
                     <span
@@ -762,7 +766,9 @@ function FileGallery({ showStarredOnly }: any) {
                     >
                       <Circle color={radioClick ? "#2676ff" : "none"} />
                     </span>
-                  {["xls", "xlsx"].includes(file?.name.split(".").pop() || "") && (
+                    {["xls", "xlsx"].includes(
+                      file?.name.split(".").pop() || ""
+                    ) && (
                       <>
                         <Xcel className="w-4 h-5 mr-1" />
                         <p className="whitespace-nowrap ml-1">
@@ -774,7 +780,9 @@ function FileGallery({ showStarredOnly }: any) {
                         </p>
                       </>
                     )}
-                    {["doc", "docx"].includes(file?.name.split(".").pop() || "") && (
+                    {["doc", "docx"].includes(
+                      file?.name.split(".").pop() || ""
+                    ) && (
                       <>
                         <ShortRich />
                         <p className="whitespace-nowrap ml-1">
@@ -791,36 +799,43 @@ function FileGallery({ showStarredOnly }: any) {
                         {" "}
                         <img src="rich.png" alt="" className="w-4 h-4" />{" "}
                         <p className="whitespace-nowrap ml-1">
-                        {file?.name.length > 10
-                          ? `${file.name.slice(0, 10)}...${file.name
-                              .split(".")
-                              .pop()}`
-                          : file.name}</p>
+                          {file?.name.length > 10
+                            ? `${file.name.slice(0, 10)}...${file.name
+                                .split(".")
+                                .pop()}`
+                            : file.name}
+                        </p>
                       </>
                     )}
-                    {["jpg", "png"].includes(file?.name.split(".").pop() || "") && (
+                    {["jpg", "png"].includes(
+                      file?.name.split(".").pop() || ""
+                    ) && (
                       <>
-                       <div><Gallery className="w-3 h-3 md:w-4 md:h-4"/></div> 
-                       <p className="whitespace-nowrap ml-1">{file?.name.length > 10
-                          ? `${file.name.slice(0, 10)}...${file.name
-                              .split(".")
-                              .pop()}`
-                          : file.name}</p>
-                        
+                        <div>
+                          <Gallery className="w-3 h-3 md:w-4 md:h-4" />
+                        </div>
+                        <p className="whitespace-nowrap ml-1">
+                          {file?.name.length > 10
+                            ? `${file.name.slice(0, 10)}...${file.name
+                                .split(".")
+                                .pop()}`
+                            : file.name}
+                        </p>
                       </>
                     )}
                     {file?.name.split(".").pop() === "pdf" && (
                       <>
                         <img src="/pdf.png" className="w-4 h-4 mr-1" />
                         <p className="whitespace-nowrap ml-1">
-                        {file?.name.length > 10
-                          ? `${file.name.slice(0, 10)}...${file.name
-                              .split(".")
-                              .pop()}`
-                          : file.name}
-                          </p>
-                          </>
-                       )}</p>
+                          {file?.name.length > 10
+                            ? `${file.name.slice(0, 10)}...${file.name
+                                .split(".")
+                                .pop()}`
+                            : file.name}
+                        </p>
+                      </>
+                    )}
+                  </p>
                   <ThreeDots />
                 </div>
                 <div className="h-[50%] w-[85%] flex justify-between items-center">
@@ -831,7 +846,8 @@ function FileGallery({ showStarredOnly }: any) {
                     File size: {(file.size / 1024 ** 2).toFixed(2)} GB
                   </p>
                 </div>
-              </div>))}
+              </div>
+            ))}
         </div>
       )}
     </div>

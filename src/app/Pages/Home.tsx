@@ -12,7 +12,6 @@ import {
   Invite,
   Search,
   SixDots,
-  flashStar,
 } from "../../assets/Icons";
 import FilesList from "../../Components/FilesList";
 import { useAuth } from "../../AuthContext";
