@@ -32,9 +32,8 @@ export const fetchData = createAsyncThunk<
 
 // Post Data Thunk
 export const postData = createAsyncThunk<
-  
   { data: any; status: number },
-  { url: string; payload: any; method: 'post' | 'put' | 'patch'; key: string },
+  { url: string; payload: any; method: 'post' | 'put' | 'patch' | 'delete'; key: string },
   { rejectValue: string }
 >('api/postData', async ({ url, payload, method }, { rejectWithValue }) => {
   try {
@@ -50,13 +49,24 @@ export const postData = createAsyncThunk<
         },
       };
     }
-    const response = await apiClient({
+    // const response = await apiClient({
+    //   method,
+    //   url,
+    //   data: payload,
+    //   ...config,
+    // });
+    const options: any = {
       method,
       url,
-      data: payload,
       ...config,
-    });
-    
+    };
+
+    // Only include payload if method is not `delete`
+    if (method !== 'delete') {
+      options.data = payload;
+    }
+
+    const response = await apiClient(options);
     return { data: response.data, status: response.status }; 
   } catch (error: any) {
     const errorMsg = error.response ? error.response.data : error.message;

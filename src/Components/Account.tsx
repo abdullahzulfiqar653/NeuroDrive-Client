@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   CopyMail,
   Cross,
@@ -9,12 +9,12 @@ import {
   VerticalLine,
 } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
-import useApi from "../Hooks/usiApi";
 import { CiUser } from "react-icons/ci";
 import { ThreeCircles } from "react-loader-spinner";
 import { toast } from "react-toastify";
-import { RootState } from "../app/store";
-import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { postData } from "../features/ApiSlice";
 
 interface AccountProps {
   className: string;
@@ -24,10 +24,12 @@ interface AccountProps {
 function Account({ className, profileLoading }: AccountProps) {
   const { profile } = useAuth();
   const navigate = useNavigate();
-  const { logout, setIsAccountOpen } = useAuth();
+  const { logout, setIsAccountOpen, setReGetProfile } = useAuth();
   const [copytext, setCopyText] = useState(false);
 
-  const { post: uploadPost, reset: uploadReset } = useApi("postProfile");
+  const dispatch = useDispatch<AppDispatch>();
+
+  // const { post: uploadPost, reset: uploadReset } = useApi("postProfile");
   const data = useSelector((state: RootState) => state.api.calls?.postProfile);
 
   const mails = [
@@ -35,7 +37,7 @@ function Account({ className, profileLoading }: AccountProps) {
     { id: 2, mail: "example2@gmail.com" },
     { id: 3, mail: "example3@gmail.com" },
   ];
-  console.log(data?.response?.data);
+  // console.log(data?.response?.data);
   const copyToClipBoard = () => {
     setCopyText(true);
     navigator.clipboard.writeText("Hello");
@@ -44,30 +46,31 @@ function Account({ className, profileLoading }: AccountProps) {
     }, 700);
   };
 
-  const handleUpload = (event: any) => {
+  const handleUpload = async (event: any) => {
     const file = event.target.files[0];
     if (!file) return;
 
     const formData = new FormData();
     formData.append("image", file);
 
-    uploadPost({ url: "/user/profile/", payload: formData, method: "put" });
-
-    return () => uploadReset();
+    try {
+      const response = await dispatch(
+        postData({
+          url: "/user/profile/",
+          payload: formData,
+          method: "put",
+          key: "postProfile",
+        })
+      ).unwrap();
+      if (response?.status === 200) {
+        toast.success("Successsfully uploaded profile");
+        setReGetProfile((prev) => !prev);
+      } else {
+        toast.error("Failed to uploaded profile");
+      }
+    } catch (error) {}
+    console.log("Prfile upload error");
   };
-  useEffect(() => {
-    if (data?.response?.status === 200) {
-      toast.error("Failed to upload profile");
-    }
-  }, [handleUpload]);
-
-  // if (data !== undefined) {
-  //   if (data?.error) {
-  //     toast.error("Failed to upload profile");
-  //   } else if (data?.response?.data) {
-  //     toast.success("Profile changed successfully");
-  //   }
-  // }
 
   return (
     <div
@@ -133,7 +136,7 @@ function Account({ className, profileLoading }: AccountProps) {
                 className="h-[18.52px] w-[18.52px] md:h-[24px] md:w-[24px]"
               />
             </span>
-            Add email address
+            Add more space
           </p>
           <VerticalLine />
           <p
@@ -150,7 +153,7 @@ function Account({ className, profileLoading }: AccountProps) {
           </p>
         </div>
       </div>
-      {mails && (
+      {/* {mails && (
         <div className="flex flex-col justify-start relative  gap-2 mt-1 md:mt-0">
           <p className="text-[10px] md:text-[12px] font-[500] top-[287px] md:top-[377px]">
             Other Email Address
@@ -170,7 +173,7 @@ function Account({ className, profileLoading }: AccountProps) {
             </p>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 }

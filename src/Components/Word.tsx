@@ -16,7 +16,7 @@ import { AppDispatch } from "../app/store";
 DocumentEditorContainerComponent.Inject(Toolbar);
 
 const Word = ({ fileUrl, fileName }: any) => {
-  // const [savedData, setSavedData] = useState(null);
+
   const viewerRef = useRef<DocumentEditorContainerComponent>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -27,6 +27,15 @@ const Word = ({ fileUrl, fileName }: any) => {
     fileName,
     viewerRef,
   });
+
+  if (fileUrl === "") {
+    // If fileUrl is empty, load an empty document
+    if (viewerRef.current) {
+      viewerRef.current.documentEditor.open("");
+      console.log("Loaded an empty document.");
+    }
+    return;
+  }
 
 const save = async () => {
   try {
@@ -39,7 +48,7 @@ const save = async () => {
 
     const formData = new FormData();
     const parentFolderId = localStorage.getItem("parent_folder_id") || "";
-    formData.append("file", docxBlob, "ExportedDocument543.docx");
+    formData.append("file", docxBlob, fileName ? `${fileName}.docx` : "Sample.docx");
 
     await dispatch(
       postData({

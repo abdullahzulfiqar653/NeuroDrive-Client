@@ -1,5 +1,6 @@
 import Account from "../../Components/Account";
 import { useEffect, useRef, useState } from "react";
+import { GaugeComponent } from "react-gauge-component";
 import {
   Add,
   Line,
@@ -11,6 +12,7 @@ import {
   Invite,
   Search,
   SixDots,
+  flashStar,
 } from "../../assets/Icons";
 import FilesList from "../../Components/FilesList";
 import { useAuth } from "../../AuthContext";
@@ -19,9 +21,7 @@ import useApi from "../../Hooks/usiApi";
 import { ThreeCircles } from "react-loader-spinner";
 import { AppDispatch, RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getDirectory,
-} from "../../features/directories/folderSlice";
+import { getDirectory } from "../../features/directories/folderSlice";
 
 // const folder = [
 //   // "Workspace",
@@ -33,8 +33,14 @@ import {
 // ];
 
 function Home() {
-  const { isAccountOpen, setIsAccountOpen, toggleComponent, setProfile } =
-    useAuth();
+  const {
+    isAccountOpen,
+    setIsAccountOpen,
+    toggleComponent,
+    setProfile,
+    reGetProfile,
+    setUsedStorage,
+  } = useAuth();
   const [isLeftBar, setLeftBar] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -47,7 +53,14 @@ function Home() {
   };
   useEffect(() => {
     profileFetch("/user/profile/");
-  }, []);
+  }, [reGetProfile]);
+
+  const size = data?.response?.data?.features_data;
+
+  const average = size?.total_size / size?.size_allowed;
+
+  // Handle cases where size_allowed is 0 to avoid division by zero
+  setUsedStorage(size?.size_allowed !== 0 ? average : 0);
 
   useEffect(() => {
     setProfile(data?.response?.data.url);
@@ -65,7 +78,7 @@ function Home() {
       <div className="flex w-[100vw] relative bg-[#f6f8fc] h-screen overflow-x-hidden">
         {/* left side bar  */}
 
-        <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl overflow-hidden flex-[0.2]  h-[100vh] min-h-[600px] desktop-view-table hidden md:flex flex-col justify-between">
+        <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl overflow-hidden flex-[0.2]  h-[100vh] min-h-[600px] desktop-view-table hidden md:flex flex-col">
           <LeftBar />
         </div>
         {/* content main  */}
@@ -210,8 +223,9 @@ type LeftBarProps = {
 };
 function LeftBar({ setLeftBar }: LeftBarProps) {
   const dispatch = useDispatch<AppDispatch>();
+  const [setFolderName, setsetFolderName] = useState<string>("");
   const { directory } = useSelector((state: RootState) => state.folders);
-  const { toggleComponent, parentFolder, setParentFolder } =
+  const { toggleComponent, parentFolder, setParentFolder, usedStorage } =
     useAuth();
 
   useEffect(() => {
@@ -225,15 +239,14 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         .catch((error) => {
           console.error("Error fetching folder details:", error);
         });
-    } 
+    }
   }, []);
 
   useEffect(() => {
-   if (directory) {
+    if (directory) {
       setParentFolder(directory);
     }
-  }, [directory, getDirectory])
-  
+  }, [directory, getDirectory]);
 
   const handleClickFolder = (folder_id: string) => {
     dispatch(getDirectory(folder_id))
@@ -257,7 +270,10 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         {/* <Line className={"my-1 md:hidden block"} /> */}
         <div className="flex flex-col gap-2 md:pl-1 pl-5 mt-3">
           <div
-            onClick={() => handleClickFolder("main")}
+            onClick={() => {
+              handleClickFolder("main");
+              // setFolderName("");
+            }}
             className="cursor-pointer bg-[#3984FF] w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center shadow-md"
           >
             <div className="flex items-center gap-3">
@@ -296,7 +312,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             <span>
               <Arrow color="#9F9F9F" />
             </span>
-            FOLDERS
+            {setFolderName !== "" ? setFolderName : "FOLDERS"}
           </h1>
           <span
             onClick={() => toggleComponent("newFolder")}
@@ -309,7 +325,10 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
           {directory?.children && directory.children.length > 0 ? (
             directory.children.map((child) => (
               <h1
-                onClick={() => handleClickFolder(child.id)}
+                onClick={() => {
+                  handleClickFolder(child.id);
+                  setsetFolderName(child.name);
+                }}
                 key={child.id}
                 className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 "
               >
@@ -321,7 +340,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             ))
           ) : (
             <p className="whitespace-nowrap rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
-              No folder
+              No folders
             </p>
           )}
         </div>
@@ -334,32 +353,83 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
           className="text-[#40566D] text-[14px] pl-4 pr-4 flex font-sans justify-between md:hidden items-start w-full"
         >
           {/* <span className="flex items-center  gap-2">
-            <MobileWallet />
-            My Wallets
-          </span> */}
+          <MobileWallet />
+          My Wallets
+        </span> */}
           <Arrow className={"w-[8px] h-[22px]"} />
         </div>
+        {/* <div
+        style={{
+          background: "linear-gradient(180deg, #1D203E 0%, #4D55A4 130.53%)",
+        }}
+        className="w-[75vw]  md:w-full py-2 text-[#FFFFFF] rounded-tr-2xl rounded-tl-2xl flex flex-col justify-center items-center"
+      >
+        <div className="flex justify-between w-[90%]">
+          <p className="text-[16px] font-[600]">Available Space</p>
+          <p className="text-[16px]">30%</p>
+        </div>
+        <p className="text-[#FFFFFF80] text-[10px] text-start w-[90%]">
+          Expire on: 12.12.24
+        </p>
+        <img src="progressbar.svg" />
         <div
           style={{
-            background: "linear-gradient(180deg, #1D203E 0%, #4D55A4 130.53%)",
+            background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
           }}
-          className="w-[75vw]  md:w-full py-2 text-[#FFFFFF] rounded-tr-2xl rounded-tl-2xl flex flex-col justify-center items-center"
+          className="flex justify-center items-center mt-2 w-[90%] text-[white] text-[14px] rounded-xl h-[39px]"
         >
-          <div className="flex justify-between w-[90%]">
-            <p className="text-[16px] font-[600]">Available Space</p>
-            <p className="text-[16px]">30%</p>
-          </div>
-          <p className="text-[#FFFFFF80] text-[10px] text-start w-[90%]">
-            Expire on: 12.12.24
-          </p>
-          <img src="progressbar.svg" />
-          <div
-            style={{
-              background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
+          ⚡️ Buy more space
+        </div>
+      </div> */}
+
+        <div
+          className="md:block w-[75vw]  md:w-full py-2 text-[#FFFFFF] rounded-tr-2xl rounded-tl-2xl flex flex-col justify-center items-center"
+          style={{
+            background: "linear-gradient(to top, #4D55A4, #1D203E)",
+            borderTopLeftRadius: "15px",
+            borderTopRightRadius: "15px",
+            // padding: "20px"
+            // borderRadius: "10px",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <GaugeComponent
+            value={usedStorage}
+            type="radial"
+            labels={{
+              tickLabels: {
+                type: "inner",
+                ticks: [
+                  { value: 20 },
+                  { value: 40 },
+                  { value: 60 },
+                  { value: 80 },
+                  { value: 100 },
+                ],
+              },
             }}
-            className="flex justify-center items-center mt-2 w-[90%] text-[white] text-[14px] rounded-xl h-[39px]"
-          >
-            ⚡️ Buy more space
+            arc={{
+              colorArray: ["#3983FF", "#B325FC"],
+              subArcs: [{ limit: 10 }, { limit: 30 }, {}, {}, {}],
+              padding: 0.02,
+              width: 0.3,
+            }}
+            pointer={{
+              elastic: true,
+              animationDelay: 0,
+              color: "white",
+            }}
+          />
+          <div className="flex justify-center">
+            <div
+              style={{
+                background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
+              }}
+              className="flex justify-center items-center mt-2 w-[90%] text-[white] text-[14px] rounded-xl h-[39px]"
+            >
+              ⚡️ Buy more space
+            </div>
           </div>
         </div>
       </div>

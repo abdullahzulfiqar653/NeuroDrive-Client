@@ -34,12 +34,9 @@ const ExcelSheet: React.FC<ExcelSheetProps> = ({ fileUrl, fileName }) => {
           blobData = new Blob([args.blobData], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         }
     
-   
-        const fileName = 'jhjkh.xlsx';
-
     
         formData.append('saveType', 'Xlsx');
-        formData.append('file', blobData, fileName);
+        formData.append('file', blobData, fileName ? `${fileName}.xlsx` : "Sample.xlsx");
  
         await dispatch(
           postData({

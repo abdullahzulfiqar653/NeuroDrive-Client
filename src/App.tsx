@@ -39,13 +39,13 @@ function App() {
             element={<ProtectedRoute element={<TextFile />} />}
           />
         </Routes>
-      </FileProvider>
 
-      {isOpenComponent.share && <ShareFile />}
-      {isOpenComponent.upload && <UploadDocument />}
-      {(isOpenComponent.newFolder ||
-        isOpenComponent.newExcel ||
-        isOpenComponent.newDocs) && <CreateComponent />}
+        {isOpenComponent.share && <ShareFile />}
+        {isOpenComponent.upload && <UploadDocument />}
+        {(isOpenComponent.newFolder ||
+          isOpenComponent.newExcel ||
+          isOpenComponent.newDocs) && <CreateComponent />}
+      </FileProvider>
     </>
   );
 }

@@ -1,28 +1,27 @@
 import { useState } from "react";
 import { Cross, Xcel } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../app/store";
-import {
-  createFolders,
-  getDirectory,
-} from "../features/directories/folderSlice";
-import { toast } from "react-toastify";
-import { ThreeDots } from "react-loader-spinner";
 import { FileViewer } from "../Hooks/FileViewer";
+import { AppDispatch } from "../app/store";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { createFolders, getDirectory } from "../features/directories/folderSlice";
+import { ThreeDots } from "react-loader-spinner";
 
 function CreateComponent() {
+  const [createFile, setCreateFile] = useState(false);
   const { parentFolder, isOpenComponent, toggleComponent } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
-  const [isFile, setIsFile] = useState({
-    fileName: "",
-    fileType: "",
-  });
   const [value, setValue] = useState({
     name: "",
     parent: "",
   });
+  const [fileData, setFileData] = useState<{
+    fileUrl: string;
+    fileType: "excel" | "word" | "pdf";
+    fileName: string;
+  } | null>(null);
 
   const handleClose = () => {
     if (isOpenComponent.newExcel) {
@@ -34,35 +33,39 @@ function CreateComponent() {
     }
   };
 
-  // const handleCreate = () => {
-  //   if (isOpenComponent.newExcel) {
-  //     navigate("/text-file?type=excel");
-  //     setTimeout(() => toggleComponent("newExcel", false), 0);
-  //   } else if (isOpenComponent.newDocs) {
-  //     navigate("/text-file?type=word");
-  //     setTimeout(() => toggleComponent("newDocs", false), 0);
-  //   } else {
-  //     alert("Please select a file type to create.");
-  //     handleClose();
-  //   }
-  // };
-
   const handleChange = (newValue: string) => {
-    if (isOpenComponent.newFolder) {
-      setValue((prev) => ({
-        ...prev,
-        name: newValue,
-      }));
-    } else if (isOpenComponent.newExcel) {
-      setIsFile((prev) => ({
-        ...prev,
-        fileName: newValue,
-      }));
+    setValue((prev) => ({
+      ...prev,
+      name: newValue,
+    }));
+  };
+
+  const createBlankFile = (type: "excel" | "word" | "pdf") => {
+    const fileName = `${value.name || "New File"}.${type}`;
+    let fileUrl = "";
+
+    if (type === "excel") {
+      fileUrl = type; // can change url as we want
+    } else if (type === "word") {
+      fileUrl = type;
+    } else if (type === "pdf") {
+      fileUrl = type;
     }
+
+    setFileData({ fileUrl, fileType: type, fileName });
+    setTimeout(() => {
+      toggleComponent("newDocs", false);
+      toggleComponent("newFolder", false);
+      toggleComponent("newExcel", false);
+    }, 100);
   };
 
   const handleSubmit = () => {
-    if (isOpenComponent.newFolder) {
+    if (isOpenComponent.newExcel) {
+      createBlankFile("excel");
+    } else if (isOpenComponent.newDocs) {
+      createBlankFile("word");
+    } else if (isOpenComponent.newFolder) {
       const updatedValue = {
         ...value,
         parent: parentFolder?.id,
@@ -82,12 +85,8 @@ function CreateComponent() {
         .catch((error) => {
           console.error("Folder Creation failed:", error);
         });
-    } else if (isOpenComponent.newExcel) {
-      setIsFile((prev) => ({
-        ...prev,
-        fileType: "excel",
-      }));
     }
+    setCreateFile(true);
   };
 
   return (
@@ -117,7 +116,7 @@ function CreateComponent() {
           <p className="font-sans">Enter Name</p>
           <div className="h-[36px] w-[97%] md:h-[54px] bg-[#ECECEC] rounded-md px-3">
             <input
-              value={value.name || isFile.fileName}
+              value={value.name}
               onChange={(e) => handleChange(e.target.value)}
               type="text"
               placeholder={
@@ -126,12 +125,12 @@ function CreateComponent() {
                   : "Enter your file name"
               }
               className={`w-full h-full outline-none text-[12px] font-sans font-[600] md:text-[16px] bg-[#ffffff00] placeholder:text-[#000000ac] placeholder:font-[500] placeholder:text-[black]`}
-            />
+              />
           </div>
         </div>
         <button
           onClick={handleSubmit}
-          disabled={isOpenComponent.newFolder ? value.name === "" : isFile.fileName === ""}
+          disabled={value.name === ""}
           style={{
             background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
             borderImageSource:
@@ -146,13 +145,15 @@ function CreateComponent() {
             </span>
           )}
         </button>
+
+        {createFile && fileData && (
+          <FileViewer
+            fileUrl={fileData.fileUrl}
+            fileType={fileData.fileType}
+            fileName={fileData.fileName}
+          />
+        )}
       </div>
-    {isFile &&
-        <FileViewer
-          fileUrl={""}
-          fileType={isFile.fileType as "excel" | "word" | "pdf"}
-          fileName={isFile?.fileName}
-        />}
     </div>
   );
 }
