@@ -30,7 +30,8 @@ interface PopupProps {
 }
 
 function FileGallery({ showStarredOnly }: any) {
-  const { isGridMode, parentFolder } = useAuth();
+  const { isGridMode, parentFolder, isOpenComponent, toggleComponent } =
+    useAuth();
   const [isSelected, setIsSelected] = useState<number | null>(null);
   const [radioClick, setRadioClick] = useState(false);
   const { reset } = useApi("getSingleFile");
@@ -42,14 +43,6 @@ function FileGallery({ showStarredOnly }: any) {
     fileName: string;
   } | null>(null);
   const dispatch = useDispatch<AppDispatch>();
-
-  // const data = useSelector(
-  //   (state: RootState) => state.api.calls?.getSingleFile
-  // );
-  // const starData = useSelector((state: RootState) => state.api.calls?.starFile);
-  // const deleteRes = useSelector(
-  //   (state: RootState) => state.api.calls?.deleteFile
-  // );
 
   const formatFileSize = (sizeInBytes: number) => {
     if (sizeInBytes < 1024 ** 2) {
@@ -290,174 +283,178 @@ function FileGallery({ showStarredOnly }: any) {
         </div>
       ) : (
         <div className="container md:rounded-xl md:border w-full h-full my-4">
-          <div className="h-full rounded-xl bg-[#F1F5FA]  w-[full] md:flex flex-col ">
-            <div className="overflow-hidden rounded-xl  bg-[#F1F5FA] w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
-              <p className="border w-[30%] gap-2 h-full flex items-center justify-start px-4">
-                <span
-                  onClick={() => setRadioClick((prev) => !prev)}
-                  className="w-auto text-start mr-4 cursor-pointer"
-                >
-                  <Circle color={radioClick ? "#2676ff" : "none"} />
-                </span>{" "}
-                Name
-              </p>
-              <p className="border w-[30%] h-full flex items-center justify-start px-4">
-                Shared by
-              </p>
-              <p className="border w-[30%] h-full flex items-center justify-start px-4">
-                File Size
-              </p>
-              <p className="border w-[10%] h-full flex items-center justify-start px-4">
-                More
-              </p>
-            </div>
-
-            {parentFolder?.files
-              .filter((item) => (showStarredOnly ? item?.is_starred : true))
-              .map((file, index) => (
-                <div
-                  key={index}
-                  onClick={() => handleFileOpen(file.id)}
-                  // onClick={() => fetch(`files/${file.id}/`)}
-                  className="overflow-hidden cursor-pointer bg-white hover:bg-[#f2f3f3] w-[full] text-[14px] h-[57px] font-sans flex justify-between items-center"
-                >
-                  <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
-                    <span
-                      // onClick={() => setRadioClick((prev) => !prev)}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleClick(index);
-                      }}
-                      className="w-auto text-start mr-4 cursor-pointer"
-                    >
-                      <Circle
-                        // onClick={() => handleClick(index)}
-                        color={isSelected === index ? "#2676ff" : "none"}
-                      />
-                    </span>
-
-                    {["xls", "xlsx"].includes(
-                      file?.name.split(".").pop() || ""
-                    ) && (
-                      <>
-                        <Xcel className="w-4 h-4" />
-                        <p className="whitespace-nowrap">
-                          {file?.name.length > 10
-                            ? `${file.name.slice(0, 10)}...${file.name
-                                .split(".")
-                                .pop()}`
-                            : file.name}
-                        </p>
-                      </>
-                    )}
-                    {["doc", "docx"].includes(
-                      file?.name.split(".").pop() || ""
-                    ) && (
-                      <>
-                        <ShortRich />
-                        <p className="whitespace-nowrap">
-                          {file?.name.length > 12
-                            ? `${file.name.slice(0, 12)}...${file.name
-                                .split(".")
-                                .pop()}`
-                            : file.name}
-                        </p>
-                      </>
-                    )}
-                    {file?.name.split(".").pop() === "txt" && (
-                      <>
-                        {" "}
-                        <img src="rich.png" alt="" className="w-4 h-4" />{" "}
-                        <p className="whitespace-nowrap">
-                          {file?.name.length > 10
-                            ? `${file.name.slice(0, 10)}...${file.name
-                                .split(".")
-                                .pop()}`
-                            : file.name}
-                        </p>
-                      </>
-                    )}
-                    {["jpg", "png"].includes(
-                      file?.name.split(".").pop() || ""
-                    ) && (
-                      <>
-                        <div>
-                          <Gallery className="w-3 h-3 md:w-4 md:h-4" />
-                        </div>
-                        <p className="whitespace-nowrap">
-                          {file?.name.length > 10
-                            ? `${file.name.slice(0, 10)}...${file.name
-                                .split(".")
-                                .pop()}`
-                            : file.name}
-                        </p>
-                      </>
-                    )}
-                    {file?.name.split(".").pop() === "pdf" && (
-                      <>
-                        <img src="/pdf.png" className="w-3 h-3 md:w-4 md:h-4" />
-                        <p className="whitespace-nowrap">
-                          {file?.name.length > 10
-                            ? `${file.name.slice(0, 10)}...${file.name
-                                .split(".")
-                                .pop()}`
-                            : file.name}
-                        </p>
-                      </>
-                    )}
-                  </p>
-
-                  <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
-                    {Array.isArray(file.shared_with) &&
-                    file.shared_with.length > 0 ? (
-                      <>
-                        <img src="per1.png" alt="Person" /> {file.personName}
-                      </>
-                    ) : (
-                      <>
-                        <NoPerson />
-                      </>
-                    )}
-                  </p>
-
-                  <p className="border w-[30%] h-full flex items-center justify-start px-4">
-                    {formatFileSize(file?.size)}
-                  </p>
-
-                  {fileData && (
-                    <FileViewer
-                      fileUrl={fileData?.fileUrl}
-                      fileType={fileData.fileType as "excel" | "word" | "pdf"}
-                      fileName={fileData?.fileName}
-                    />
-                  )}
-
-                  <Popup
-                    trigger={
-                      <p className="cursor-pointer border w-[10%] h-full flex items-center justify-start px-4">
-                        <ThreeDots />
-                      </p>
-                    }
-                    position="bottom right"
-                    arrowStyle={{
-                      color: "white",
-                      transform: "translateX(20px)",
-                    }}
-                    contentStyle={{
-                      marginLeft: "-50px",
-                      marginTop: "-10px",
-                      padding: "10px",
-                      borderRadius: "8px",
-                      backgroundColor: "white",
-                      borderColor: "white",
-                      border: "none",
-                      width: "auto",
-                      height: "auto",
-                      boxShadow: "0px -2px 12px 0px #0000001A",
-                    }}
-                    className="popup-content"
+          {parentFolder && parentFolder?.files.length > 0 ? (
+            <div className="h-full rounded-xl bg-[#F1F5FA]  w-[full] md:flex flex-col ">
+              <div className="overflow-hidden rounded-xl  bg-[#F1F5FA] w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
+                <p className="border w-[30%] gap-2 h-full flex items-center justify-start px-4">
+                  <span
+                    onClick={() => setRadioClick((prev) => !prev)}
+                    className="w-auto text-start mr-4 cursor-pointer"
                   >
-                    {/* <div className="flex flex-col gap-2 p-2 pr-4 font-sans text-[14px] ">
+                    <Circle color={radioClick ? "#2676ff" : "none"} />
+                  </span>{" "}
+                  Name
+                </p>
+                <p className="border w-[30%] h-full flex items-center justify-start px-4">
+                  Shared by
+                </p>
+                <p className="border w-[30%] h-full flex items-center justify-start px-4">
+                  File Size
+                </p>
+                <p className="border w-[10%] h-full flex items-center justify-start px-4">
+                  More
+                </p>
+              </div>
+
+              {parentFolder?.files
+                .filter((item) => (showStarredOnly ? item?.is_starred : true))
+                .map((file, index) => (
+                  <div
+                    key={index}
+                    onClick={() => handleFileOpen(file.id)}
+                    // onClick={() => fetch(`files/${file.id}/`)}
+                    className="overflow-hidden cursor-pointer bg-white hover:bg-[#f2f3f3] w-[full] text-[14px] h-[57px] font-sans flex justify-between items-center"
+                  >
+                    <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
+                      <span
+                        // onClick={() => setRadioClick((prev) => !prev)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleClick(index);
+                        }}
+                        className="w-auto text-start mr-4 cursor-pointer"
+                      >
+                        <Circle
+                          // onClick={() => handleClick(index)}
+                          color={isSelected === index ? "#2676ff" : "none"}
+                        />
+                      </span>
+
+                      {["xls", "xlsx"].includes(
+                        file?.name.split(".").pop() || ""
+                      ) && (
+                        <>
+                          <Xcel className="w-4 h-4" />
+                          <p className="whitespace-nowrap">
+                            {file?.name.length > 10
+                              ? `${file.name.slice(0, 10)}...${file.name
+                                  .split(".")
+                                  .pop()}`
+                              : file.name}
+                          </p>
+                        </>
+                      )}
+                      {["doc", "docx"].includes(
+                        file?.name.split(".").pop() || ""
+                      ) && (
+                        <>
+                          <ShortRich />
+                          <p className="whitespace-nowrap">
+                            {file?.name.length > 12
+                              ? `${file.name.slice(0, 12)}...${file.name
+                                  .split(".")
+                                  .pop()}`
+                              : file.name}
+                          </p>
+                        </>
+                      )}
+                      {file?.name.split(".").pop() === "txt" && (
+                        <>
+                          {" "}
+                          <img src="rich.png" alt="" className="w-4 h-4" />{" "}
+                          <p className="whitespace-nowrap">
+                            {file?.name.length > 10
+                              ? `${file.name.slice(0, 10)}...${file.name
+                                  .split(".")
+                                  .pop()}`
+                              : file.name}
+                          </p>
+                        </>
+                      )}
+                      {["jpg", "png"].includes(
+                        file?.name.split(".").pop() || ""
+                      ) && (
+                        <>
+                          <div>
+                            <Gallery className="w-3 h-3 md:w-4 md:h-4" />
+                          </div>
+                          <p className="whitespace-nowrap">
+                            {file?.name.length > 10
+                              ? `${file.name.slice(0, 10)}...${file.name
+                                  .split(".")
+                                  .pop()}`
+                              : file.name}
+                          </p>
+                        </>
+                      )}
+                      {file?.name.split(".").pop() === "pdf" && (
+                        <>
+                          <img
+                            src="/pdf.png"
+                            className="w-3 h-3 md:w-4 md:h-4"
+                          />
+                          <p className="whitespace-nowrap">
+                            {file?.name.length > 10
+                              ? `${file.name.slice(0, 10)}...${file.name
+                                  .split(".")
+                                  .pop()}`
+                              : file.name}
+                          </p>
+                        </>
+                      )}
+                    </p>
+
+                    <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
+                      {Array.isArray(file.shared_with) &&
+                      file.shared_with.length > 0 ? (
+                        <>
+                          <img src="per1.png" alt="Person" /> {file.personName}
+                        </>
+                      ) : (
+                        <>
+                          <NoPerson />
+                        </>
+                      )}
+                    </p>
+
+                    <p className="border w-[30%] h-full flex items-center justify-start px-4">
+                      {formatFileSize(file?.size)}
+                    </p>
+
+                    {fileData && (
+                      <FileViewer
+                        fileUrl={fileData?.fileUrl}
+                        fileType={fileData.fileType as "excel" | "word" | "pdf"}
+                        fileName={fileData?.fileName}
+                      />
+                    )}
+
+                    <Popup
+                      trigger={
+                        <p className="cursor-pointer border w-[10%] h-full flex items-center justify-start px-4">
+                          <ThreeDots />
+                        </p>
+                      }
+                      position="bottom right"
+                      arrowStyle={{
+                        color: "white",
+                        transform: "translateX(20px)",
+                      }}
+                      contentStyle={{
+                        marginLeft: "-50px",
+                        marginTop: "-10px",
+                        padding: "10px",
+                        borderRadius: "8px",
+                        backgroundColor: "white",
+                        borderColor: "white",
+                        border: "none",
+                        width: "auto",
+                        height: "auto",
+                        boxShadow: "0px -2px 12px 0px #0000001A",
+                      }}
+                      className="popup-content"
+                    >
+                      {/* <div className="flex flex-col gap-2 p-2 pr-4 font-sans text-[14px] ">
                       {actions.map((action, index) => (
                         <div
                           key={index}
@@ -485,120 +482,64 @@ function FileGallery({ showStarredOnly }: any) {
                         </div>
                       ))}
                     </div> */}
-                    <div className="flex flex-col gap-2 p-2 pr-4 font-sans text-[14px] ">
-                      <div
-                        // onClick={() => handleDownloadClick(file?.id)}
-                        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
-                      >
-                        <NoPerson className="w-4 h-4" />
-                        Share
-                      </div>
-                      {file?.is_starred ? (
+                      <div className="flex flex-col gap-2 p-2 pr-4 font-sans text-[14px] ">
                         <div
-                          onClick={() =>
-                            handleUnStarClick(file?.name, file?.id)
-                          }
-                          className="flex gap-2 items-center whitespace-nowrap cursor-pointer"
-                        >
-                          <Starred className="w-4 h-4 fill-yellow-300" />
-                          Unstarred
-                        </div>
-                      ) : (
-                        <div
-                          onClick={() => handleStarClick(file?.name, file?.id)}
+                          // onClick={() => handleDownloadClick(file?.id)}
                           className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
                         >
-                          <Starred className="w-4 h-4" />
-                          Starred
+                          <NoPerson className="w-4 h-4" />
+                          Share
                         </div>
-                      )}
-                      <Popup
-                        trigger={
-                          <button className="flex gap-2 items-center focus:outline-none">
-                            <Rename /> Rename
-                          </button>
-                        }
-                        position="center center"
-                        modal
-                        closeOnDocumentClick={true}
-                        className="popup-content"
-                        contentStyle={{
-                          borderRadius: "15px",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          height: "30%",
-                        }}
-                      >
-                        <div
-                          className="rounded-lg w-full relative"
-                          onClick={(e) => e.stopPropagation()} // Prevent click events inside the popup from closing it
-                        >
-                          {/* Title */}
-                          <h2 className="text-lg font-semibold mb-4">
-                            Rename File
-                          </h2>
-                          {/* Input Field */}
-                          <input
-                            type="text"
-                            placeholder="Enter new name"
-                            className="w-full border border-gray-300 rounded p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          />
-                          {/* Close Button */}
-                          <button
-                            className="absolute top-2 right-2 text-xl font-bold hover:text-gray-800"
-                            onClick={close}
+                        {file?.is_starred ? (
+                          <div
+                            onClick={() =>
+                              handleUnStarClick(file?.name, file?.id)
+                            }
+                            className="flex gap-2 items-center whitespace-nowrap cursor-pointer"
                           >
-                            ✕
-                          </button>
-                          {/* Action Buttons */}
-                          <div className="flex gap-4">
-                            <button
-                              className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 focus:outline-none"
-                              onClick={close}
-                            >
-                              Close
-                            </button>
-                            <button
-                              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none"
-                              onClick={() => {
-                                // Handle submit logic here
-                                console.log("Submitted");
-                                close(); // Close the popup
-                              }}
-                            >
-                              Submit
-                            </button>
+                            <Starred className="w-4 h-4 fill-yellow-300" />
+                            Unstarred
                           </div>
+                        ) : (
+                          <div
+                            onClick={() =>
+                              handleStarClick(file?.name, file?.id)
+                            }
+                            className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
+                          >
+                            <Starred className="w-4 h-4" />
+                            Starred
+                          </div>
+                        )}
+                        <div
+                          onClick={() => toggleComponent("reName")}
+                          className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
+                        >
+                          <Rename />
+                          Rename
                         </div>
-                      </Popup>
-
-                      {/* <div
-                        // onClick={() => handleDownloadClick(file?.id)}
-                        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
-                      >
-                        <Rename />
-                        Rename
-ls                      </div> */}
-                      <div
-                        onClick={() => handleDownloadClick(file?.id)}
-                        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
-                      >
-                        <Download />
-                        Download
+                        <div
+                          onClick={() => handleDownloadClick(file?.id)}
+                          className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
+                        >
+                          <Download />
+                          Download
+                        </div>
+                        <div
+                          onClick={() => handleDeleteClick(file?.id)}
+                          className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
+                        >
+                          <Trash className="w-4 h-4" />
+                          Move to Trash
+                        </div>
                       </div>
-                      <div
-                        onClick={() => handleDeleteClick(file?.id)}
-                        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
-                      >
-                        <Trash className="w-4 h-4" />
-                        Move to Trash
-                      </div>
-                    </div>
-                  </Popup>
-                </div>
-              ))}
-          </div>
+                    </Popup>
+                  </div>
+                ))}
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       )}
     </div>

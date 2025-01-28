@@ -391,9 +391,10 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             background: "linear-gradient(to top, #4D55A4, #1D203E)",
             borderTopLeftRadius: "15px",
             borderTopRightRadius: "15px",
-            // padding: "20px",
+            // padding: "20px"
             // borderRadius: "10px",
-            width: "95%",
+            marginLeft: "10px",
+            width: "97%",
             height: "100%",
           }}
         >
