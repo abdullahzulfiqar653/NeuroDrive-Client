@@ -39,7 +39,7 @@ const ExcelSheet: React.FC<ExcelSheetProps> = ({ fileUrl, fileName }) => {
         formData.append(
           "file",
           blobData,
-          fileName ? `${fileName}.xlsx` : "Sample.xlsx"
+          fileName ? `${fileName}` : "Sample.xlsx"
         );
 
         await dispatch(
@@ -63,34 +63,14 @@ const ExcelSheet: React.FC<ExcelSheetProps> = ({ fileUrl, fileName }) => {
     }
   };
 
-  // const fetchData = async () => {
-  //   if (!fileUrl) return;
-  //   try {
-  //     const response = await axios.get(fileUrl, {
-  //       responseType: "blob",
-  //     });
-  //     const file = new File([response.data], "Sample.xlsx", {
-  //       type: response.headers["content-type"],
-  //     });
-  //     spreadsheetRef.current?.open({ file });
-  //   } catch (error) {
-  //     console.error("Error fetching file:", error);
-  //   }
-  // };
-
   const fetchData = async () => {
-    if (fileUrl === "") {
-      if (spreadsheetRef.current) {
-        spreadsheetRef.current.sheets[0].rows = [];
-        spreadsheetRef.current.refresh();
-      }
-    }
+    if (!fileUrl) return;
 
     try {
       const response = await axios.get(fileUrl, { responseType: "blob" });
 
       const textData = await response.data.text();
-      if (textData.includes("<!DOCTYPE html>")) {
+      if (textData.trim().startsWith("<!DOCTYPE html>")) {
         console.error("Received an HTML response instead of an Excel file.");
         toast.error("Error loading file. Please check the file URL.");
         return;
@@ -99,6 +79,14 @@ const ExcelSheet: React.FC<ExcelSheetProps> = ({ fileUrl, fileName }) => {
       const fileBlob = new Blob([response.data], {
         type: response.headers["content-type"],
       });
+
+      if (
+        !fileBlob.type.includes(
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+      ) {
+        return;
+      }
 
       const file = new File([fileBlob], fileName || "Sample.xlsx", {
         type: fileBlob.type,
@@ -110,6 +98,7 @@ const ExcelSheet: React.FC<ExcelSheetProps> = ({ fileUrl, fileName }) => {
       toast.error("Failed to load the file. Please try again.");
     }
   };
+
   useEffect(() => {
     if (fileUrl) {
       fetchData();
