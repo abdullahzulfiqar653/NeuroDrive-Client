@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Cross } from "../assets/Icons";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
@@ -24,7 +24,7 @@ function ReNameFile({ fileId, settoggleReName }: ReNameFileProps) {
       name: value,
     };
     try {
-       await dispatch(
+      await dispatch(
         postData({
           url: `files/${fileId}/`,
           payload: paylod,
@@ -40,6 +40,14 @@ function ReNameFile({ fileId, settoggleReName }: ReNameFileProps) {
       console.log("error", error);
     }
   };
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   return (
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center">

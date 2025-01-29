@@ -11,6 +11,7 @@ import {
   ShortRich,
   ShortXcel,
   ThreeDots,
+  // cleanMeta,
   Gallery,
 } from "../assets/Icons";
 import { FileViewer } from "../Hooks/FileViewer";
@@ -23,10 +24,14 @@ import { toast } from "react-toastify";
 import { fetchData, postData } from "../features/ApiSlice";
 import { getDirectory } from "../features/directories/folderSlice";
 import ReNameFile from "./ReNameFile";
+import MetaData from "./MetaData";
+import { warn } from "console";
 
 function FileGallery({ showStarredOnly }: any) {
-  const { isGridMode, parentFolder } = useAuth();
+  const { isGridMode, parentFolder, isOpenComponent, toggleComponent } =
+    useAuth();
   const [isSelected, setIsSelected] = useState<number | null>(null);
+  const [metaToggle, setMetaToggle] = useState<boolean>(false);
   const [toggleReName, settoggleReName] = useState(false);
   const [radioClick, setRadioClick] = useState(false);
   const { reset } = useApi("getSingleFile");
@@ -171,12 +176,15 @@ function FileGallery({ showStarredOnly }: any) {
       reset();
     }
   };
-  // console.log(parentFolder);
-  // console.log(
-  //   parentFolder?.files.map((item) => {
-  //     return item?.name;
-  //   })
-  // );
+
+  const handleMetaData = (meta: any) => {
+    if (meta === null) {
+      toast.warn("Meta data is already removed");
+    } else {
+      setMetaToggle(true);
+    }
+  };
+
   return (
     <div className="h-full w-[100%] md:w-[96%]">
       {isGridMode ? (
@@ -739,6 +747,21 @@ function FileGallery({ showStarredOnly }: any) {
                         <Download />
                         Download
                       </div>
+                      <div
+                        onClick={() => handleMetaData(file?.metadata)}
+                        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
+                      >
+                        {/* <cleanMeta /> */}
+                        Clean meta data
+                      </div>
+                      {metaToggle && (
+                        <MetaData
+                          meta={file?.metadata}
+                          name={file?.name}
+                          setMetaToggle={setMetaToggle}
+                          id={file?.id}
+                        />
+                      )}
                       <div
                         onClick={() => handleDeleteClick(file?.id)}
                         className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
