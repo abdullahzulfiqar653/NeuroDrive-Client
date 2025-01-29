@@ -5,7 +5,10 @@ import { FileViewer } from "../Hooks/FileViewer";
 import { AppDispatch } from "../app/store";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { createFolders, getDirectory } from "../features/directories/folderSlice";
+import {
+  createFolders,
+  getDirectory,
+} from "../features/directories/folderSlice";
 import { ThreeDots } from "react-loader-spinner";
 
 function CreateComponent() {
@@ -41,7 +44,7 @@ function CreateComponent() {
   };
 
   const createBlankFile = (type: "excel" | "word" | "pdf") => {
-    const fileName = `${value.name || "New File"}.${type}`;
+    const fileName = `${value.name || "New File"}`;
     let fileUrl = "";
 
     if (type === "excel") {
@@ -124,8 +127,8 @@ function CreateComponent() {
                   ? "Enter your folder name"
                   : "Enter your file name"
               }
-              className={`w-full h-full outline-none text-[12px] font-sans font-[600] md:text-[16px] bg-[#ffffff00] placeholder:text-[#000000ac] placeholder:font-[500] placeholder:text-[black]`}
-              />
+              className={`w-full h-full outline-none text-[12px] font-sans font-[600] md:text-[16px] bg-[#ffffff00] placeholder:text-[#000000ac] placeholder:font-[500]  placeholder:text-[#292828]`}
+            />
           </div>
         </div>
         <button
