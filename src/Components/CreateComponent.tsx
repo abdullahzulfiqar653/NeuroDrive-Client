@@ -44,7 +44,13 @@ function CreateComponent() {
   };
 
   const createBlankFile = (type: "excel" | "word" | "pdf") => {
-    const fileName = `${value.name || "New File"}`;
+    const extensionMap: { [key in "excel" | "word" | "pdf"]: string } = {
+      excel: "xlsx",
+      word: "docx",
+      pdf: "pdf",
+    };
+
+    const fileName = `${value.name}.${extensionMap[type] || "New File"}`;
     let fileUrl = "";
 
     if (type === "excel") {
@@ -56,6 +62,7 @@ function CreateComponent() {
     }
 
     setFileData({ fileUrl, fileType: type, fileName });
+
     setTimeout(() => {
       toggleComponent("newDocs", false);
       toggleComponent("newFolder", false);
@@ -64,6 +71,7 @@ function CreateComponent() {
   };
 
   const handleSubmit = () => {
+    localStorage.removeItem("fileId");
     if (isOpenComponent.newExcel) {
       createBlankFile("excel");
     } else if (isOpenComponent.newDocs) {

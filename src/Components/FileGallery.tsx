@@ -61,7 +61,7 @@ function FileGallery({ showStarredOnly }: any) {
       const result = await dispatch(
         fetchData({ url: `files/${id}/`, key: "fileFetch" })
       ).unwrap();
-
+      localStorage.setItem("fileId", result.data.id);
       if (result && result.data) {
         const { content_type, url, name } = result.data;
 
@@ -82,6 +82,8 @@ function FileGallery({ showStarredOnly }: any) {
           document.body.removeChild(link);
           toast.success("Image Downloaded Successfully");
         } else {
+          console.log("jhuhu", result.data.id);
+
           setFileData({
             fileUrl: url,
             fileType: mapContentTypeToFileType(content_type),
@@ -185,8 +187,6 @@ function FileGallery({ showStarredOnly }: any) {
       setMetaToggle(true);
     }
   };
-
-  console.log(parentFolder);
 
   return (
     <div className="h-full w-[100%] md:w-[96%]">

@@ -50,7 +50,8 @@ const MetaData = ({ meta, name, id, setMetaToggle }: MetaDataProps) => {
 
   return (
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center overflow-y-auto">
-      <div className="w-[70vw] md:w-[90vw] sm:w-[90vw] h-screen relative max-w-[901px] md:min-w-[493px] md:min-h-[506px] rounded-lg px-4 bg-[#ffffff] items-center justify-center sm:flex sm:h-[80vh] md:h-[80vh] md:flex sm:justify-around md:justify-around md:gap-4">
+      <div className="w-[70vw] md:w-[90vw] sm:w-[90vw] relative max-w-[901px] md:min-w-[493px] rounded-lg px-4 bg-white items-center justify-center sm:flex sm:h-[80vh] md:h-[80vh] md:flex sm:justify-around md:justify-around md:gap-4">
+        {/* <div className="bg-white "> */}
         <div className="flex flex-col gap-5 justify-center">
           <div className="flex">
             <p onClick={() => setMetaToggle(false)}>
@@ -105,6 +106,7 @@ const MetaData = ({ meta, name, id, setMetaToggle }: MetaDataProps) => {
           </button>
         </div>
       </div>
+      {/* </div> */}
     </div>
   );
 };
