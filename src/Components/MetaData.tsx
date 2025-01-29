@@ -40,15 +40,17 @@ const MetaData = ({ meta, name, id, setMetaToggle }: MetaDataProps) => {
       ).unwrap();
       if (data.status === 200) {
         toast.success("Meta datais removed");
+        setMetaToggle(false);
       }
     } catch (error) {
       toast.warn("Error in removing meta data");
+      setMetaToggle(false);
     }
   };
 
   return (
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center overflow-y-auto">
-      <div className="w-[70vw] md:w-[90vw] sm:w-[90vw] h-100vh relative max-w-[901px] md:min-w-[493px] md:min-h-[506px] rounded-lg px-4 bg-[#ffffff] items-center justify-center sm:flex sm:h-[80vh] md:h-[80vh] md:flex sm:justify-around md:justify-around md:gap-4">
+      <div className="w-[70vw] md:w-[90vw] sm:w-[90vw] h-screen relative max-w-[901px] md:min-w-[493px] md:min-h-[506px] rounded-lg px-4 bg-[#ffffff] items-center justify-center sm:flex sm:h-[80vh] md:h-[80vh] md:flex sm:justify-around md:justify-around md:gap-4">
         <div className="flex flex-col gap-5 justify-center">
           <div className="flex">
             <p onClick={() => setMetaToggle(false)}>
@@ -96,7 +98,7 @@ const MetaData = ({ meta, name, id, setMetaToggle }: MetaDataProps) => {
             ))}
           </div>
           <button
-            onClick={() => console.log("sad", meta)}
+            onClick={() => handleRemove(id)}
             className="bg-[#F5000D] mb-3 w-[162px] h-[42px] p-2 text-white rounded-lg self-center outline-none  sm:hidden md:hidden"
           >
             Clean

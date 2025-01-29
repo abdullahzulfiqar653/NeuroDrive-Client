@@ -11,7 +11,7 @@ import {
   ShortRich,
   ShortXcel,
   ThreeDots,
-  // cleanMeta,
+  CleanMeta,
   Gallery,
 } from "../assets/Icons";
 import { FileViewer } from "../Hooks/FileViewer";
@@ -25,11 +25,9 @@ import { fetchData, postData } from "../features/ApiSlice";
 import { getDirectory } from "../features/directories/folderSlice";
 import ReNameFile from "./ReNameFile";
 import MetaData from "./MetaData";
-import { warn } from "console";
 
 function FileGallery({ showStarredOnly }: any) {
-  const { isGridMode, parentFolder, isOpenComponent, toggleComponent } =
-    useAuth();
+  const { isGridMode, parentFolder } = useAuth();
   const [isSelected, setIsSelected] = useState<number | null>(null);
   const [metaToggle, setMetaToggle] = useState<boolean>(false);
   const [toggleReName, settoggleReName] = useState(false);
@@ -178,7 +176,10 @@ function FileGallery({ showStarredOnly }: any) {
   };
 
   const handleMetaData = (meta: any) => {
-    if (meta === null) {
+    if (
+      meta === null ||
+      (typeof meta === "object" && Object.keys(meta).length === 0)
+    ) {
       toast.warn("Meta data is already removed");
     } else {
       setMetaToggle(true);
@@ -201,44 +202,61 @@ function FileGallery({ showStarredOnly }: any) {
                 className="w-[109px] cursor-pointer h-[117px] md:w-[207px] md:h-[213px] flex flex-col "
               >
                 <div className="flex items-center justify-center h-[80%]  hover:bg-[#f2f3f3] bg-white rounded-[16px] md:rounded-[32px]">
-                  {["jpg", "png"].includes(
-                    item?.name.split(".").pop() || ""
-                  ) && (
+                  {["jpg", "png"].includes(item?.name.split(".").pop() || "") ||
+                  (item?.content_type &&
+                    item.content_type.includes("image/")) ? (
                     <>
                       <Gallery
                         className={"w-[32px] h-[41px] md:w-[77px] md:h-[79px]"}
                       />
                     </>
-                  )}
+                  ) : null}
                   {["xls", "xlsx"].includes(
                     item?.name.split(".").pop() || ""
-                  ) && (
+                  ) ||
+                  (item?.content_type &&
+                    item.content_type.includes("application/vnd.ms-excel")) ||
+                  item.content_type.includes(
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                  ) ? (
                     <>
                       <Xcel
                         className={"w-[32px] h-[41px] md:w-[77px] md:h-[79px]"}
                       />
                     </>
-                  )}
-                  {item?.name.split(".").pop() === "text" && (
+                  ) : null}
+
+                  {item?.name.split(".").pop() === "txt" ||
+                  (item?.content_type &&
+                    item.content_type.includes("text/plain")) ? (
                     <img
                       src="/doc.svg"
                       className={"w-[40px] h-[40px] md:w-[77px] md:h-[77px]"}
                     />
-                  )}
-                  {item?.name.split(".").pop() === "pdf" && (
+                  ) : null}
+
+                  {item?.name.split(".").pop() === "pdf" ||
+                  (item?.content_type &&
+                    item.content_type.includes("application/pdf")) ? (
                     <img
                       src="/pdf.png"
                       className={"w-[32px] h-[41px] md:w-[77px] md:h-[79px]"}
                     />
-                  )}
+                  ) : null}
+
                   {["doc", "docx"].includes(
                     item?.name.split(".").pop() || ""
-                  ) && (
+                  ) ||
+                  (item?.content_type &&
+                    (item.content_type.includes("application/msword") ||
+                      item.content_type.includes(
+                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      ))) ? (
                     <img
                       src="/rich.png"
                       className={"w-[40px] h-[40px] md:w-[77px] md:h-[77px]"}
                     />
-                  )}
+                  ) : null}
                 </div>
                 <div className="flex items-center justify-between mt-1 px-2">
                   <div className="flex items-center gap-2">
@@ -520,7 +538,7 @@ function FileGallery({ showStarredOnly }: any) {
                         onClick={() => handleMetaData(file?.metadata)}
                         className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
                       >
-                        {/* <cleanMeta /> */}
+                        <CleanMeta />
                         Clean meta data
                       </div>
                       {metaToggle && (
