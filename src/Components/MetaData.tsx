@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { postData } from "../features/ApiSlice";
 import { AppDispatch } from "../app/store";
 import { toast } from "react-toastify";
+import { getDirectory } from "../features/directories/folderSlice";
 
 type MetaDataType = {
   file_name: string;
@@ -29,6 +30,7 @@ const MetaData = ({ meta, name, id, setMetaToggle }: MetaDataProps) => {
     const paylod = {
       is_removed_metadata: true,
     };
+    const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
     try {
       const data = await dispatch(
         postData({
@@ -41,6 +43,7 @@ const MetaData = ({ meta, name, id, setMetaToggle }: MetaDataProps) => {
       if (data.status === 200) {
         toast.success("Meta datais removed");
         setMetaToggle(false);
+        dispatch(getDirectory(parentFolderId));
       }
     } catch (error) {
       toast.warn("Error in removing meta data");
@@ -49,24 +52,25 @@ const MetaData = ({ meta, name, id, setMetaToggle }: MetaDataProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center overflow-y-auto">
-      <div className="w-[70vw] md:w-[90vw] sm:w-[90vw] relative max-w-[901px] md:min-w-[493px] rounded-lg px-4 bg-white items-center justify-center sm:flex sm:h-[80vh] md:h-[80vh] md:flex sm:justify-around md:justify-around md:gap-4">
-        {/* <div className="bg-white "> */}
-        <div className="flex flex-col gap-5 justify-center">
-          <div className="flex">
+    <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center">
+      <div className="w-[70vw] md:w-[90vw] sm:w-[90vw] h-[85vh]  relative max-w-[901px] md:min-w-[493px] md:min-h-[506px] rounded-lg px-2 sm:px-4 py-2 bg-[#ffffff] items-center justify-center sm:flex sm:h-[80vh] md:h-[80vh] md:flex sm:justify-around md:justify-around md:gap-4">
+        <div className="flex flex-col gap-2 sm:gap-5 items-center justify-center">
+          <div className="flex justify-start w-full">
             <p onClick={() => setMetaToggle(false)}>
-              <IoIosArrowBack className="font-bold text-2xl mt-1 cursor-pointer" />
+              <IoIosArrowBack className="font-bold text-[18px] sm:text-2xl mt-1 cursor-pointer" />
             </p>
-            <h1 className="text-2xl font-extrabold">Meta Data Cleaner</h1>
+            <h1 className="text-[18px] sm:text-2xl font-extrabold">
+              Meta Data Cleaner
+            </h1>
           </div>
-          <div className="">
+          <div>
             <img
-              className=" sm:w-[280px]  md:w-[318px] object-cover rounded-lg"
+              className=" h-[163px] sm:h-[289px] md:h-[330px] w-[64vw] sm:w-[318px] object-cover rounded-lg"
               src="meta.png"
               alt=""
             />
           </div>
-          <p className="w-[300px] text-xs">
+          <p className="w-[60vw] sm:w-[300px] text-[10px] sm:text-xs text-start">
             NOTE: Once the cleaning process is completed, it will not be
             possible to recover this information.
           </p>
@@ -77,30 +81,37 @@ const MetaData = ({ meta, name, id, setMetaToggle }: MetaDataProps) => {
             Clean
           </button>
         </div>
-        <div className="flex sm:w-[50%] flex-col pt-11 sm:pt-0 md:pt-0  gap-5 justify-center">
-          <h1 className="text-2xl font-extrabold md:text-center sm:text-center">
+        <div className="flex w-full sm:w-[50%] flex-col pt-1 gap-1 sm:gap-5 justify-center">
+          <h1 className="text-[18px] sm:text-2xl font-extrabold md:text-center sm:text-center">
             Details
           </h1>
-          <p>{name}</p>
-          <div className="bg-[#ECECEC6B] w-full sm:w-[300px] md:w-full h-[360px] rounded-md p-3">
+          <p className="text-[11px] sm:text-[16px] font-[500]">{name}</p>
+          <div className="bg-[#ECECEC6B] w-full sm:w-[300px] md:w-full h-[35vh] sm:h-full rounded-md p-3 overflow-y-auto">
             {Object.entries(meta ?? {}).map(([key, value]) => (
               <div key={key} className="flex border-b-2 pb-2">
-                <h1 className="opacity-35 w-36 pl-2">{key}</h1>
+                <h1 className="opacity-35 w-36 pl-2 text-[10px] sm:text-[16px]">
+                  {key}
+                </h1>
                 {value === false ? (
-                  <p className="text-wrap w-full break-words ">false</p>
+                  <p className="text-wrap w-full break-words text-[10px] sm:text-[16px]">
+                    false
+                  </p>
                 ) : value === true ? (
-                  <p className="text-wrap w-full break-words ">true</p>
+                  <p className="text-wrap w-full break-words text-[10px] sm:text-[16px]">
+                    true
+                  </p>
                 ) : (
-                  <p className="text-wrap w-full break-words ">
-                    {value as any}
+                  <p className="text-wrap w-full break-words text-[10px] sm:text-[16px] truncate">
+                    {value}
                   </p>
                 )}
               </div>
             ))}
           </div>
+
           <button
             onClick={() => handleRemove(id)}
-            className="bg-[#F5000D] mb-3 w-[162px] h-[42px] p-2 text-white rounded-lg self-center outline-none  sm:hidden md:hidden"
+            className="bg-[#F5000D] mb-0 w-[130px] h-[32px] text-white rounded-lg self-center outline-none  sm:hidden md:hidden"
           >
             Clean
           </button>
