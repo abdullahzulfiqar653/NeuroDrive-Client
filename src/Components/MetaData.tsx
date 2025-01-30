@@ -28,7 +28,7 @@ const MetaData = ({ meta, name, id, setMetaToggle }: MetaDataProps) => {
 
   const handleRemove = async (id: number) => {
     const paylod = {
-      is_removed_metadata: true,
+      is_remove_metadata: true,
     };
     const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
     try {
@@ -41,7 +41,7 @@ const MetaData = ({ meta, name, id, setMetaToggle }: MetaDataProps) => {
         })
       ).unwrap();
       if (data.status === 200) {
-        toast.success("Meta datais removed");
+        toast.success("Meta data is removed");
         setMetaToggle(false);
         dispatch(getDirectory(parentFolderId));
       }
@@ -86,25 +86,17 @@ const MetaData = ({ meta, name, id, setMetaToggle }: MetaDataProps) => {
             Details
           </h1>
           <p className="text-[11px] sm:text-[16px] font-[500]">{name}</p>
-          <div className="bg-[#ECECEC6B] w-full sm:w-[300px] md:w-full h-[35vh] sm:h-full rounded-md p-3 overflow-y-auto">
+          <div className="bg-[#ECECEC6B] w-full sm:w-[300px] md:w-full font-[500] font-sans h-[35vh] sm:h-full rounded-md p-3 overflow-y-auto">
             {Object.entries(meta ?? {}).map(([key, value]) => (
               <div key={key} className="flex border-b-2 pb-2">
-                <h1 className="opacity-35 w-36 pl-2 text-[10px] sm:text-[16px]">
+                <h1 className="opacity-35 w-36 mr-2 sm:mr-5 text-[10px] sm:text-[16px]">
                   {key}
                 </h1>
-                {value === false ? (
-                  <p className="text-wrap w-full break-words text-[10px] sm:text-[16px]">
-                    false
-                  </p>
-                ) : value === true ? (
-                  <p className="text-wrap w-full break-words text-[10px] sm:text-[16px]">
-                    true
-                  </p>
-                ) : (
-                  <p className="text-wrap w-full break-words text-[10px] sm:text-[16px] truncate">
-                    {value}
-                  </p>
-                )}
+                <p className="text-wrap w-full break-words text-[10px] sm:text-[16px] truncate">
+                  {typeof value === "boolean"
+                    ? value.toString()
+                    : value || "N/A"}
+                </p>
               </div>
             ))}
           </div>

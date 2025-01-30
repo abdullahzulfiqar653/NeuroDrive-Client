@@ -120,7 +120,7 @@ function FilesList() {
                 <span
                   className="cursor-pointer z-10 flex"
                   onClick={() => {
-                    setIsGridMode(true), console.log("heelo");
+                    setIsGridMode(true);
                   }}
                 >
                   <List />

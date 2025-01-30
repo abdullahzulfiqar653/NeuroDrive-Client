@@ -7,6 +7,7 @@ import { getDirectory } from "../features/directories/folderSlice";
 import { AppDispatch } from "../app/store";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import useFileLoader from "../Hooks/useFileLoader";
 
 interface ExcelSheetProps {
   fileUrl: any;
@@ -14,13 +15,20 @@ interface ExcelSheetProps {
 }
 
 const ExcelSheet: React.FC<ExcelSheetProps> = ({ fileUrl, fileName }) => {
-  const spreadsheetRef = useRef<SpreadsheetComponent>(null);
+  const viewerRef = useRef<SpreadsheetComponent>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const beforeSave = (args: any) => {
     args.needBlobData = true;
     args.isFullPost = false;
   };
+
+  const { loadFile } = useFileLoader({
+    fileType: "excel",
+    fileUrl,
+    fileName,
+    viewerRef,
+  });
 
   const saveComplete = async (args: any) => {
     if (args.blobData) {
@@ -63,45 +71,47 @@ const ExcelSheet: React.FC<ExcelSheetProps> = ({ fileUrl, fileName }) => {
     }
   };
 
-  const fetchData = async () => {
-    if (!fileUrl) return;
+  // const fetchData = async () => {
+  //   if (!fileUrl) return;
 
-    try {
-      const response = await axios.get(fileUrl, { responseType: "blob" });
+  //   try {
+  //     const response = await axios.get(fileUrl, { responseType: "blob" });
 
-      const textData = await response.data.text();
-      if (textData.trim().startsWith("<!DOCTYPE html>")) {
-        console.error("Received an HTML response instead of an Excel file.");
-        toast.error("Error loading file. Please check the file URL.");
-        return;
-      }
+  //     const textData = await response.data.text();
+  //     if (textData.trim().startsWith("<!DOCTYPE html>")) {
+  //       console.error("Received an HTML response instead of an Excel file.");
+  //       toast.error("Error loading file. Please check the file URL.");
+  //       return;
+  //     }
 
-      const fileBlob = new Blob([response.data], {
-        type: response.headers["content-type"],
-      });
+  //     const fileBlob = new Blob([response.data], {
+  //       type: response.headers["content-type"],
+  //     });
 
-      if (
-        !fileBlob.type.includes(
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
-      ) {
-        return;
-      }
+  //     if (
+  //       !fileBlob.type.includes(
+  //         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  //       )
+  //     ) {
+  //       return;
+  //     }
 
-      const file = new File([fileBlob], fileName || "Sample.xlsx", {
-        type: fileBlob.type,
-      });
+  //     const file = new File([fileBlob], fileName || "Sample.xlsx", {
+  //       type: fileBlob.type,
+  //     });
 
-      spreadsheetRef.current?.open({ file });
-    } catch (error) {
-      console.error("Error fetching file:", error);
-      toast.error("Failed to load the file. Please try again.");
-    }
-  };
+  //     viewerRef.current?.open({ file });
+  //   } catch (error) {
+  //     console.error("Error fetching file:", error);
+  //     toast.error("Failed to load the file. Please try again.");
+  //   }
+  // };
 
   useEffect(() => {
     if (fileUrl) {
-      fetchData();
+      // fetchData();
+      loadFile();
+      console.error("loadFile");
     }
   }, [fileUrl]);
 
@@ -113,10 +123,10 @@ const ExcelSheet: React.FC<ExcelSheetProps> = ({ fileUrl, fileName }) => {
       <SpreadsheetComponent
         openUrl="https://services.syncfusion.com/react/production/api/spreadsheet/open"
         saveUrl="https://services.syncfusion.com/react/production/api/spreadsheet/save"
-        ref={spreadsheetRef}
+        ref={viewerRef}
         beforeSave={beforeSave}
         saveComplete={saveComplete}
-        created={fetchData}
+        // created={fetchData}
       />
     </div>
   );

@@ -9,10 +9,11 @@ import { getDirectory } from "../features/directories/folderSlice";
 
 type ReNameFileProps = {
   fileId: any;
+  setActiveIndex:any;
   settoggleReName: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function ReNameFile({ fileId, settoggleReName }: ReNameFileProps) {
+function ReNameFile({ fileId, settoggleReName ,setActiveIndex}: ReNameFileProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [value, setValue] = useState("");
 
@@ -33,6 +34,7 @@ function ReNameFile({ fileId, settoggleReName }: ReNameFileProps) {
         })
       ).unwrap();
       settoggleReName(false);
+      setActiveIndex(null);
       toast.success("Name changed successfully");
       dispatch(getDirectory(parentFolderId));
     } catch (error) {

@@ -206,7 +206,7 @@ function Home() {
               >
                 <Cross className={"h-[14px] w-[14px]"} />
               </span>
-              <LeftBar setLeftBar={setLeftBar} />
+              <LeftBar />
             </section>
           </section>
         )}
@@ -217,10 +217,11 @@ function Home() {
 
 export default Home;
 
-type LeftBarProps = {
-  setLeftBar?: React.Dispatch<React.SetStateAction<boolean>>;
-};
-function LeftBar({ setLeftBar }: LeftBarProps) {
+// type LeftBarProps = {
+//   setLeftBar?: React.Dispatch<React.SetStateAction<boolean>>;
+// };
+
+function LeftBar() {
   const dispatch = useDispatch<AppDispatch>();
   const [setFolderName, setsetFolderName] = useState<string>("");
   const { directory } = useSelector((state: RootState) => state.folders);

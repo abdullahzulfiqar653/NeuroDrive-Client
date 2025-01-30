@@ -48,7 +48,7 @@ function TextFile() {
               {fileType === "pdf" && (
                 <img src="/pdf.png" alt="" className="w-[26px] h-[26px]" />
               )}
-              <p className="font-sans text-[14px] text-white">{fileName}</p>
+              <p className="font-sans text-[14px] text-white w-[20vw] truncate">{fileName}</p>
             </>
           </span>
         </div>
