@@ -25,11 +25,17 @@ const useFileLoader = ({ fileType, fileUrl, fileName, viewerRef }: UseFileLoader
             toast.success("PDF loaded successfully!");
           }
           else if (fileType === 'excel') {
-            const file = new File([response.data], fileName, {
-                type: response.headers['content-type'],
-              });
-                viewerRef.current.open({ file });
-                toast.success("Document loaded successfully!");
+            const fileBlob = new Blob([response.data], {
+              type: response.headers['content-type'],
+          });
+          
+          const updatedFileName = fileName || "Sample.xlsx";
+          const file = new File([fileBlob], updatedFileName, {
+              type: fileBlob.type
+          });
+          
+          viewerRef.current.open({ file });
+          toast.success("Document loaded successfully!");          
           } 
           else if (fileType === 'word') {
             const base64String = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
