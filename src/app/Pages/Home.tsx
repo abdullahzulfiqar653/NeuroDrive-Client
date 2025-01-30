@@ -77,7 +77,7 @@ function Home() {
       <div className="flex w-[100vw] relative bg-[#f6f8fc] h-screen overflow-x-hidden">
         {/* left side bar  */}
 
-        <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl overflow-hidden flex-[0.2]  h-[100vh] min-h-[600px] desktop-view-table hidden md:flex flex-col">
+        <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl relative overflow-hidden flex-[0.2]  h-[100vh] min-h-[600px] desktop-view-table hidden md:flex flex-col">
           <LeftBar />
         </div>
         {/* content main  */}
@@ -344,42 +344,19 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
           )}
         </div>
       </div>
-      <div className="flex flex-col justify-center items-center gap-4">
-        <div
+      <div className="flex flex-col justify-center items-center gap-4 absolute bottom-0 w-full">
+        {/* <div
           onClick={() => {
             setLeftBar?.((prev) => !prev);
           }}
           className="text-[#40566D] text-[14px] pl-4 pr-4 flex font-sans justify-between md:hidden items-start w-full"
         >
-          {/* <span className="flex items-center  gap-2">
-          <MobileWallet />
-          My Wallets
-        </span> */}
+          <span className="flex items-center  gap-2">
+            <MobileWallet />
+            My Wallets
+          </span>
           <Arrow className={"w-[8px] h-[22px]"} />
-        </div>
-        {/* <div
-        style={{
-          background: "linear-gradient(180deg, #1D203E 0%, #4D55A4 130.53%)",
-        }}
-        className="w-[75vw]  md:w-full py-2 text-[#FFFFFF] rounded-tr-2xl rounded-tl-2xl flex flex-col justify-center items-center"
-      >
-        <div className="flex justify-between w-[90%]">
-          <p className="text-[16px] font-[600]">Available Space</p>
-          <p className="text-[16px]">30%</p>
-        </div>
-        <p className="text-[#FFFFFF80] text-[10px] text-start w-[90%]">
-          Expire on: 12.12.24
-        </p>
-        <img src="progressbar.svg" />
-        <div
-          style={{
-            background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
-          }}
-          className="flex justify-center items-center mt-2 w-[90%] text-[white] text-[14px] rounded-xl h-[39px]"
-        >
-          ⚡️ Buy more space
-        </div>
-      </div> */}
+        </div> */}
 
         <div
           className="md:block w-[75vw]  md:w-full py-2 text-[#FFFFFF] rounded-tr-2xl rounded-tl-2xl flex flex-col justify-center items-center"

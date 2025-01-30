@@ -66,6 +66,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     newExcel: false,
     newDocs: false,
     reName: false,
+    meta: false,
   });
 
   useEffect(() => {

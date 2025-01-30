@@ -1,13 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import {
-  CopyMail,
-  Cross,
-  Edit,
-  Signout,
-  TickIcon,
-  VerticalLine,
-} from "../assets/Icons";
+import { Cross, Edit, Signout, VerticalLine } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
 import { CiUser } from "react-icons/ci";
 import { ThreeCircles } from "react-loader-spinner";
@@ -25,27 +17,11 @@ function Account({ className, profileLoading }: AccountProps) {
   const { profile } = useAuth();
   const navigate = useNavigate();
   const { logout, setIsAccountOpen, setReGetProfile } = useAuth();
-  const [copytext, setCopyText] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
   // const { post: uploadPost, reset: uploadReset } = useApi("postProfile");
   const data = useSelector((state: RootState) => state.api.calls?.postProfile);
-
-  // const mails = [
-  //   { id: 1, mail: "example@gmail.com" },
-  //   { id: 2, mail: "example2@gmail.com" },
-  //   { id: 3, mail: "example3@gmail.com" },
-  // ];
-  
-  // console.log(data?.response?.data);
-  const copyToClipBoard = () => {
-    setCopyText(true);
-    navigator.clipboard.writeText("Hello");
-    setTimeout(() => {
-      setCopyText(false);
-    }, 700);
-  };
 
   const handleUpload = async (event: any) => {
     const file = event.target.files[0];
@@ -115,15 +91,6 @@ function Account({ className, profileLoading }: AccountProps) {
             </label>
           </div>
         </div>
-        <p className="text-[10px] md:text-[14px] flex items-center">
-          hello@mail.com
-          <span
-            onClick={copyToClipBoard}
-            className="ml-3 cursor-pointer transform hover:scale-110 duration-100"
-          >
-            {copytext ? <TickIcon /> : <CopyMail />}
-          </span>
-        </p>
         <div className="w-[226px] md:w-[293px] h-[40px] md:h-[52px] bg-[#F8FBFD] rounded-[99px] pl-2 md:pl-3 mb-3 flex items-center justify-between">
           <p
             onClick={() => {

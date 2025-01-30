@@ -1,12 +1,8 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "reactjs-popup/dist/index.css";
 import {
   Xcel,
-  Trash,
   Circle,
-  Rename,
-  Starred,
-  Download,
   NoPerson,
   ShortRich,
   ShortXcel,
@@ -14,7 +10,6 @@ import {
   Gallery,
 } from "../assets/Icons";
 import { FileViewer } from "../Hooks/FileViewer";
-import Popup from "reactjs-popup";
 import { useAuth } from "../AuthContext";
 import useApi from "../Hooks/usiApi";
 import { useDispatch } from "react-redux";
@@ -22,12 +17,13 @@ import { AppDispatch } from "../app/store";
 import { toast } from "react-toastify";
 import { fetchData, postData } from "../features/ApiSlice";
 import { getDirectory } from "../features/directories/folderSlice";
-import ReNameFile from "./ReNameFile";
+import CustomPopup from "./CustomPopup";
 
 function FileGallery({ showStarredOnly }: any) {
   const { isGridMode, parentFolder } = useAuth();
   const [isSelected, setIsSelected] = useState<number | null>(null);
-  const [toggleReName, settoggleReName] = useState(false);
+  const [metaToggle, setMetaToggle] = useState<boolean>(false);
+  // const [toggleReName, settoggleReName] = useState(false);
   const [radioClick, setRadioClick] = useState(false);
   const { reset } = useApi("getSingleFile");
   const { post } = useApi("starFile");
@@ -38,6 +34,14 @@ function FileGallery({ showStarredOnly }: any) {
     fileName: string;
   } | null>(null);
   const dispatch = useDispatch<AppDispatch>();
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+ 
+
+  const handlePopupToggle = ({ index, event }: any) => {
+    event.stopPropagation();
+    setActiveIndex((prev) => (prev === index ? null : index)); 
+  };
+  
 
   const formatFileSize = (sizeInBytes: number) => {
     if (sizeInBytes < 1024 ** 2) {
@@ -58,7 +62,7 @@ function FileGallery({ showStarredOnly }: any) {
       const result = await dispatch(
         fetchData({ url: `files/${id}/`, key: "fileFetch" })
       ).unwrap();
-
+      localStorage.setItem("fileId", result.data.id);
       if (result && result.data) {
         const { content_type, url, name } = result.data;
 
@@ -79,6 +83,8 @@ function FileGallery({ showStarredOnly }: any) {
           document.body.removeChild(link);
           toast.success("Image Downloaded Successfully");
         } else {
+          console.log("jhuhu", result.data.id);
+
           setFileData({
             fileUrl: url,
             fileType: mapContentTypeToFileType(content_type),
@@ -106,6 +112,7 @@ function FileGallery({ showStarredOnly }: any) {
       });
       toast.success("File is getting stared");
       dispatch(getDirectory(parentFolderId));
+      setActiveIndex(null);
     } catch (error) {
       toast.warning("Error is getting stared");
     }
@@ -123,6 +130,7 @@ function FileGallery({ showStarredOnly }: any) {
       });
       toast.success("File is getting unstared");
       dispatch(getDirectory(parentFolderId));
+      setActiveIndex(null);
     } catch (error) {
       toast.warning("Error is getting unstared");
     }
@@ -141,6 +149,7 @@ function FileGallery({ showStarredOnly }: any) {
       if (response?.status === 204) {
         toast.success("Successsfully uploaded profile");
         dispatch(getDirectory(parentFolderId));
+        setActiveIndex(null);
       } else {
         toast.error("Failed to uploaded profile");
       }
@@ -164,6 +173,7 @@ function FileGallery({ showStarredOnly }: any) {
         link.click();
         document.body.removeChild(link);
         toast.success("file Downloaded Successfully");
+        setActiveIndex(null);
       }
     } catch (error) {
       toast.error("Failed to open the file. Please try again.");
@@ -171,12 +181,19 @@ function FileGallery({ showStarredOnly }: any) {
       reset();
     }
   };
-  // console.log(parentFolder);
-  // console.log(
-  //   parentFolder?.files.map((item) => {
-  //     return item?.name;
-  //   })
-  // );
+
+  const handleMetaData = (meta: any) => {
+    if (
+      meta === null ||
+      (typeof meta === "object" && Object.keys(meta).length === 0)
+    ) {
+      toast.warn("Meta data is already removed");
+    } else {
+      setMetaToggle(true);
+    }
+    setActiveIndex(null);
+  };
+
   return (
     <div className="h-full w-[100%] md:w-[96%]">
       {isGridMode ? (
@@ -191,44 +208,61 @@ function FileGallery({ showStarredOnly }: any) {
                 className="w-[109px] cursor-pointer h-[117px] md:w-[207px] md:h-[213px] flex flex-col "
               >
                 <div className="flex items-center justify-center h-[80%]  hover:bg-[#f2f3f3] bg-white rounded-[16px] md:rounded-[32px]">
-                  {["jpg", "png"].includes(
-                    item?.name.split(".").pop() || ""
-                  ) && (
+                  {["jpg", "png"].includes(item?.name.split(".").pop() || "") ||
+                  (item?.content_type &&
+                    item.content_type.includes("image/")) ? (
                     <>
                       <Gallery
                         className={"w-[32px] h-[41px] md:w-[77px] md:h-[79px]"}
                       />
                     </>
-                  )}
+                  ) : null}
                   {["xls", "xlsx"].includes(
                     item?.name.split(".").pop() || ""
-                  ) && (
+                  ) ||
+                  (item?.content_type &&
+                    item.content_type.includes("application/vnd.ms-excel")) ||
+                  item.content_type.includes(
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                  ) ? (
                     <>
                       <Xcel
                         className={"w-[32px] h-[41px] md:w-[77px] md:h-[79px]"}
                       />
                     </>
-                  )}
-                  {item?.name.split(".").pop() === "text" && (
+                  ) : null}
+
+                  {item?.name.split(".").pop() === "txt" ||
+                  (item?.content_type &&
+                    item.content_type.includes("text/plain")) ? (
                     <img
                       src="/doc.svg"
                       className={"w-[40px] h-[40px] md:w-[77px] md:h-[77px]"}
                     />
-                  )}
-                  {item?.name.split(".").pop() === "pdf" && (
+                  ) : null}
+
+                  {item?.name.split(".").pop() === "pdf" ||
+                  (item?.content_type &&
+                    item.content_type.includes("application/pdf")) ? (
                     <img
                       src="/pdf.png"
                       className={"w-[32px] h-[41px] md:w-[77px] md:h-[79px]"}
                     />
-                  )}
+                  ) : null}
+
                   {["doc", "docx"].includes(
                     item?.name.split(".").pop() || ""
-                  ) && (
+                  ) ||
+                  (item?.content_type &&
+                    (item.content_type.includes("application/msword") ||
+                      item.content_type.includes(
+                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      ))) ? (
                     <img
                       src="/rich.png"
                       className={"w-[40px] h-[40px] md:w-[77px] md:h-[77px]"}
                     />
-                  )}
+                  ) : null}
                 </div>
                 <div className="flex items-center justify-between mt-1 px-2">
                   <div className="flex items-center gap-2">
@@ -255,9 +289,29 @@ function FileGallery({ showStarredOnly }: any) {
                       </span>
                     </p>
                   </div>
-                  <span>
-                    <ThreeDots />
-                  </span>
+                  <span onClick={(event) => handlePopupToggle({ index, event })}
+                      className="cursor-pointer relative"
+                    >
+                      <ThreeDots />
+                  {activeIndex === index && (
+                    <div  className="absolute w-auto right-3 top-3 bg-white rounded-lg shadow-lg p-3 border z-50">
+                      <CustomPopup
+                        file={item}
+                        metaToggle={metaToggle}
+                        setMetaToggle={setMetaToggle}
+                        handleDeleteClick={() => handleDeleteClick(item.id)}
+                        handleDownloadClick={() => handleDownloadClick(item.id)}
+                        handleMetaData={() => handleMetaData(item.metadata)}
+                        handleStarClick={() =>
+                          handleStarClick(item.name, item.id)
+                        }
+                        handleUnStarClick={() =>
+                          handleUnStarClick(item.name, item.id)
+                        }
+                      />
+                    </div>
+                  )}   </span>
+                 
                   {fileData && (
                     <FileViewer
                       fileUrl={fileData?.fileUrl}
@@ -270,244 +324,6 @@ function FileGallery({ showStarredOnly }: any) {
             ))}
         </div>
       ) : (
-        // <div className="container md:rounded-xl md:border w-full h-full my-4">
-        //   <div className="h-full rounded-xl bg-[#F1F5FA]  w-[full] md:flex flex-col ">
-        //     <div className="overflow-hidden rounded-xl  bg-[#F1F5FA] w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
-        //       <p className="border w-[30%] gap-2 h-full flex items-center justify-start px-4">
-        //         <span
-        //           onClick={() => setRadioClick((prev) => !prev)}
-        //           className="w-auto text-start mr-4 cursor-pointer"
-        //         >
-        //           <Circle color={radioClick ? "#2676ff" : "none"} />
-        //         </span>{" "}
-        //         Name
-        //       </p>
-        //       <p className="border w-[30%] h-full flex items-center justify-start px-4">
-        //         Shared by
-        //       </p>
-        //       <p className="border w-[30%] h-full flex items-center justify-start px-4">
-        //         File Size
-        //       </p>
-        //       <p className="border w-[10%] h-full flex items-center justify-start px-4">
-        //         More
-        //       </p>
-        //     </div>
-
-        //     {parentFolder?.files
-        //       .filter((item) => (showStarredOnly ? item?.is_starred : true))
-        //       .map((file, index) => (
-        //         <div
-        //           key={index}
-        //           onClick={() => handleFileOpen(file.id)}
-        //           // onClick={() => fetch(`files/${file.id}/`)}
-        //           className="overflow-hidden cursor-pointer bg-white hover:bg-[#f2f3f3] w-[full] text-[14px] h-[57px] font-sans flex justify-between items-center"
-        //         >
-        //           <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
-        //             <span
-        //               // onClick={() => setRadioClick((prev) => !prev)}
-        //               onClick={(e) => {
-        //                 e.stopPropagation();
-        //                 handleClick(index);
-        //               }}
-        //               className="w-auto text-start mr-4 cursor-pointer"
-        //             >
-        //               <Circle
-        //                 // onClick={() => handleClick(index)}
-        //                 color={isSelected === index ? "#2676ff" : "none"}
-        //               />
-        //             </span>
-
-        //             {["xls", "xlsx"].includes(
-        //               file?.name.split(".").pop() || ""
-        //             ) && (
-        //               <>
-        //                 <Xcel className="w-4 h-4" />
-        //                 <p className="whitespace-nowrap">
-        //                   {file?.name.length > 10
-        //                     ? file.name.includes(".")
-        //                       ? `${file.name.slice(0, 10)}...${file.name
-        //                           .split(".")
-        //                           .pop()}`
-        //                       : `${file.name.slice(0, 10)}...`
-        //                     : file.name}
-        //                 </p>
-        //               </>
-        //             )}
-        //             {["doc", "docx"].includes(
-        //               file?.name.split(".").pop() || ""
-        //             ) && (
-        //               <>
-        //                 <ShortRich />
-        //                 <p className="whitespace-nowrap">
-        //                   {file?.name.length > 10
-        //                     ? file.name.includes(".")
-        //                       ? `${file.name.slice(0, 10)}...${file.name
-        //                           .split(".")
-        //                           .pop()}`
-        //                       : `${file.name.slice(0, 10)}...`
-        //                     : file.name}
-        //                 </p>
-        //               </>
-        //             )}
-        //             {file?.name.split(".").pop() === "txt" && (
-        //               <>
-        //                 {" "}
-        //                 <img src="rich.png" alt="" className="w-4 h-4" />{" "}
-        //                 <p className="whitespace-nowrap">
-        //                   {file?.name.length > 10
-        //                     ? file.name.includes(".")
-        //                       ? `${file.name.slice(0, 10)}...${file.name
-        //                           .split(".")
-        //                           .pop()}`
-        //                       : `${file.name.slice(0, 10)}...`
-        //                     : file.name}
-        //                 </p>
-        //               </>
-        //             )}
-        //             {["jpg", "png"].includes(
-        //               file?.name.split(".").pop() || ""
-        //             ) && (
-        //               <>
-        //                 <div>
-        //                   <Gallery className="w-3 h-3 md:w-4 md:h-4" />
-        //                 </div>
-        //                 <p className="whitespace-nowrap">
-        //                   {file?.name.length > 10
-        //                     ? file.name.includes(".")
-        //                       ? `${file.name.slice(0, 10)}...${file.name
-        //                           .split(".")
-        //                           .pop()}`
-        //                       : `${file.name.slice(0, 10)}...`
-        //                     : file.name}
-        //                 </p>
-        //               </>
-        //             )}
-        //             {file?.name.split(".").pop() === "pdf" && (
-        //               <>
-        //                 <img src="/pdf.png" className="w-3 h-3 md:w-4 md:h-4" />
-        //                 <p className="whitespace-nowrap">
-        //                   {file?.name.length > 10
-        //                     ? file.name.includes(".")
-        //                       ? `${file.name.slice(0, 10)}...${file.name
-        //                           .split(".")
-        //                           .pop()}`
-        //                       : `${file.name.slice(0, 10)}...`
-        //                     : file.name}
-        //                 </p>
-        //               </>
-        //             )}
-        //           </p>
-
-        //           <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
-        //             {Array.isArray(file.shared_with) &&
-        //             file.shared_with.length > 0 ? (
-        //               <>
-        //                 <img src="per1.png" alt="Person" /> {file.personName}
-        //               </>
-        //             ) : (
-        //               <>
-        //                 <NoPerson />
-        //               </>
-        //             )}
-        //           </p>
-
-        //           <p className="border w-[30%] h-full flex items-center justify-start px-4">
-        //             {formatFileSize(file?.size)}
-        //           </p>
-
-        //           {fileData && (
-        //             <FileViewer
-        //               fileUrl={fileData?.fileUrl}
-        //               fileType={fileData.fileType as "excel" | "word" | "pdf"}
-        //               fileName={fileData?.fileName}
-        //             />
-        //           )}
-
-        //           <Popup
-        //             trigger={
-        //               <p className="cursor-pointer border w-[10%] h-full flex items-center justify-start px-4">
-        //                 <ThreeDots />
-        //               </p>
-        //             }
-        //             position="bottom right"
-        //             arrowStyle={{
-        //               color: "white",
-        //               transform: "translateX(20px)",
-        //             }}
-        //             contentStyle={{
-        //               marginLeft: "-50px",
-        //               marginTop: "-10px",
-        //               padding: "10px",
-        //               borderRadius: "8px",
-        //               backgroundColor: "white",
-        //               borderColor: "white",
-        //               border: "none",
-        //               width: "auto",
-        //               height: "auto",
-        //               boxShadow: "0px -2px 12px 0px #0000001A",
-        //             }}
-        //             className="popup-content"
-        //           >
-        //             <div className="flex flex-col gap-2 p-2 pr-4 font-sans text-[14px] ">
-        //               <div
-        //                 // onClick={() => handleDownloadClick(file?.id)}
-        //                 className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
-        //               >
-        //                 <NoPerson className="w-4 h-4" />
-        //                 Share
-        //               </div>
-        //               {file?.is_starred ? (
-        //                 <div
-        //                   onClick={() =>
-        //                     handleUnStarClick(file?.name, file?.id)
-        //                   }
-        //                   className="flex gap-2 items-center whitespace-nowrap cursor-pointer"
-        //                 >
-        //                   <Starred className="w-4 h-4 fill-yellow-300" />
-        //                   Unstarred
-        //                 </div>
-        //               ) : (
-        //                 <div
-        //                   onClick={() => handleStarClick(file?.name, file?.id)}
-        //                   className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
-        //                 >
-        //                   <Starred className="w-4 h-4" />
-        //                   Starred
-        //                 </div>
-        //               )}
-        //               <div
-        //                 onClick={() => settoggleReName(true)}
-        //                 className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
-        //               >
-        //                 <Rename />
-        //                 Rename
-        //               </div>
-        //               {toggleReName && (
-        //                 <ReNameFile
-        //                   fileId={file?.id}
-        //                   settoggleReName={settoggleReName}
-        //                 />
-        //               )}
-        //               <div
-        //                 onClick={() => handleDownloadClick(file?.id)}
-        //                 className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
-        //               >
-        //                 <Download />
-        //                 Download
-        //               </div>
-        //               <div
-        //                 onClick={() => handleDeleteClick(file?.id)}
-        //                 className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
-        //               >
-        //                 <Trash className="w-4 h-4" />
-        //                 Move to Trash
-        //               </div>
-        //             </div>
-        //           </Popup>
-        //         </div>
-        //       ))}
-        //   </div>
-        // </div>
         <div className="container md:rounded-xl md:border w-full h-full my-4">
           <div className="h-full rounded-xl bg-[#F1F5FA] w-[full] hidden md:flex flex-col ">
             <div className="overflow-hidden rounded-xl  bg-[#F1F5FA] w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
@@ -534,226 +350,178 @@ function FileGallery({ showStarredOnly }: any) {
             {parentFolder?.files
               .filter((item) => (showStarredOnly ? item?.is_starred : true))
               .map((file, index) => (
-                <div
-                  key={index}
-                  onClick={() => handleFileOpen(file.id)}
-                  className="overflow-hidden cursor-pointer bg-white hover:bg-[#f2f3f3] w-[full] text-[14px] h-[57px] font-sans flex justify-between items-center"
-                >
-                  <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
-                    <span
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleClick(index);
-                      }}
-                      className="w-auto text-start mr-4 cursor-pointer"
-                    >
-                      <Circle
-                        color={isSelected === index ? "#2676ff" : "none"}
-                      />
-                    </span>
-
-                    {/* Check file extension and content type */}
-                    {["xls", "xlsx"].includes(
-                      file?.name.split(".").pop() || ""
-                    ) ||
-                    (file?.content_type &&
-                      (file.content_type.includes("excel") ||
-                        file.content_type.includes("spreadsheet"))) ? (
-                      <>
-                        <Xcel className="w-4 h-4" />
-                        <p className="whitespace-nowrap">
-                          {file?.name.length > 10
-                            ? file.name.includes(".")
-                              ? `${file.name.slice(0, 10)}...${file.name
-                                  .split(".")
-                                  .pop()}`
-                              : `${file.name.slice(0, 10)}...`
-                            : file.name}
-                        </p>
-                      </>
-                    ) : null}
-
-                    {["doc", "docx"].includes(
-                      file?.name.split(".").pop() || ""
-                    ) ||
-                    (file?.content_type &&
-                      (file.content_type.includes("application/msword") ||
-                        file.content_type.includes(
-                          "vnd.openxmlformats-officedocument.wordprocessingml.document"
-                        ))) ? (
-                      <>
-                        <ShortRich />
-                        <p className="whitespace-nowrap">
-                          {file?.name.length > 10
-                            ? file.name.includes(".")
-                              ? `${file.name.slice(0, 10)}...${file.name
-                                  .split(".")
-                                  .pop()}`
-                              : `${file.name.slice(0, 10)}...`
-                            : file.name}
-                        </p>
-                      </>
-                    ) : null}
-
-                    {file?.name.split(".").pop() === "txt" && (
-                      <>
-                        <img src="rich.png" alt="" className="w-4 h-4" />
-                        <p className="whitespace-nowrap">
-                          {file?.name.length > 10
-                            ? file.name.includes(".")
-                              ? `${file.name.slice(0, 10)}...${file.name
-                                  .split(".")
-                                  .pop()}`
-                              : `${file.name.slice(0, 10)}...`
-                            : file.name}
-                        </p>
-                      </>
-                    )}
-
-                    {["jpg", "png"].includes(
-                      file?.name.split(".").pop() || ""
-                    ) && (
-                      <>
-                        <div>
-                          <Gallery className="w-3 h-3 md:w-4 md:h-4" />
-                        </div>
-                        <p className="whitespace-nowrap">
-                          {file?.name.length > 10
-                            ? file.name.includes(".")
-                              ? `${file.name.slice(0, 10)}...${file.name
-                                  .split(".")
-                                  .pop()}`
-                              : `${file.name.slice(0, 10)}...`
-                            : file.name}
-                        </p>
-                      </>
-                    )}
-
-                    {file?.name.split(".").pop() === "pdf" && (
-                      <>
-                        <img src="/pdf.png" className="w-3 h-3 md:w-4 md:h-4" />
-                        <p className="whitespace-nowrap">
-                          {file?.name.length > 10
-                            ? file.name.includes(".")
-                              ? `${file.name.slice(0, 10)}...${file.name
-                                  .split(".")
-                                  .pop()}`
-                              : `${file.name.slice(0, 10)}...`
-                            : file.name}
-                        </p>
-                      </>
-                    )}
-                  </p>
-
-                  <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
-                    {Array.isArray(file.shared_with) &&
-                    file.shared_with.length > 0 ? (
-                      <>
-                        <img src="per1.png" alt="Person" /> {file.personName}
-                      </>
-                    ) : (
-                      <>
-                        <NoPerson />
-                      </>
-                    )}
-                  </p>
-
-                  <p className="border w-[30%] h-full flex items-center justify-start px-4">
-                    {formatFileSize(file?.size)}
-                  </p>
-
-                  {fileData && (
-                    <FileViewer
-                      fileUrl={fileData?.fileUrl}
-                      fileType={fileData.fileType as "excel" | "word" | "pdf"}
-                      fileName={fileData?.fileName}
-                    />
-                  )}
-
-                  <Popup
-                    trigger={
-                      <p className="cursor-pointer border w-[10%] h-full flex items-center justify-start px-4">
-                        <ThreeDots />
-                      </p>
-                    }
-                    position="bottom right"
-                    arrowStyle={{
-                      color: "white",
-                      transform: "translateX(20px)",
-                    }}
-                    contentStyle={{
-                      marginLeft: "-50px",
-                      marginTop: "-10px",
-                      padding: "10px",
-                      borderRadius: "8px",
-                      backgroundColor: "white",
-                      borderColor: "white",
-                      border: "none",
-                      width: "auto",
-                      height: "auto",
-                      boxShadow: "0px -2px 12px 0px #0000001A",
-                    }}
-                    className="popup-content"
+                <div className="relative">
+                  <div
+                    key={index}
+                    onClick={() => handleFileOpen(file.id)}
+                    className="overflow-hidden cursor-pointer bg-white hover:bg-[#f2f3f3] w-[full] text-[14px] h-[57px] font-sans flex justify-between items-center"
                   >
-                    <div className="flex flex-col gap-2 p-2 pr-4 font-sans text-[14px] ">
-                      <div className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer">
-                        <NoPerson className="w-4 h-4" />
-                        Share
-                      </div>
-                      {file?.is_starred ? (
-                        <div
-                          onClick={() =>
-                            handleUnStarClick(file?.name, file?.id)
-                          }
-                          className="flex gap-2 items-center whitespace-nowrap cursor-pointer"
-                        >
-                          <Starred className="w-4 h-4 fill-yellow-300" />
-                          Unstarred
-                        </div>
-                      ) : (
-                        <div
-                          onClick={() => handleStarClick(file?.name, file?.id)}
-                          className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
-                        >
-                          <Starred className="w-4 h-4" />
-                          Starred
-                        </div>
-                      )}
-                      <div
-                        onClick={() => settoggleReName(true)}
-                        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
+                    <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleClick(index);
+                        }}
+                        className="w-auto text-start mr-4 cursor-pointer"
                       >
-                        <Rename />
-                        Rename
-                      </div>
-                      {toggleReName && (
-                        <ReNameFile
-                          fileId={file?.id}
-                          settoggleReName={settoggleReName}
+                        <Circle
+                          color={isSelected === index ? "#2676ff" : "none"}
                         />
+                      </span>
+
+                      {/* Check file extension and content type */}
+                      {["xls", "xlsx"].includes(
+                        file?.name.split(".").pop() || ""
+                      ) ||
+                      (file?.content_type &&
+                        (file.content_type.includes("excel") ||
+                          file.content_type.includes("spreadsheet"))) ? (
+                        <>
+                          <Xcel className="w-4 h-4" />
+                          <p className="whitespace-nowrap">
+                            {file?.name.length > 10
+                              ? file.name.includes(".")
+                                ? `${file.name.slice(0, 10)}...${file.name
+                                    .split(".")
+                                    .pop()}`
+                                : `${file.name.slice(0, 10)}...`
+                              : file.name}
+                          </p>
+                        </>
+                      ) : null}
+
+                      {["doc", "docx"].includes(
+                        file?.name.split(".").pop() || ""
+                      ) ||
+                      (file?.content_type &&
+                        (file.content_type.includes("application/msword") ||
+                          file.content_type.includes(
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                          ))) ? (
+                        <>
+                          <ShortRich />
+                          <p className="whitespace-nowrap">
+                            {file?.name.length > 10
+                              ? file.name.includes(".")
+                                ? `${file.name.slice(0, 10)}...${file.name
+                                    .split(".")
+                                    .pop()}`
+                                : `${file.name.slice(0, 10)}...`
+                              : file.name}
+                          </p>
+                        </>
+                      ) : null}
+
+                      {file?.name.split(".").pop() === "txt" ||
+                      (file?.content_type &&
+                        file.content_type.includes("text/plain")) ? (
+                        <>
+                          <img src="rich.png" alt="" className="w-4 h-4" />
+                          <p className="whitespace-nowrap">
+                            {file?.name.length > 10
+                              ? file.name.includes(".")
+                                ? `${file.name.slice(0, 10)}...${file.name
+                                    .split(".")
+                                    .pop()}`
+                                : `${file.name.slice(0, 10)}...`
+                              : file.name}
+                          </p>
+                        </>
+                      ) : null}
+
+                      {["jpg", "png"].includes(
+                        file?.name.split(".").pop() || ""
+                      ) ||
+                      (file?.content_type &&
+                        (file.content_type.includes("image/jpeg") ||
+                          file.content_type.includes("image/png"))) ? (
+                        <>
+                          <div>
+                            <Gallery className="w-3 h-3 md:w-4 md:h-4" />
+                          </div>
+                          <p className="whitespace-nowrap">
+                            {file?.name.length > 10
+                              ? file.name.includes(".")
+                                ? `${file.name.slice(0, 10)}...${file.name
+                                    .split(".")
+                                    .pop()}`
+                                : `${file.name.slice(0, 10)}...`
+                              : file.name}
+                          </p>
+                        </>
+                      ) : null}
+
+                      {file?.name.split(".").pop() === "pdf" && (
+                        <>
+                          <img
+                            src="/pdf.png"
+                            className="w-3 h-3 md:w-4 md:h-4"
+                          />
+                          <p className="whitespace-nowrap">
+                            {file?.name.length > 10
+                              ? file.name.includes(".")
+                                ? `${file.name.slice(0, 10)}...${file.name
+                                    .split(".")
+                                    .pop()}`
+                                : `${file.name.slice(0, 10)}...`
+                              : file.name}
+                          </p>
+                        </>
                       )}
-                      <div
-                        onClick={() => handleDownloadClick(file?.id)}
-                        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
-                      >
-                        <Download />
-                        Download
-                      </div>
-                      <div
-                        onClick={() => handleDeleteClick(file?.id)}
-                        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
-                      >
-                        <Trash className="w-4 h-4" />
-                        Move to Trash
-                      </div>
+                    </p>
+                    <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
+                      {Array.isArray(file.shared_with) &&
+                      file.shared_with.length > 0 ? (
+                        <>
+                          <img src="per1.png" alt="Person" /> {file.personName}
+                        </>
+                      ) : (
+                        <>
+                          <NoPerson />
+                        </>
+                      )}
+                    </p>
+                    <p className="border w-[30%] h-full flex items-center justify-start px-4">
+                      {formatFileSize(file?.size)}
+                    </p>
+                    {fileData && (
+                      <FileViewer
+                        fileUrl={fileData?.fileUrl}
+                        fileType={fileData.fileType as "excel" | "word" | "pdf"}
+                        fileName={fileData?.fileName}
+                      />
+                    )}
+                    <div
+                      onClick={(event) => handlePopupToggle({ index, event })}
+                      className="cursor-pointer border w-[10%] h-full flex items-center justify-start px-4"
+                    >
+                      <ThreeDots />
                     </div>
-                  </Popup>
+                  </div>
+                  {activeIndex === index && (
+                    <div className="absolute w-auto right-0 top-8 bg-white rounded-lg shadow-lg p-3 border z-50">
+                      <CustomPopup
+                        file={file}
+                        metaToggle={metaToggle}
+                        setMetaToggle={setMetaToggle}
+                        handleDeleteClick={() => handleDeleteClick(file.id)}
+                        handleDownloadClick={() => handleDownloadClick(file.id)}
+                        handleMetaData={() => handleMetaData(file.metadata)}
+                        handleStarClick={() =>
+                          handleStarClick(file.name, file.id)
+                        }
+                        handleUnStarClick={() =>
+                          handleUnStarClick(file.name, file.id)
+                        }
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
           </div>
           {parentFolder?.files
             .filter((item) => (showStarredOnly ? item.is_starred : true))
-            .map((file) => (
+            .map((file,index) => (
               <div
                 onClick={() => handleFileOpen(file.id)}
                 className="w-full h-[74px] my-2  rounded-tl-[12px] rounded-tr-[12px] bg-[#FFFFFF] md:hidden flex flex-col items-center"
@@ -836,7 +604,30 @@ function FileGallery({ showStarredOnly }: any) {
                       </>
                     )}
                   </p>
-                  <ThreeDots />
+                  <div
+                      onClick={(event) => handlePopupToggle({ index, event })}
+                      className="cursor-pointer relative border w-[10%] h-full flex items-center justify-start px-4"
+                    >
+                      <ThreeDots />
+                    </div>
+                  {activeIndex === index && (
+                    <div className="absolute w-auto right-0 top-8 bg-white rounded-lg shadow-lg p-3 border z-50">
+                      <CustomPopup
+                        file={file}
+                        metaToggle={metaToggle}
+                        setMetaToggle={setMetaToggle}
+                        handleDeleteClick={() => handleDeleteClick(file.id)}
+                        handleDownloadClick={() => handleDownloadClick(file.id)}
+                        handleMetaData={() => handleMetaData(file.metadata)}
+                        handleStarClick={() =>
+                          handleStarClick(file.name, file.id)
+                        }
+                        handleUnStarClick={() =>
+                          handleUnStarClick(file.name, file.id)
+                        }
+                      />
+                    </div>
+                  )}
                 </div>
                 <div className="h-[50%] w-[85%] flex justify-between items-center">
                   <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
