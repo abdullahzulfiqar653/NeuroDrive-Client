@@ -32,7 +32,6 @@ const Word = ({ fileUrl, fileName }: any) => {
   if (fileUrl === "") {
     if (viewerRef.current) {
       viewerRef.current.documentEditor.open("");
-      console.log("Loaded an empty document.");
     }
     return;
   }

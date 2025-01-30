@@ -147,7 +147,7 @@ function CreateComponent() {
             borderImageSource:
               "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)",
           }}
-          className="w-[132px] h-[34px] disabled:opacity-75 disabled:cursor-not-allowed md:w-[163px] md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
+          className="w-[132px] h-[34px] z-20 disabled:opacity-75 disabled:cursor-not-allowed md:w-[163px] md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
         >
           Create
           {loading && (

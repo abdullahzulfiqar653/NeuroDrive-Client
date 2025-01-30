@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "reactjs-popup/dist/index.css";
 import {
   Xcel,
@@ -18,7 +18,6 @@ import { toast } from "react-toastify";
 import { fetchData, postData } from "../features/ApiSlice";
 import { getDirectory } from "../features/directories/folderSlice";
 import CustomPopup from "./CustomPopup";
-import MetaData from "./MetaData";
 
 function FileGallery({ showStarredOnly }: any) {
   const { isGridMode, parentFolder } = useAuth();
@@ -82,8 +81,6 @@ function FileGallery({ showStarredOnly }: any) {
           document.body.removeChild(link);
           toast.success("Image Downloaded Successfully");
         } else {
-          console.log("jhuhu", result.data.id);
-
           setFileData({
             fileUrl: url,
             fileType: mapContentTypeToFileType(content_type),
@@ -181,18 +178,18 @@ function FileGallery({ showStarredOnly }: any) {
     }
   };
 
-  const handleMetaData = (meta: any) => {
-    if (
-      meta === null ||
-      (typeof meta === "object" && Object.keys(meta).length === 0)
-    ) {
-      toast.warn("Meta data is already removed");
-      setActiveIndex(null);
-    } else {
-      setMetaToggle(true);
-      setActiveIndex(null);
-    }
-  };
+  // const handleMetaData = (meta: any) => {
+  //   if (
+  //     meta === null ||
+  //     (typeof meta === "object" && Object.keys(meta).length === 0)
+  //   ) {
+  //     toast.warn("Meta data is already removed");
+  //     setActiveIndex(null);
+  //   } else {
+  //     setMetaToggle(true);
+  //     setActiveIndex(null);
+  //   }
+  // };
 
   return (
     <div className="h-full w-[100%] md:w-[96%]">
@@ -311,25 +308,28 @@ function FileGallery({ showStarredOnly }: any) {
                       />
                     )}
                   </div>
-                  {metaToggle && (
+                  {/* {metaToggle && (
                     <MetaData
                       meta={item?.metadata}
                       name={item?.name}
                       setMetaToggle={setMetaToggle}
                       id={item?.id}
                     />
-                  )}
+                  )} */}
                 </div>
                 {activeIndex === index && (
                   <div className="absolute w-auto right-6 -bottom-[164px]  bg-white rounded-lg shadow-lg p-3 border z-50">
                     <CustomPopup
                       file={item}
+                      id={item?.id}
+                      name={item?.name}
+                      meta={item?.metadata}
                       metaToggle={metaToggle}
-                      setActiveIndex={setActiveIndex}
                       setMetaToggle={setMetaToggle}
+                      setActiveIndex={setActiveIndex}
                       handleDeleteClick={() => handleDeleteClick(item.id)}
                       handleDownloadClick={() => handleDownloadClick(item.id)}
-                      handleMetaData={() => handleMetaData(item.metadata)}
+                      // handleMetaData={() => handleMetaData(item.metadata)}
                       handleStarClick={() =>
                         handleStarClick(item.name, item.id)
                       }
@@ -521,11 +521,15 @@ function FileGallery({ showStarredOnly }: any) {
                     <div className="absolute w-auto right-0 top-8 bg-white rounded-lg shadow-lg p-3 border z-50">
                       <CustomPopup
                         file={file}
+                        id={file?.id}
+                        name={file?.name}
+                        meta={file?.metadata}
                         metaToggle={metaToggle}
                         setMetaToggle={setMetaToggle}
+                        setActiveIndex={setActiveIndex}
                         handleDeleteClick={() => handleDeleteClick(file.id)}
                         handleDownloadClick={() => handleDownloadClick(file.id)}
-                        handleMetaData={() => handleMetaData(file.metadata)}
+                        // handleMetaData={() => handleMetaData(item.metadata)}
                         handleStarClick={() =>
                           handleStarClick(file.name, file.id)
                         }
@@ -535,14 +539,14 @@ function FileGallery({ showStarredOnly }: any) {
                       />
                     </div>
                   )}
-                  {metaToggle && (
+                  {/* {metaToggle && (
                     <MetaData
                       meta={file?.metadata}
                       name={file?.name}
                       setMetaToggle={setMetaToggle}
                       id={file?.id}
                     />
-                  )}
+                  )} */}
                 </div>
               ))}
           </div>
@@ -556,7 +560,10 @@ function FileGallery({ showStarredOnly }: any) {
                 <div className="h-[50%] w-full bg-[#F1F5FA] rounded-tl-[12px] rounded-tr-[12px] px-2 pr-4 flex justify-between items-center">
                   <p className="flex items-center font-sans text-[11px]">
                     <span
-                      onClick={() => setRadioClick((prev) => !prev)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setRadioClick((prev) => !prev);
+                      }}
                       className="w-auto text-start mr-4 cursor-pointer"
                     >
                       <Circle color={radioClick ? "#2676ff" : "none"} />
@@ -633,19 +640,23 @@ function FileGallery({ showStarredOnly }: any) {
                   </p>
                   <div
                     onClick={(event) => handlePopupToggle({ index, event })}
-                    className="cursor-pointer relative border w-[10%] h-full flex items-center justify-start px-4"
+                    className="cursor-pointer border w-[10%] h-full flex items-center justify-start px-4"
                   >
                     <ThreeDots />
                   </div>
                   {activeIndex === index && (
-                    <div className="absolute w-auto right-0 top-8 bg-white rounded-lg shadow-lg p-3 border z-50">
+                    <div className="absolute w-auto right-0 -bottom-[164px] bg-white rounded-lg shadow-lg p-3 border z-50">
                       <CustomPopup
                         file={file}
+                        id={file?.id}
+                        name={file?.name}
+                        meta={file?.metadata}
                         metaToggle={metaToggle}
                         setMetaToggle={setMetaToggle}
+                        setActiveIndex={setActiveIndex}
                         handleDeleteClick={() => handleDeleteClick(file.id)}
                         handleDownloadClick={() => handleDownloadClick(file.id)}
-                        handleMetaData={() => handleMetaData(file.metadata)}
+                        // handleMetaData={() => handleMetaData(item.metadata)}
                         handleStarClick={() =>
                           handleStarClick(file.name, file.id)
                         }
