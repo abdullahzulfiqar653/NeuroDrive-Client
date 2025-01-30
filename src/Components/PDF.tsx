@@ -42,7 +42,6 @@ const PDF = ({ fileUrl, fileName }: any) => {
               "Content-Type": "multipart/form-data",
             },
           });
-          console.log(response, "response");
           toast.success("PDF sent to the backend successfully!");
         } catch (error) {
           console.error("Error sending the PDF:", error);

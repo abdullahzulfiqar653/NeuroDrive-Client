@@ -36,8 +36,6 @@ function FileGallery({ showStarredOnly }: any) {
   const dispatch = useDispatch<AppDispatch>();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  console.log(parentFolder);
-
   const handlePopupToggle = ({ index, event }: any) => {
     event.stopPropagation();
     setActiveIndex((prev) => (prev === index ? null : index));
@@ -83,8 +81,6 @@ function FileGallery({ showStarredOnly }: any) {
           document.body.removeChild(link);
           toast.success("Image Downloaded Successfully");
         } else {
-          console.log("jhuhu", result.data.id);
-
           setFileData({
             fileUrl: url,
             fileType: mapContentTypeToFileType(content_type),

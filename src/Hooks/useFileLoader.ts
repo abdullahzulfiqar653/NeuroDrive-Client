@@ -25,7 +25,14 @@ const useFileLoader = ({ fileType, fileUrl, fileName, viewerRef }: UseFileLoader
             toast.success("PDF loaded successfully!");
           }
           else if (fileType === 'excel') {
-            const fileBlob = new Blob([response.data], {
+
+          const contentType = response.headers['content-type'];
+           
+          if (contentType === "text/html") {
+            return;
+          }
+          
+          const fileBlob = new Blob([response.data], {
               type: response.headers['content-type'],
           });
           
