@@ -223,7 +223,7 @@ export default Home;
 
 function LeftBar() {
   const dispatch = useDispatch<AppDispatch>();
-  const [setFolderName, setsetFolderName] = useState<string>("");
+  const [isFolderName, setFolderName] = useState<string>("");
   const { directory } = useSelector((state: RootState) => state.folders);
   const { toggleComponent, parentFolder, setParentFolder, usedStorage } =
     useAuth();
@@ -272,7 +272,7 @@ function LeftBar() {
           <div
             onClick={() => {
               handleClickFolder("main");
-              // setFolderName("");
+              setFolderName("FOLDERS");
             }}
             className="cursor-pointer bg-[#3984FF] w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center shadow-md"
           >
@@ -312,7 +312,7 @@ function LeftBar() {
             <span>
               <Arrow color="#9F9F9F" />
             </span>
-            {setFolderName !== "" ? setFolderName : "FOLDERS"}
+            {isFolderName !== "" ? isFolderName : "FOLDERS"}
           </h1>
           <span
             onClick={() => toggleComponent("newFolder")}
@@ -327,7 +327,7 @@ function LeftBar() {
               <h1
                 onClick={() => {
                   handleClickFolder(child.id);
-                  setsetFolderName(child.name);
+                  setFolderName(child.name);
                 }}
                 key={child.id}
                 className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 "

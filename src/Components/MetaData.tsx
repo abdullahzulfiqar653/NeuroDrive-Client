@@ -21,9 +21,10 @@ interface MetaDataProps {
   setMetaToggle: React.Dispatch<React.SetStateAction<boolean>>;
   name: string;
   id: number;
+  setActiveIndex:any;
 }
 
-const MetaData = ({ meta, name, id, setMetaToggle }: MetaDataProps) => {
+const MetaData = ({ meta, name, id, setMetaToggle,setActiveIndex }: MetaDataProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleRemove = async (id: number) => {
@@ -43,11 +44,13 @@ const MetaData = ({ meta, name, id, setMetaToggle }: MetaDataProps) => {
       if (data.status === 200) {
         toast.success("Meta data is removed");
         setMetaToggle(false);
+        setActiveIndex(null)
         dispatch(getDirectory(parentFolderId));
       }
     } catch (error) {
       toast.warn("Error in removing meta data");
       setMetaToggle(false);
+      setActiveIndex(null)
     }
   };
 

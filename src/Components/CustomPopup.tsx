@@ -93,6 +93,7 @@ const CustomPopup = ({
           name={name}
           setMetaToggle={setMetaToggle}
           id={id}
+          setActiveIndex={setActiveIndex}
         />
       )}
       <div
