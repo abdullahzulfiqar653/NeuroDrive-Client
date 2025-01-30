@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import "reactjs-popup/dist/index.css";
 import {
   Xcel,
