@@ -35,6 +35,7 @@ function FileGallery({ showStarredOnly }: any) {
   } | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  console.log(parentFolder);
 
   const handlePopupToggle = ({ index, event }: any) => {
     event.stopPropagation();

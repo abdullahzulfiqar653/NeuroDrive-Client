@@ -10,23 +10,23 @@ import { getDirectory } from "../features/directories/folderSlice";
 type ReNameFileProps = {
   fileId: any;
   setActiveIndex: any;
-  settoggleReName: React.Dispatch<React.SetStateAction<boolean>>;
+  settogglePassword: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function ReNameFile({
+function EncryptFile({
   fileId,
-  settoggleReName,
+  settogglePassword,
   setActiveIndex,
 }: ReNameFileProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [value, setValue] = useState("");
 
   const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
-  const data = useSelector((state: RootState) => state.api.calls?.reName);
+  const data = useSelector((state: RootState) => state.api.calls?.encrypt);
 
   const handleSubmit = async () => {
     const paylod = {
-      name: value,
+      password: value,
     };
     try {
       await dispatch(
@@ -34,15 +34,15 @@ function ReNameFile({
           url: `files/${fileId}/`,
           payload: paylod,
           method: "patch",
-          key: "reName",
+          key: "encrypt",
         })
       ).unwrap();
-      settoggleReName(false);
+      settogglePassword(false);
       setActiveIndex(null);
-      toast.success("Name changed successfully");
+      toast.success("File is encrypted");
       dispatch(getDirectory(parentFolderId));
     } catch (error) {
-      toast.warn("Unable to change name");
+      toast.warn("Unable to encryot file");
       console.log("error", error);
     }
   };
@@ -52,7 +52,7 @@ function ReNameFile({
       <div className="relative py-11 w-[59vw] px-3 md:px-4 flex flex-col items-center justify-center rounded-lg bg-[#ffffff]">
         <span
           onClick={() => {
-            settoggleReName(false);
+            settogglePassword(false);
           }}
           className="absolute right-4 top-4 cursor-pointer"
         >
@@ -60,23 +60,28 @@ function ReNameFile({
         </span>
 
         <div className="flex flex-col items-start w-full justify-start text-[12px] md:text-[14px] text-black">
-          <p className="font-sans text-2xl font-bold mb-3">
-            Enter new file name
-          </p>
+          <p className="font-sans text-2xl font-bold mb-3">Enter password</p>
           <div className="h-[36px] mb-4 w-[97%] md:h-[54px] bg-[#ECECEC] rounded-md px-3">
             <input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              type="text"
-              placeholder="New name"
+              type="password"
+              placeholder="Password"
+              required
+              minLength={8}
               className="w-full h-full outline-none text-[12px] font-sans font-[600] md:text-[16px] bg-[#ffffff00] placeholder:text-sm placeholder:text-gray-400"
             />
           </div>
+          {value.length > 0 && value.length < 8 && (
+            <p className="text-red-500 text-sm">
+              Password must be at least 8 characters
+            </p>
+          )}
         </div>
 
         <button
           onClick={handleSubmit}
-          disabled={value === ""}
+          disabled={value.length < 8}
           style={{
             background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
             borderImageSource:
@@ -96,4 +101,4 @@ function ReNameFile({
   );
 }
 
-export default ReNameFile;
+export default EncryptFile;
