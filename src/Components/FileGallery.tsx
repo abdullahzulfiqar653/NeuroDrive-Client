@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import { fetchData, postData } from "../features/ApiSlice";
 import { getDirectory } from "../features/directories/folderSlice";
 import CustomPopup from "./CustomPopup";
+import MetaData from "./MetaData";
 
 function FileGallery({ showStarredOnly }: any) {
   const { isGridMode, parentFolder } = useAuth();
@@ -35,13 +36,11 @@ function FileGallery({ showStarredOnly }: any) {
   } | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
- 
 
   const handlePopupToggle = ({ index, event }: any) => {
     event.stopPropagation();
-    setActiveIndex((prev) => (prev === index ? null : index)); 
+    setActiveIndex((prev) => (prev === index ? null : index));
   };
-  
 
   const formatFileSize = (sizeInBytes: number) => {
     if (sizeInBytes < 1024 ** 2) {
@@ -110,11 +109,11 @@ function FileGallery({ showStarredOnly }: any) {
         payload: paylod,
         method: "put",
       });
-      toast.success("File is getting stared");
+      toast.success("File is getting starred");
       dispatch(getDirectory(parentFolderId));
       setActiveIndex(null);
     } catch (error) {
-      toast.warning("Error is getting stared");
+      toast.warning("Error is getting starred");
     }
   };
   const handleUnStarClick = (name: string, id: number) => {
@@ -128,11 +127,11 @@ function FileGallery({ showStarredOnly }: any) {
         payload: paylod,
         method: "put",
       });
-      toast.success("File is getting unstared");
+      toast.success("File is getting unstarred");
       dispatch(getDirectory(parentFolderId));
       setActiveIndex(null);
     } catch (error) {
-      toast.warning("Error is getting unstared");
+      toast.warning("Error is getting unstarred");
     }
   };
 
@@ -147,11 +146,11 @@ function FileGallery({ showStarredOnly }: any) {
         })
       ).unwrap();
       if (response?.status === 204) {
-        toast.success("Successsfully uploaded profile");
+        toast.success("File Deleted Successfully");
         dispatch(getDirectory(parentFolderId));
         setActiveIndex(null);
       } else {
-        toast.error("Failed to uploaded profile");
+        toast.error("Failed to delete file");
       }
     } catch (error) {}
     console.log("Prfile upload error");
@@ -188,10 +187,11 @@ function FileGallery({ showStarredOnly }: any) {
       (typeof meta === "object" && Object.keys(meta).length === 0)
     ) {
       toast.warn("Meta data is already removed");
+      setActiveIndex(null);
     } else {
       setMetaToggle(true);
+      setActiveIndex(null);
     }
-    setActiveIndex(null);
   };
 
   return (
@@ -201,125 +201,144 @@ function FileGallery({ showStarredOnly }: any) {
           {parentFolder?.files
             ?.filter((item) => (showStarredOnly ? item?.is_starred : true))
             .map((item, index) => (
-              <div
-                key={index}
-                // onClick={() => handleClick(index)}
-                onClick={() => handleFileOpen(item.id)}
-                className="w-[109px] cursor-pointer h-[117px] md:w-[207px] md:h-[213px] flex flex-col "
-              >
-                <div className="flex items-center justify-center h-[80%]  hover:bg-[#f2f3f3] bg-white rounded-[16px] md:rounded-[32px]">
-                  {["jpg", "png"].includes(item?.name.split(".").pop() || "") ||
-                  (item?.content_type &&
-                    item.content_type.includes("image/")) ? (
-                    <>
-                      <Gallery
-                        className={"w-[32px] h-[41px] md:w-[77px] md:h-[79px]"}
-                      />
-                    </>
-                  ) : null}
-                  {["xls", "xlsx"].includes(
-                    item?.name.split(".").pop() || ""
-                  ) ||
-                  (item?.content_type &&
-                    item.content_type.includes("application/vnd.ms-excel")) ||
-                  item.content_type.includes(
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                  ) ? (
-                    <>
-                      <Xcel
-                        className={"w-[32px] h-[41px] md:w-[77px] md:h-[79px]"}
-                      />
-                    </>
-                  ) : null}
+              <div className="relative">
+                <div
+                  key={index}
+                  // onClick={() => handleClick(index)}
+                  onClick={() => handleFileOpen(item.id)}
+                  className="w-[109px] cursor-pointer h-[117px] md:w-[207px] md:h-[213px] flex flex-col "
+                >
+                  <div className="flex items-center justify-center h-[80%]  hover:bg-[#f2f3f3] bg-white rounded-[16px] md:rounded-[32px]">
+                    {["jpg", "png"].includes(
+                      item?.name.split(".").pop() || ""
+                    ) ||
+                    (item?.content_type &&
+                      item.content_type.includes("image/")) ? (
+                      <>
+                        <Gallery
+                          className={
+                            "w-[32px] h-[41px] md:w-[77px] md:h-[79px]"
+                          }
+                        />
+                      </>
+                    ) : null}
+                    {["xls", "xlsx"].includes(
+                      item?.name.split(".").pop() || ""
+                    ) ||
+                    (item?.content_type &&
+                      item.content_type.includes("application/vnd.ms-excel")) ||
+                    item.content_type.includes(
+                      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    ) ? (
+                      <>
+                        <Xcel
+                          className={
+                            "w-[32px] h-[41px] md:w-[77px] md:h-[79px]"
+                          }
+                        />
+                      </>
+                    ) : null}
 
-                  {item?.name.split(".").pop() === "txt" ||
-                  (item?.content_type &&
-                    item.content_type.includes("text/plain")) ? (
-                    <img
-                      src="/doc.svg"
-                      className={"w-[40px] h-[40px] md:w-[77px] md:h-[77px]"}
-                    />
-                  ) : null}
-
-                  {item?.name.split(".").pop() === "pdf" ||
-                  (item?.content_type &&
-                    item.content_type.includes("application/pdf")) ? (
-                    <img
-                      src="/pdf.png"
-                      className={"w-[32px] h-[41px] md:w-[77px] md:h-[79px]"}
-                    />
-                  ) : null}
-
-                  {["doc", "docx"].includes(
-                    item?.name.split(".").pop() || ""
-                  ) ||
-                  (item?.content_type &&
-                    (item.content_type.includes("application/msword") ||
-                      item.content_type.includes(
-                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                      ))) ? (
-                    <img
-                      src="/rich.png"
-                      className={"w-[40px] h-[40px] md:w-[77px] md:h-[77px]"}
-                    />
-                  ) : null}
-                </div>
-                <div className="flex items-center justify-between mt-1 px-2">
-                  <div className="flex items-center gap-2">
-                    {item?.name.split(".").pop() === "xls" && <ShortXcel />}
-                    {item?.name.split(".").pop() === "doc" && <ShortRich />}
-                    {item?.name.split(".").pop() === "jpg" && <Gallery />}
-                    {item?.name.split(".").pop() === "pdf" && (
+                    {item?.name.split(".").pop() === "txt" ||
+                    (item?.content_type &&
+                      item.content_type.includes("text/plain")) ? (
                       <img
-                        src="/square.png"
-                        className={"w-3 h-3 md:w-[18px] md:h-5"}
+                        src="/doc.svg"
+                        className={"w-[40px] h-[40px] md:w-[77px] md:h-[77px]"}
                       />
-                    )}
-                    <p className="text-[10px] md:text-[12px] font-sans flex flex-col">
-                      <span className="whitespace-nowrap">
-                        {item?.name.length > 12
-                          ? `${item.name.slice(0, 12)}...${item.name
-                              .split(".")
-                              .pop()}`
-                          : item.name}
-                      </span>
-                      <span className="text-[#00000069]">
-                        {item?.name.split(".").pop()} .{" "}
-                        {formatFileSize(item?.size)}
-                      </span>
-                    </p>
+                    ) : null}
+
+                    {item?.name.split(".").pop() === "pdf" ||
+                    (item?.content_type &&
+                      item.content_type.includes("application/pdf")) ? (
+                      <img
+                        src="/pdf.png"
+                        className={"w-[32px] h-[41px] md:w-[77px] md:h-[79px]"}
+                      />
+                    ) : null}
+
+                    {["doc", "docx"].includes(
+                      item?.name.split(".").pop() || ""
+                    ) ||
+                    (item?.content_type &&
+                      (item.content_type.includes("application/msword") ||
+                        item.content_type.includes(
+                          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        ))) ? (
+                      <img
+                        src="/rich.png"
+                        className={"w-[40px] h-[40px] md:w-[77px] md:h-[77px]"}
+                      />
+                    ) : null}
                   </div>
-                  <span onClick={(event) => handlePopupToggle({ index, event })}
+                  <div className="flex items-center justify-between mt-1 px-2">
+                    <div className="flex items-center gap-2">
+                      {item?.name.split(".").pop() === "xls" && <ShortXcel />}
+                      {item?.name.split(".").pop() === "doc" && <ShortRich />}
+                      {item?.name.split(".").pop() === "jpg" && <Gallery />}
+                      {item?.name.split(".").pop() === "pdf" && (
+                        <img
+                          src="/square.png"
+                          className={"w-3 h-3 md:w-[18px] md:h-5"}
+                        />
+                      )}
+                      <p className="text-[10px] md:text-[12px] font-sans flex flex-col">
+                        <span className="whitespace-nowrap">
+                          {item?.name.length > 12
+                            ? `${item.name.slice(0, 12)}...${item.name
+                                .split(".")
+                                .pop()}`
+                            : item.name}
+                        </span>
+                        <span className="text-[#00000069]">
+                          {item?.name.split(".").pop()} .{" "}
+                          {formatFileSize(item?.size)}
+                        </span>
+                      </p>
+                    </div>
+                    <span
+                      onClick={(event) => handlePopupToggle({ index, event })}
                       className="cursor-pointer relative"
                     >
                       <ThreeDots />
-                  {activeIndex === index && (
-                    <div  className="absolute w-auto right-3 top-3 bg-white rounded-lg shadow-lg p-3 border z-50">
-                      <CustomPopup
-                        file={item}
-                        metaToggle={metaToggle}
-                        setMetaToggle={setMetaToggle}
-                        handleDeleteClick={() => handleDeleteClick(item.id)}
-                        handleDownloadClick={() => handleDownloadClick(item.id)}
-                        handleMetaData={() => handleMetaData(item.metadata)}
-                        handleStarClick={() =>
-                          handleStarClick(item.name, item.id)
-                        }
-                        handleUnStarClick={() =>
-                          handleUnStarClick(item.name, item.id)
-                        }
+                    </span>
+
+                    {fileData && (
+                      <FileViewer
+                        fileUrl={fileData?.fileUrl}
+                        fileType={fileData.fileType as "excel" | "word" | "pdf"}
+                        fileName={fileData?.fileName}
                       />
-                    </div>
-                  )}   </span>
-                 
-                  {fileData && (
-                    <FileViewer
-                      fileUrl={fileData?.fileUrl}
-                      fileType={fileData.fileType as "excel" | "word" | "pdf"}
-                      fileName={fileData?.fileName}
+                    )}
+                  </div>
+                  {metaToggle && (
+                    <MetaData
+                      meta={item?.metadata}
+                      name={item?.name}
+                      setMetaToggle={setMetaToggle}
+                      id={item?.id}
                     />
                   )}
                 </div>
+                {activeIndex === index && (
+                  <div className="absolute w-auto right-6 -bottom-[164px]  bg-white rounded-lg shadow-lg p-3 border z-50">
+                    <CustomPopup
+                      file={item}
+                      metaToggle={metaToggle}
+                      setActiveIndex={setActiveIndex}
+                      setMetaToggle={setMetaToggle}
+                      handleDeleteClick={() => handleDeleteClick(item.id)}
+                      handleDownloadClick={() => handleDownloadClick(item.id)}
+                      handleMetaData={() => handleMetaData(item.metadata)}
+                      handleStarClick={() =>
+                        handleStarClick(item.name, item.id)
+                      }
+                      handleUnStarClick={() =>
+                        handleUnStarClick(item.name, item.id)
+                      }
+                    />
+                  </div>
+                )}
               </div>
             ))}
         </div>
@@ -516,12 +535,20 @@ function FileGallery({ showStarredOnly }: any) {
                       />
                     </div>
                   )}
+                  {metaToggle && (
+                    <MetaData
+                      meta={file?.metadata}
+                      name={file?.name}
+                      setMetaToggle={setMetaToggle}
+                      id={file?.id}
+                    />
+                  )}
                 </div>
               ))}
           </div>
           {parentFolder?.files
             .filter((item) => (showStarredOnly ? item.is_starred : true))
-            .map((file,index) => (
+            .map((file, index) => (
               <div
                 onClick={() => handleFileOpen(file.id)}
                 className="w-full h-[74px] my-2  rounded-tl-[12px] rounded-tr-[12px] bg-[#FFFFFF] md:hidden flex flex-col items-center"
@@ -605,11 +632,11 @@ function FileGallery({ showStarredOnly }: any) {
                     )}
                   </p>
                   <div
-                      onClick={(event) => handlePopupToggle({ index, event })}
-                      className="cursor-pointer relative border w-[10%] h-full flex items-center justify-start px-4"
-                    >
-                      <ThreeDots />
-                    </div>
+                    onClick={(event) => handlePopupToggle({ index, event })}
+                    className="cursor-pointer relative border w-[10%] h-full flex items-center justify-start px-4"
+                  >
+                    <ThreeDots />
+                  </div>
                   {activeIndex === index && (
                     <div className="absolute w-auto right-0 top-8 bg-white rounded-lg shadow-lg p-3 border z-50">
                       <CustomPopup

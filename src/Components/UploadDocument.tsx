@@ -14,7 +14,7 @@ function UploadDocument() {
   const [dragging, setDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  // const { post, reset } = useApi("uploadFile");
+
   const res = useSelector((state: RootState) => state.api.calls?.uploadFile);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -26,7 +26,7 @@ function UploadDocument() {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
-      setFile(selectedFile); // Store the file in state
+      setFile(selectedFile); 
     }
   };
 
@@ -45,8 +45,7 @@ function UploadDocument() {
 
     const droppedFile = event.dataTransfer.files[0];
     if (droppedFile) {
-      setFile(droppedFile); // Store the dropped file in state
-      // console.log("Dropped file:", droppedFile);
+      setFile(droppedFile); 
     }
   };
 

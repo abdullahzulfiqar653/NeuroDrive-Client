@@ -12,20 +12,19 @@ import ReNameFile from "./ReNameFile";
 
 const CustomPopup = ({
   file,
-  metaToggle,
+  setActiveIndex,
   handleUnStarClick,
   handleStarClick,
   handleDownloadClick,
   handleMetaData,
   handleDeleteClick,
-  setMetaToggle
 }: any) => {
   const [toggleReName, settoggleReName] = useState(false);
 
   return (
    
 
-        <div className="flex flex-col gap-2 font-sans text-[14px]">
+        <div className="flex flex-col gap-2 font-sans text-[14px] z-50">
           <div className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer">
             <NoPerson className="w-4 h-4" /> Share
           </div>
@@ -45,13 +44,13 @@ const CustomPopup = ({
             </div>
           )}
           <div
-            onClick={() => settoggleReName(true)}
+            onClick={() => {settoggleReName(true)}}
             className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer"
           >
             <Rename /> Rename
           </div>
           {toggleReName && (
-            <ReNameFile fileId={file?.id} settoggleReName={settoggleReName} />
+            <ReNameFile fileId={file?.id} settoggleReName={settoggleReName} setActiveIndex={setActiveIndex}/>
           )}
           <div
             onClick={handleDownloadClick}
@@ -65,14 +64,6 @@ const CustomPopup = ({
           >
             <CleanMeta /> Clean meta data
           </div>
-          {metaToggle && (
-            <MetaData
-              meta={file?.metadata}
-              name={file?.name}
-              setMetaToggle={setMetaToggle}
-              id={file?.id}
-            />
-          )}
           <div
             onClick={handleDeleteClick}
             className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer"
