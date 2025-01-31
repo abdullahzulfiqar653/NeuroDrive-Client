@@ -14,6 +14,7 @@ import { useAuth } from "../AuthContext";
 import useApi from "../Hooks/usiApi";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../app/store";
+import { GoLock } from "react-icons/go";
 import { toast } from "react-toastify";
 import { fetchData, postData } from "../features/ApiSlice";
 import { getDirectory } from "../features/directories/folderSlice";
@@ -213,11 +214,18 @@ function FileGallery({ showStarredOnly }: any) {
                     (item?.content_type &&
                       item.content_type.includes("image/")) ? (
                       <>
-                        <Gallery
-                          className={
-                            "w-[32px] h-[41px] md:w-[77px] md:h-[79px]"
-                          }
-                        />
+                        <div className="">
+                          <Gallery
+                            className={`w-[32px] h-[41px] md:w-[77px] md:h-[79px] ${
+                              item?.is_password_protected ? "blur-sm" : ""
+                            }`}
+                          />
+                          {item?.is_password_protected && (
+                            <p className="absolute top-14 right-[75px]">
+                              <GoLock className="text-6xl" />
+                            </p>
+                          )}
+                        </div>
                       </>
                     ) : null}
                     {["xls", "xlsx"].includes(
@@ -229,30 +237,56 @@ function FileGallery({ showStarredOnly }: any) {
                       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     ) ? (
                       <>
-                        <Xcel
-                          className={
-                            "w-[32px] h-[41px] md:w-[77px] md:h-[79px]"
-                          }
-                        />
+                        <div className="">
+                          <Xcel
+                            className={`${
+                              item?.is_password_protected ? "blur-sm" : ""
+                            }w-[32px] h-[41px] md:w-[77px] md:h-[79px]`}
+                          />
+                          {item?.is_password_protected && (
+                            <p className="absolute top-14 right-[75px]">
+                              <GoLock className="text-6xl" />
+                            </p>
+                          )}
+                        </div>
                       </>
                     ) : null}
 
                     {item?.name.split(".").pop() === "txt" ||
                     (item?.content_type &&
                       item.content_type.includes("text/plain")) ? (
-                      <img
-                        src="/doc.svg"
-                        className={"w-[40px] h-[40px] md:w-[77px] md:h-[77px]"}
-                      />
+                      <div className="">
+                        {" "}
+                        <img
+                          src="/doc.svg"
+                          className={`w-[40px] h-[40px] md:w-[77px] md:h-[77px]${
+                            item?.is_password_protected ? "blur-sm" : ""
+                          }`}
+                        />
+                        {item?.is_password_protected && (
+                          <p className="absolute top-14 right-[75px]">
+                            <GoLock className="text-6xl" />
+                          </p>
+                        )}
+                      </div>
                     ) : null}
 
                     {item?.name.split(".").pop() === "pdf" ||
                     (item?.content_type &&
                       item.content_type.includes("application/pdf")) ? (
-                      <img
-                        src="/pdf.png"
-                        className={"w-[32px] h-[41px] md:w-[77px] md:h-[79px]"}
-                      />
+                      <div className="">
+                        <img
+                          src="/pdf.png"
+                          className={`w-[32px] h-[41px] md:w-[77px] md:h-[79px]${
+                            item?.is_password_protected ? "blur-sm" : ""
+                          }`}
+                        />
+                        {item?.is_password_protected && (
+                          <p className="absolute top-14 right-[75px]">
+                            <GoLock className="text-6xl" />
+                          </p>
+                        )}
+                      </div>
                     ) : null}
 
                     {["doc", "docx"].includes(
@@ -263,10 +297,20 @@ function FileGallery({ showStarredOnly }: any) {
                         item.content_type.includes(
                           "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                         ))) ? (
-                      <img
-                        src="/rich.png"
-                        className={"w-[40px] h-[40px] md:w-[77px] md:h-[77px]"}
-                      />
+                      <div className="">
+                        {" "}
+                        <img
+                          src="/rich.png"
+                          className={`w-[40px] h-[40px] md:w-[77px] md:h-[77px] ${
+                            item?.is_password_protected ? "blur-sm" : ""
+                          }`}
+                        />
+                        {item?.is_password_protected && (
+                          <p className="absolute top-14 right-[75px]">
+                            <GoLock className="text-6xl" />
+                          </p>
+                        )}
+                      </div>
                     ) : null}
                   </div>
                   <div className="flex items-center justify-between mt-1 px-2">
@@ -282,8 +326,8 @@ function FileGallery({ showStarredOnly }: any) {
                       )}
                       <p className="text-[10px] md:text-[12px] font-sans flex flex-col">
                         <span className="whitespace-nowrap">
-                          {item?.name.length > 12
-                            ? `${item.name.slice(0, 12)}...${item.name
+                          {item?.name.length > 10
+                            ? `${item.name.slice(0, 10)}...${item.name
                                 .split(".")
                                 .pop()}`
                             : item.name}

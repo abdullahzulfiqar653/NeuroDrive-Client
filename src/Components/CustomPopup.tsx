@@ -7,11 +7,12 @@ import {
   Rename,
   Starred,
   Trash,
+  Lock,
 } from "../assets/Icons";
 import MetaData from "./MetaData";
 import ReNameFile from "./ReNameFile";
 import { toast } from "react-toastify";
-import EncryptFile from "./EncryptFile";
+import SetPassword from "./SetPassword";
 
 const CustomPopup = ({
   file,
@@ -107,14 +108,23 @@ const CustomPopup = ({
       </div>
       <div
         onClick={() => {
-          settogglePassword(true);
+          // settogglePassword(true);
         }}
         className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer px-1 hover:shadow-md"
       >
         <Encrypt /> Encrypt
       </div>
+
+      <div
+        onClick={() => {
+          settogglePassword(true);
+        }}
+        className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer px-1 hover:shadow-md"
+      >
+        <Lock /> Set Password
+      </div>
       {togglePassword && (
-        <EncryptFile
+        <SetPassword
           fileId={file?.id}
           settogglePassword={settogglePassword}
           setActiveIndex={setActiveIndex}

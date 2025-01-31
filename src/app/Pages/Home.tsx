@@ -58,7 +58,6 @@ function Home() {
   useEffect(() => {
     profileFetch("/user/profile/");
   }, [reGetProfile]);
-  console.log(data);
   const size = data?.response?.data?.features_data;
   setUsed(size?.total_size);
   setTotal_size(size?.size_allowed);

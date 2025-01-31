@@ -37,7 +37,7 @@ const PDF = ({ fileUrl, fileName }: any) => {
           const blob = await viewerRef.current.saveAsBlob();
           const formData = new FormData();
           formData.append("file", blob, fileName);
-          const response = await axios.post("/api/upload-pdf", formData, {
+           await axios.post("/api/upload-pdf", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
