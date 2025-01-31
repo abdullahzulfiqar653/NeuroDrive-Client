@@ -244,15 +244,17 @@ function RegisterSeeds() {
   };
 
   return (
-    <div className="relative flex  justify-between">
-      <div className="absolute flex items-center justify-center -left-[9vw] right-0 top-[8vh]">
-        <p className="text-[14px] font-sans">
+    <div className="relative bg-white flex md:flex-row flex-col w-full h-[100vh] justify-between">
+
+      <div className="absolute hidden md:flex items-center justify-center -left-[9vw] right-0 top-[8vh]">
+  <p className="text-[14px] font-sans">
           Need Help?{" "}
           <p className="text-[#d8d8d8] whitespace-nowrap">Ask any question</p>
         </p>
         <img src="/img2.png" alt="" className="w-20 h-20" />
       </div>
-      <div className="flex flex-col w-[40vw] gap-3 p-4">
+      <div className="flex flex-col w-[100vw] md:w-[40vw] p-4">
+
         <span className="flex gap-2 md:pr-7 items-center md:border-r border-white">
           <img src="/logo.svg" alt="" className="w-7 h-6" />
           <p className="font-chakra text-[16px] md:text-[22px] text-black">
@@ -263,11 +265,11 @@ function RegisterSeeds() {
           <div className="flex flex-col items-center gap-1">
             <img src="seeds.svg" alt="" className="w-17 h-17" />
             <h1 className="text-[#202343] text-[38px]">Your Seed</h1>
-            <p className="text-[#202343] text-[16px] font-sans">
-              Don’t have any account?
+            <p className="text-[#c23939] text-[16px] font-sans">
+            Already have an acoount 
               <span
                 onClick={() => navigate("/login")}
-                className="text-blue-600 cursor-pointer"
+                className="text-blue-600 cursor-pointer m-2"
               >
                 Login here
               </span>
@@ -370,7 +372,7 @@ function RegisterSeeds() {
           height: "100vh",
           width: "50vw",
         }}
-        className="rounded-[22px] w-[50%] overflow-hidden "
+        className="rounded-[22px] w-full h-[50vh]  md:w-[50%] overflow-hidden  "
       >
         <img
           src="/regis-bg.svg"
