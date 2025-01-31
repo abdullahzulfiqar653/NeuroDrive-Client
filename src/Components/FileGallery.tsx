@@ -43,6 +43,24 @@ function FileGallery({ showStarredOnly }: any) {
     setActiveIndex((prev) => (prev === index ? null : index));
   };
 
+  const popupRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        popupRef.current &&
+        !popupRef.current.contains(event.target as Node)
+      ) {
+        setActiveIndex(null); // Close the popup
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const formatFileSize = (sizeInBytes: number) => {
     if (sizeInBytes < 1024 ** 2) {
       return `${(sizeInBytes / 1024).toFixed(2)} KB`;
@@ -327,9 +345,11 @@ function FileGallery({ showStarredOnly }: any) {
                       <p className="text-[10px] md:text-[12px] font-sans flex flex-col">
                         <span className="whitespace-nowrap">
                           {item?.name.length > 10
-                            ? `${item.name.slice(0, 10)}...${item.name
-                                .split(".")
-                                .pop()}`
+                            ? item.name.includes(".")
+                              ? `${item.name.slice(0, 10)}...${item.name
+                                  .split(".")
+                                  .pop()}`
+                              : `${item.name.slice(0, 10)}...`
                             : item.name}
                         </span>
                         <span className="text-[#00000069]">
@@ -363,7 +383,10 @@ function FileGallery({ showStarredOnly }: any) {
                   )} */}
                 </div>
                 {activeIndex === index && (
-                  <div className="absolute w-auto right-6 -bottom-[164px]  bg-white rounded-lg shadow-lg p-3 border z-50">
+                  <div
+                    ref={popupRef}
+                    className="absolute w-auto right-6 -bottom-[164px]  bg-white rounded-lg shadow-lg p-3 border z-50"
+                  >
                     <CustomPopup
                       file={item}
                       id={item?.id}
@@ -584,14 +607,6 @@ function FileGallery({ showStarredOnly }: any) {
                       />
                     </div>
                   )}
-                  {/* {metaToggle && (
-                    <MetaData
-                      meta={file?.metadata}
-                      name={file?.name}
-                      setMetaToggle={setMetaToggle}
-                      id={file?.id}
-                    />
-                  )} */}
                 </div>
               ))}
           </div>
@@ -684,7 +699,10 @@ function FileGallery({ showStarredOnly }: any) {
                     )}
                   </p>
                   <div
-                    onClick={(event) => handlePopupToggle({ index, event })}
+                    onClick={(event) => {
+                      handlePopupToggle({ index, event }),
+                        event.stopPropagation();
+                    }}
                     className="cursor-pointer border w-[10%] h-full flex items-center justify-start px-4"
                   >
                     <ThreeDots />
