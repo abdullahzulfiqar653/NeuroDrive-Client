@@ -8,41 +8,85 @@ import { postData } from "../features/ApiSlice";
 import { getDirectory } from "../features/directories/folderSlice";
 
 type ReNameFileProps = {
-  fileId: any;
   setActiveIndex: any;
-  settogglePassword: React.Dispatch<React.SetStateAction<boolean>>;
+  protectedFile: any;
+  setProtectedFile: React.Dispatch<
+    React.SetStateAction<{ isActive: boolean; workType: string }>
+  >;
 };
 
-function SetPassword({
-  fileId,
-  settogglePassword,
+function ProtectedPass({
   setActiveIndex,
+  protectedFile,
+  setProtectedFile,
 }: ReNameFileProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [value, setValue] = useState("");
 
   const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
-  const data = useSelector((state: RootState) => state.api.calls?.setPassword);
+  const fileId = localStorage.getItem("fileId") ?? "";
+  const data = useSelector(
+    (state: RootState) => state.api.calls?.protectedFile
+  );
+  console.log(data);
 
   const handleSubmit = async () => {
-    const paylod = {
-      password: value,
-    };
     try {
-      await dispatch(
-        postData({
-          url: `files/${fileId}/`,
-          payload: paylod,
-          method: "patch",
-          key: "setPassword",
-        })
-      ).unwrap();
-      settogglePassword(false);
+      const paylod = {
+        password: value,
+      };
+      if (protectedFile.workType === "download") {
+        const response = await dispatch(
+          postData({
+            url: `files/password-protected/${fileId}/`,
+            payload: paylod,
+            method: "post",
+            key: "DprotectedFile",
+          })
+        ).unwrap();
+        if (response && response.data) {
+          const { url } = response.data;
+          const link = document.createElement("a");
+          link.href = url;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      }
+      if (protectedFile.downloadOpen === "downloadOpen") {
+        const result = await dispatch(
+          postData({
+            url: `files/password-protected/${fileId}/`,
+            payload: paylod,
+            method: "post",
+            key: "OprotectedFile",
+          })
+        ).unwrap();
+        if (result && result.data) {
+          const { content_type, url, name } = result.data;
+          const allowedExtensions = ["png", "jpg", "jpeg"];
+          const fileExtension = content_type?.split("/")?.pop()?.toLowerCase();
+          if (!fileExtension) {
+            alert("Invalid file type. Unable to process.");
+            return;
+          }
+          if (allowedExtensions.includes(fileExtension)) {
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = name;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            toast.success("Image Downloaded Successfully");
+          }
+        }
+      }
+      setProtectedFile((prev) => ({ ...prev, isActive: false }));
       setActiveIndex(null);
       dispatch(getDirectory(parentFolderId));
-      toast.success("Password is set to file");
+      //   toast.success("Password matched");
     } catch (error) {
-      toast.warn("Unable to encryot file");
+      toast.warn("Wrong Password");
       console.log("error", error);
     }
   };
@@ -52,7 +96,7 @@ function SetPassword({
       <div className="relative py-11 w-[59vw] px-3 md:px-4 flex flex-col items-center justify-center rounded-lg bg-[#ffffff]">
         <span
           onClick={() => {
-            settogglePassword(false);
+            setProtectedFile((prev) => ({ ...prev, isActive: false }));
           }}
           className="absolute right-4 top-4 cursor-pointer"
         >
@@ -101,4 +145,4 @@ function SetPassword({
   );
 }
 
-export default SetPassword;
+export default ProtectedPass;
