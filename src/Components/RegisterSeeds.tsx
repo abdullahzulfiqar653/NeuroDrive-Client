@@ -67,10 +67,10 @@ function RegisterSeeds() {
         </span>
         <div className="flex flex-col items-center justify-center h-full w-full gap-[5vh]">
           <div className="flex flex-col items-center gap-1">
-            <img src="seeds.svg" alt="" className="w-17 h-17" />
+            <img src="seeds.svg" alt="" className="w-17 h-17 md:w-17 md:h-17" />
             <h1 className="text-[#202343] text-[38px]">Your Seed</h1>
-            <p className="text-[#202343] text-[16px] font-sans">
-              Already have an acoount
+            <p className="text-[#202343] text-[16px] font-sans m-2">
+              Already have an account
               <span
                 onClick={() => navigate("/login")}
                 className="text-blue-600 cursor-pointer"
