@@ -259,7 +259,7 @@ function FileGallery({ showStarredOnly }: any) {
                               }`}
                             />
                             {item?.is_password_protected && (
-                              <p className="absolute top-14 right-[75px]">
+                              <p className="absolute top-3 right-6 md:top-14 md:right-[75px]">
                                 <GoLock className="text-6xl" />
                               </p>
                             )}
@@ -284,7 +284,7 @@ function FileGallery({ showStarredOnly }: any) {
                               }w-[32px] h-[41px] md:w-[77px] md:h-[79px]`}
                             />
                             {item?.is_password_protected && (
-                              <p className="absolute top-14 right-[75px]">
+                              <p className="absolute top-3 right-6 md:top-14 md:right-[75px]">
                                 <GoLock className="text-6xl" />
                               </p>
                             )}
@@ -304,7 +304,7 @@ function FileGallery({ showStarredOnly }: any) {
                             }`}
                           />
                           {item?.is_password_protected && (
-                            <p className="absolute top-14 right-[75px]">
+                            <p className="absolute top-3 right-6 md:top-14 md:right-[75px]">
                               <GoLock className="text-6xl" />
                             </p>
                           )}
@@ -322,7 +322,7 @@ function FileGallery({ showStarredOnly }: any) {
                             }`}
                           />
                           {item?.is_password_protected && (
-                            <p className="absolute top-14 right-[75px]">
+                            <p className="absolute top-3 right-6 md:top-14 md:right-[75px]">
                               <GoLock className="text-6xl" />
                             </p>
                           )}
@@ -346,7 +346,7 @@ function FileGallery({ showStarredOnly }: any) {
                             }`}
                           />
                           {item?.is_password_protected && (
-                            <p className="absolute top-14 right-[75px]">
+                            <p className="absolute top-3 right-6 md:top-14 md:right-[75px]">
                               <GoLock className="text-6xl" />
                             </p>
                           )}
@@ -495,7 +495,23 @@ function FileGallery({ showStarredOnly }: any) {
                           (file.content_type.includes("excel") ||
                             file.content_type.includes("spreadsheet"))) ? (
                           <>
-                            <Xcel className="w-4 h-4" />
+                            <div className="">
+                              {" "}
+                              <p
+                                className={`${
+                                  file?.is_password_protected
+                                    ? "blur-[2px]"
+                                    : ""
+                                }`}
+                              >
+                                <Xcel className={`w-4 h-4`} />
+                              </p>
+                              {file?.is_password_protected && (
+                                <p className="absolute top-5">
+                                  <GoLock />
+                                </p>
+                              )}
+                            </div>
                             <p className="whitespace-nowrap">
                               {file?.name.length > 10
                                 ? file.name.includes(".")
@@ -517,7 +533,26 @@ function FileGallery({ showStarredOnly }: any) {
                               "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                             ))) ? (
                           <>
-                            <ShortRich />
+                            <div className="relative">
+                              <p
+                                className={`${
+                                  file?.is_password_protected
+                                    ? "blur-[2px]"
+                                    : ""
+                                }`}
+                              >
+                                {" "}
+                                <ShortRich />
+                              </p>
+                              <p>
+                                {" "}
+                                {file?.is_password_protected && (
+                                  <p className="absolute top-1 right-[2px]">
+                                    <GoLock />
+                                  </p>
+                                )}
+                              </p>
+                            </div>
                             <p className="whitespace-nowrap">
                               {file?.name.length > 10
                                 ? file.name.includes(".")
@@ -534,7 +569,29 @@ function FileGallery({ showStarredOnly }: any) {
                         (file?.content_type &&
                           file.content_type.includes("text/plain")) ? (
                           <>
-                            <img src="rich.png" alt="" className="w-4 h-4" />
+                            <div className="">
+                              <p
+                                className={`${
+                                  file?.is_password_protected
+                                    ? "blur-[2px]"
+                                    : ""
+                                }`}
+                              >
+                                <img
+                                  src="rich.png"
+                                  alt=""
+                                  className="w-4 h-4"
+                                />
+                              </p>
+                              <p>
+                                {" "}
+                                {file?.is_password_protected && (
+                                  <p className="absolute top-5">
+                                    <GoLock />
+                                  </p>
+                                )}
+                              </p>
+                            </div>
                             <p className="whitespace-nowrap">
                               {file?.name.length > 10
                                 ? file.name.includes(".")
@@ -555,7 +612,26 @@ function FileGallery({ showStarredOnly }: any) {
                             file.content_type.includes("image/png"))) ? (
                           <>
                             <div>
-                              <Gallery className="w-3 h-3 md:w-4 md:h-4" />
+                              <div className="">
+                                <p
+                                  className={`${
+                                    file?.is_password_protected
+                                      ? "blur-[2px]"
+                                      : ""
+                                  }`}
+                                >
+                                  {" "}
+                                  <Gallery className="w-3 h-3 md:w-4 md:h-4" />
+                                </p>
+                                <p>
+                                  {" "}
+                                  {file?.is_password_protected && (
+                                    <p className="absolute top-5">
+                                      <GoLock />
+                                    </p>
+                                  )}
+                                </p>
+                              </div>
                             </div>
                             <p className="whitespace-nowrap">
                               {file?.name.length > 10
@@ -571,10 +647,28 @@ function FileGallery({ showStarredOnly }: any) {
 
                         {file?.name.split(".").pop() === "pdf" && (
                           <>
-                            <img
-                              src="/pdf.png"
-                              className="w-3 h-3 md:w-4 md:h-4"
-                            />
+                            <div className="">
+                              <p
+                                className={`${
+                                  file?.is_password_protected
+                                    ? "blur-[2px]"
+                                    : ""
+                                }`}
+                              >
+                                <img
+                                  src="/pdf.png"
+                                  className="w-3 h-3 md:w-4 md:h-4"
+                                />
+                              </p>
+                              <p>
+                                {" "}
+                                {file?.is_password_protected && (
+                                  <p className="absolute top-5">
+                                    <GoLock />
+                                  </p>
+                                )}
+                              </p>
+                            </div>
                             <p className="whitespace-nowrap">
                               {file?.name.length > 10
                                 ? file.name.includes(".")
