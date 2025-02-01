@@ -462,18 +462,17 @@ function FileGallery({ showStarredOnly }: any) {
                   More
                 </p>
               </div>
-
               {parentFolder?.files
                 .filter((item) => (showStarredOnly ? item?.is_starred : true))
                 .map((file, index) => (
                   <>
-                    <div className="relative hidden md:flex">
+                    <div className="relative">
                       <div
                         key={index}
                         onClick={() =>
                           handleFileOpen(file.id, file.is_password_protected)
                         }
-                        className="overflow-hidden cursor-pointer bg-white hover:bg-[#f2f3f3] w-[full] text-[14px] h-[57px] font-sans flex justify-between items-center"
+                        className="overflow-hidden cursor-pointer bg-white hover:bg-[#f2f3f3] w-[full] text-[14px] h-[57px] font-sans hidden md:flex justify-between items-center"
                       >
                         <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
                           <span
@@ -574,41 +573,12 @@ function FileGallery({ showStarredOnly }: any) {
                           <ThreeDots />
                         </div>
                       </div>
-                      {activeIndex === index && (
-                        <div className="absolute w-auto right-0 top-8 bg-white rounded-lg shadow-lg p-3 border z-50">
-                          <CustomPopup
-                            file={file}
-                            id={file?.id}
-                            name={file?.name}
-                            meta={file?.metadata}
-                            metaToggle={metaToggle}
-                            setMetaToggle={setMetaToggle}
-                            setActiveIndex={setActiveIndex}
-                            handleDeleteClick={() => handleDeleteClick(file.id)}
-                            handleDownloadClick={() =>
-                              handleDownloadClick(
-                                file.id,
-                                file.is_password_protected
-                              )
-                            }
-                            // handleMetaData={() => handleMetaData(item.metadata)}
-                            handleStarClick={() =>
-                              handleStarClick(file.name, file.id)
-                            }
-                            handleUnStarClick={() =>
-                              handleUnStarClick(file.name, file.id)
-                            }
-                          />
-                        </div>
-                      )}
-                    </div>
-                    <div
-                      
-                      className="md:hidden relative flex flex-col items-center"
-                    >
-                      <div onClick={() =>
-                        handleFileOpen(file.id, file.is_password_protected)
-                      } className="w-full h-[74px] my-2  rounded-tl-[12px] rounded-tr-[12px] bg-[#FFFFFF]  ">
+                      <div
+                        onClick={() =>
+                          handleFileOpen(file.id, file.is_password_protected)
+                        }
+                        className="w-full h-[74px] my-2 flex flex-col justify-center items-center  md:hidden  rounded-tl-[12px] rounded-tr-[12px] bg-[#FFFFFF]  "
+                      >
                         <div className="h-[50%] w-full bg-[#F1F5FA] rounded-tl-[12px] rounded-tr-[12px] px-2 pr-4 flex justify-between items-center">
                           <p className="flex items-center font-sans text-[11px]">
                             <span
@@ -726,11 +696,6 @@ function FileGallery({ showStarredOnly }: any) {
                   </>
                 ))}
             </div>
-            {/* {parentFolder?.files
-              .filter((item) => (showStarredOnly ? item.is_starred : true))
-              .map((file, index) => (
-            
-              ))} */}
           </div>
         )}
       </div>
