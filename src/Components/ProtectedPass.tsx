@@ -10,6 +10,13 @@ import { getDirectory } from "../features/directories/folderSlice";
 type ReNameFileProps = {
   setActiveIndex: any;
   protectedFile: any;
+  setFileData: React.Dispatch<
+    React.SetStateAction<{
+      fileUrl: string;
+      fileType: "excel" | "word" | "pdf" | "unknown";
+      fileName: string;
+    } | null>
+  >;
   setProtectedFile: React.Dispatch<
     React.SetStateAction<{ isActive: boolean; workType: string }>
   >;
@@ -19,6 +26,7 @@ function ProtectedPass({
   setActiveIndex,
   protectedFile,
   setProtectedFile,
+  setFileData,
 }: ReNameFileProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [value, setValue] = useState("");
@@ -45,15 +53,18 @@ function ProtectedPass({
           })
         ).unwrap();
         if (response && response.data) {
-          const { url } = response.data;
+          const { url, name } = response.data;
           const link = document.createElement("a");
           link.href = url;
+          link.download = name;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
+          toast.success("file Downloaded Successfully");
+          setActiveIndex(null);
         }
       }
-      if (protectedFile.downloadOpen === "downloadOpen") {
+      if (protectedFile.workType === "downloadOpen") {
         const result = await dispatch(
           postData({
             url: `files/password-protected/${fileId}/`,
@@ -78,6 +89,12 @@ function ProtectedPass({
             link.click();
             document.body.removeChild(link);
             toast.success("Image Downloaded Successfully");
+          } else {
+            setFileData({
+              fileUrl: url,
+              fileType: mapContentTypeToFileType(content_type),
+              fileName: name,
+            });
           }
         }
       }
@@ -146,3 +163,23 @@ function ProtectedPass({
 }
 
 export default ProtectedPass;
+
+function mapContentTypeToFileType(
+  contentType: string
+): "excel" | "word" | "pdf" | "unknown" {
+  if (contentType.includes("pdf")) {
+    return "pdf";
+  } else if (
+    contentType.includes("msword") ||
+    contentType.includes("wordprocessingml")
+  ) {
+    return "word";
+  } else if (
+    contentType.includes("excel") ||
+    contentType.includes("spreadsheetml")
+  ) {
+    return "excel";
+  } else {
+    return "unknown";
+  }
+}

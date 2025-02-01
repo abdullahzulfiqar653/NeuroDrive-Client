@@ -13,6 +13,7 @@ import MetaData from "./MetaData";
 import ReNameFile from "./ReNameFile";
 import { toast } from "react-toastify";
 import SetPassword from "./SetPassword";
+import Quantumography from "./Quantumography";
 
 const CustomPopup = ({
   file,
@@ -27,6 +28,7 @@ const CustomPopup = ({
 }: any) => {
   const [toggleReName, settoggleReName] = useState(false);
   const [togglePassword, settogglePassword] = useState(false);
+  const [toggleQuantumography, setToggleQuantumography] = useState(false);
   const [metaToggle, setMetaToggle] = useState<boolean>(false);
 
   const handleMetaData = (meta: any) => {
@@ -43,8 +45,8 @@ const CustomPopup = ({
   };
 
   return (
-    <div className="flex flex-col gap-2 font-sans text-[12px] sm:text-[14px] z-50">
-      <div className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer rounded sm:px-1 hover:shadow-md">
+    <div className="flex flex-col gap-2 font-sans text-[14px] z-50">
+      <div className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer rounded px-1 hover:shadow-md">
         <NoPerson className="w-4 h-4" /> Share
       </div>
       {file?.is_starred ? (
@@ -57,7 +59,7 @@ const CustomPopup = ({
       ) : (
         <div
           onClick={handleStarClick}
-          className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer sm:px-1 hover:shadow-md"
+          className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer px-1 hover:shadow-md"
         >
           <Starred className="w-4 h-4" /> Starred
         </div>
@@ -66,7 +68,7 @@ const CustomPopup = ({
         onClick={() => {
           settoggleReName(true);
         }}
-        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer sm:px-1 hover:shadow-md"
+        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer px-1 hover:shadow-md"
       >
         <Rename /> Rename
       </div>
@@ -79,7 +81,7 @@ const CustomPopup = ({
       )}
       <div
         onClick={handleDownloadClick}
-        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer sm:px-1 hover:shadow-md"
+        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer px-1 hover:shadow-md"
       >
         <Download /> Download
       </div>
@@ -87,7 +89,7 @@ const CustomPopup = ({
         onClick={() => {
           handleMetaData(meta);
         }}
-        className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer sm:px-1 hover:shadow-md"
+        className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer px-1 hover:shadow-md"
       >
         <CleanMeta /> Clean meta data
       </div>
@@ -102,18 +104,21 @@ const CustomPopup = ({
       )}
       <div
         onClick={handleDeleteClick}
-        className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer sm:px-1 hover:shadow-md"
+        className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer px-1 hover:shadow-md"
       >
         <Trash className="w-4 h-4" /> Move to Trash
       </div>
       <div
         onClick={() => {
-          // settogglePassword(true);
+          setToggleQuantumography(true);
         }}
-        className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer sm:px-1 hover:shadow-md"
+        className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer px-1 hover:shadow-md"
       >
-        <Encrypt className={"w-4 h-4"}/> Encrypt
+        <Encrypt /> Encrypt
       </div>
+      {toggleQuantumography && (
+        <Quantumography setToggleQuantumography={setToggleQuantumography} />
+      )}
 
       <div
         onClick={() => {

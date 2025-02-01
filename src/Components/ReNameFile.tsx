@@ -60,7 +60,7 @@ function ReNameFile({
         </span>
 
         <div className="flex flex-col items-start w-full justify-start text-[12px] md:text-[14px] text-black">
-          <p className="font-sans text-[16px] sm:text-2xl font-bold mb-3">
+          <p className="font-sans text-2xl font-bold mb-3">
             Enter new file name
           </p>
           <div className="h-[36px] mb-4 w-[97%] md:h-[54px] bg-[#ECECEC] rounded-md px-3">
