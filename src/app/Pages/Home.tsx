@@ -318,7 +318,7 @@ function LeftBar() {
         </div>
         <Line className={"mt-2 min-w-[230px] w-full"} />
       </div>
-      <div className="flex flex-col items-center gap-2 my-2 h-[30vh] overflow-auto">
+      <div className="flex flex-col items-center gap-2 my-2 sm:h-[30vh] overflow-auto">
         <div className="flex items-center justify-between w-full px-2 pb-2">
           <h1 className="flex text-[14px] text-[#9F9F9F] gap-1 items-center">
             <span>

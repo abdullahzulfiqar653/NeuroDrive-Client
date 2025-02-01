@@ -441,8 +441,8 @@ function FileGallery({ showStarredOnly }: any) {
           </div>
         ) : (
           <div className="container md:rounded-xl md:border w-full h-full my-4">
-            <div className="h-full rounded-xl bg-[#F1F5FA] w-[full] hidden md:flex flex-col ">
-              <div className="overflow-hidden rounded-xl  bg-[#F1F5FA] w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
+            <div className="h-full rounded-xl bg-[rgb(241,245,250)] w-[full] flex flex-col ">
+              <div className="overflow-hidden rounded-xl hidden  bg-[#F1F5FA] w-[full] text-[14px] h-[57px]  font-sans md:flex  justify-between items-center">
                 <p className="border w-[30%] gap-2 h-full flex items-center justify-start px-4">
                   <span
                     onClick={() => setRadioClick((prev) => !prev)}
@@ -466,326 +466,271 @@ function FileGallery({ showStarredOnly }: any) {
               {parentFolder?.files
                 .filter((item) => (showStarredOnly ? item?.is_starred : true))
                 .map((file, index) => (
-                  <div className="relative">
-                    <div
-                      key={index}
-                      onClick={() =>
-                        handleFileOpen(file.id, file.is_password_protected)
-                      }
-                      className="overflow-hidden cursor-pointer bg-white hover:bg-[#f2f3f3] w-[full] text-[14px] h-[57px] font-sans flex justify-between items-center"
-                    >
-                      <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
-                        <span
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleClick(index);
-                          }}
-                          className="w-auto text-start mr-4 cursor-pointer"
-                        >
-                          <Circle
-                            color={isSelected === index ? "#2676ff" : "none"}
-                          />
-                        </span>
-
-                        {/* Check file extension and content type */}
-                        {["xls", "xlsx"].includes(
-                          file?.name.split(".").pop() || ""
-                        ) ||
-                        (file?.content_type &&
-                          (file.content_type.includes("excel") ||
-                            file.content_type.includes("spreadsheet"))) ? (
-                          <>
-                            <Xcel className="w-4 h-4" />
-                            <p className="whitespace-nowrap">
-                              {file?.name.length > 10
-                                ? file.name.includes(".")
-                                  ? `${file.name.slice(0, 10)}...${file.name
-                                      .split(".")
-                                      .pop()}`
-                                  : `${file.name.slice(0, 10)}...`
-                                : file.name}
-                            </p>
-                          </>
-                        ) : null}
-
-                        {["doc", "docx"].includes(
-                          file?.name.split(".").pop() || ""
-                        ) ||
-                        (file?.content_type &&
-                          (file.content_type.includes("application/msword") ||
-                            file.content_type.includes(
-                              "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                            ))) ? (
-                          <>
-                            <ShortRich />
-                            <p className="whitespace-nowrap">
-                              {file?.name.length > 10
-                                ? file.name.includes(".")
-                                  ? `${file.name.slice(0, 10)}...${file.name
-                                      .split(".")
-                                      .pop()}`
-                                  : `${file.name.slice(0, 10)}...`
-                                : file.name}
-                            </p>
-                          </>
-                        ) : null}
-
-                        {file?.name.split(".").pop() === "txt" ||
-                        (file?.content_type &&
-                          file.content_type.includes("text/plain")) ? (
-                          <>
-                            <img src="rich.png" alt="" className="w-4 h-4" />
-                            <p className="whitespace-nowrap">
-                              {file?.name.length > 10
-                                ? file.name.includes(".")
-                                  ? `${file.name.slice(0, 10)}...${file.name
-                                      .split(".")
-                                      .pop()}`
-                                  : `${file.name.slice(0, 10)}...`
-                                : file.name}
-                            </p>
-                          </>
-                        ) : null}
-
-                        {["jpg", "png"].includes(
-                          file?.name.split(".").pop() || ""
-                        ) ||
-                        (file?.content_type &&
-                          (file.content_type.includes("image/jpeg") ||
-                            file.content_type.includes("image/png"))) ? (
-                          <>
-                            <div>
-                              <Gallery className="w-3 h-3 md:w-4 md:h-4" />
-                            </div>
-                            <p className="whitespace-nowrap">
-                              {file?.name.length > 10
-                                ? file.name.includes(".")
-                                  ? `${file.name.slice(0, 10)}...${file.name
-                                      .split(".")
-                                      .pop()}`
-                                  : `${file.name.slice(0, 10)}...`
-                                : file.name}
-                            </p>
-                          </>
-                        ) : null}
-
-                        {file?.name.split(".").pop() === "pdf" && (
-                          <>
-                            <img
-                              src="/pdf.png"
-                              className="w-3 h-3 md:w-4 md:h-4"
-                            />
-                            <p className="whitespace-nowrap">
-                              {file?.name.length > 10
-                                ? file.name.includes(".")
-                                  ? `${file.name.slice(0, 10)}...${file.name
-                                      .split(".")
-                                      .pop()}`
-                                  : `${file.name.slice(0, 10)}...`
-                                : file.name}
-                            </p>
-                          </>
-                        )}
-                      </p>
-                      <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
-                        {Array.isArray(file.shared_with) &&
-                        file.shared_with.length > 0 ? (
-                          <>
-                            <img src="per1.png" alt="Person" />{" "}
-                            {file.personName}
-                          </>
-                        ) : (
-                          <>
-                            <NoPerson />
-                          </>
-                        )}
-                      </p>
-                      <p className="border w-[30%] h-full flex items-center justify-start px-4">
-                        {formatFileSize(file?.size)}
-                      </p>
-                      {fileData && (
-                        <FileViewer
-                          fileUrl={fileData?.fileUrl}
-                          fileType={
-                            fileData.fileType as "excel" | "word" | "pdf"
-                          }
-                          fileName={fileData?.fileName}
-                        />
-                      )}
+                  <>
+                    <div className="relative hidden md:flex">
                       <div
-                        onClick={(event) => handlePopupToggle({ index, event })}
-                        className="cursor-pointer border w-[10%] h-full flex items-center justify-start px-4"
+                        key={index}
+                        onClick={() =>
+                          handleFileOpen(file.id, file.is_password_protected)
+                        }
+                        className="overflow-hidden cursor-pointer bg-white hover:bg-[#f2f3f3] w-[full] text-[14px] h-[57px] font-sans flex justify-between items-center"
                       >
-                        <ThreeDots />
+                        <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
+                          <span
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleClick(index);
+                            }}
+                            className="w-auto text-start mr-4 cursor-pointer"
+                          >
+                            <Circle
+                              color={isSelected === index ? "#2676ff" : "none"}
+                            />
+                          </span>
+
+                          {/* Check file extension and content type */}
+                          <div className="flex justify-center gap-1 ">
+                            {["xls", "xlsx"].includes(
+                              file?.name.split(".").pop() || ""
+                            ) ||
+                            (file?.content_type &&
+                              (file.content_type.includes("excel") ||
+                                file.content_type.includes("spreadsheet"))) ? (
+                              <Xcel className="w-4 h-4" />
+                            ) : null}
+                            {["doc", "docx"].includes(
+                              file?.name.split(".").pop() || ""
+                            ) ||
+                            (file?.content_type &&
+                              (file.content_type.includes(
+                                "application/msword"
+                              ) ||
+                                file.content_type.includes(
+                                  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                ))) ? (
+                              <ShortRich />
+                            ) : null}
+                            {file?.name.split(".").pop() === "txt" ||
+                            (file?.content_type &&
+                              file.content_type.includes("text/plain")) ? (
+                              <img src="rich.png" alt="" className="w-4 h-4" />
+                            ) : null}
+                            {["jpg", "png"].includes(
+                              file?.name.split(".").pop() || ""
+                            ) ||
+                            (file?.content_type &&
+                              (file.content_type.includes("image/jpeg") ||
+                                file.content_type.includes("image/png"))) ? (
+                              <Gallery className="w-3 h-3 md:w-4 md:h-4" />
+                            ) : null}
+                            {file?.name.split(".").pop() === "pdf" && (
+                              <img
+                                src="/pdf.png"
+                                className="w-3 h-3 md:w-4 md:h-4"
+                              />
+                            )}
+                            <p className="whitespace-nowrap">
+                              {file?.name.length > 10
+                                ? file.name.includes(".")
+                                  ? `${file.name.slice(0, 10)}...${file.name
+                                      .split(".")
+                                      .pop()}`
+                                  : `${file.name.slice(0, 10)}...`
+                                : file.name}
+                            </p>
+                          </div>
+                        </p>
+                        <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
+                          {Array.isArray(file.shared_with) &&
+                          file.shared_with.length > 0 ? (
+                            <>
+                              <img src="per1.png" alt="Person" />{" "}
+                              {file.personName}
+                            </>
+                          ) : (
+                            <>
+                              <NoPerson />
+                            </>
+                          )}
+                        </p>
+                        <p className="border w-[30%] h-full flex items-center justify-start px-4">
+                          {formatFileSize(file?.size)}
+                        </p>
+                        {fileData && (
+                          <FileViewer
+                            fileUrl={fileData?.fileUrl}
+                            fileType={
+                              fileData.fileType as "excel" | "word" | "pdf"
+                            }
+                            fileName={fileData?.fileName}
+                          />
+                        )}
+                        <div
+                          onClick={(event) =>
+                            handlePopupToggle({ index, event })
+                          }
+                          className="cursor-pointer border w-[10%] h-full flex items-center justify-start px-4"
+                        >
+                          <ThreeDots />
+                        </div>
                       </div>
+                      {activeIndex === index && (
+                        <div className="absolute w-auto right-0 top-8 bg-white rounded-lg shadow-lg p-3 border z-50">
+                          <CustomPopup
+                            file={file}
+                            id={file?.id}
+                            name={file?.name}
+                            meta={file?.metadata}
+                            metaToggle={metaToggle}
+                            setMetaToggle={setMetaToggle}
+                            setActiveIndex={setActiveIndex}
+                            handleDeleteClick={() => handleDeleteClick(file.id)}
+                            handleDownloadClick={() =>
+                              handleDownloadClick(
+                                file.id,
+                                file.is_password_protected
+                              )
+                            }
+                            // handleMetaData={() => handleMetaData(item.metadata)}
+                            handleStarClick={() =>
+                              handleStarClick(file.name, file.id)
+                            }
+                            handleUnStarClick={() =>
+                              handleUnStarClick(file.name, file.id)
+                            }
+                          />
+                        </div>
+                      )}
                     </div>
-                    {activeIndex === index && (
-                      <div className="absolute w-auto right-0 top-8 bg-white rounded-lg shadow-lg p-3 border z-50">
-                        <CustomPopup
-                          file={file}
-                          id={file?.id}
-                          name={file?.name}
-                          meta={file?.metadata}
-                          metaToggle={metaToggle}
-                          setMetaToggle={setMetaToggle}
-                          setActiveIndex={setActiveIndex}
-                          handleDeleteClick={() => handleDeleteClick(file.id)}
-                          handleDownloadClick={() =>
-                            handleDownloadClick(
-                              file.id,
-                              file.is_password_protected
-                            )
-                          }
-                          // handleMetaData={() => handleMetaData(item.metadata)}
-                          handleStarClick={() =>
-                            handleStarClick(file.name, file.id)
-                          }
-                          handleUnStarClick={() =>
-                            handleUnStarClick(file.name, file.id)
-                          }
-                        />
+                    <div
+                      
+                      className="md:hidden relative flex flex-col items-center"
+                    >
+                      <div onClick={() =>
+                        handleFileOpen(file.id, file.is_password_protected)
+                      } className="w-full h-[74px] my-2  rounded-tl-[12px] rounded-tr-[12px] bg-[#FFFFFF]  ">
+                        <div className="h-[50%] w-full bg-[#F1F5FA] rounded-tl-[12px] rounded-tr-[12px] px-2 pr-4 flex justify-between items-center">
+                          <p className="flex items-center font-sans text-[11px]">
+                            <span
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setRadioClick((prev) => !prev);
+                              }}
+                              className="w-auto text-start mr-4 cursor-pointer"
+                            >
+                              <Circle color={radioClick ? "#2676ff" : "none"} />
+                            </span>
+                            <div className="flex justify-center gap-1 ">
+                              {["xls", "xlsx"].includes(
+                                file?.name.split(".").pop() || ""
+                              ) ||
+                              (file?.content_type &&
+                                (file.content_type.includes("excel") ||
+                                  file.content_type.includes(
+                                    "spreadsheet"
+                                  ))) ? (
+                                <Xcel className="w-4 h-4" />
+                              ) : null}
+                              {["doc", "docx"].includes(
+                                file?.name.split(".").pop() || ""
+                              ) ||
+                              (file?.content_type &&
+                                (file.content_type.includes(
+                                  "application/msword"
+                                ) ||
+                                  file.content_type.includes(
+                                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                  ))) ? (
+                                <ShortRich />
+                              ) : null}
+                              {file?.name.split(".").pop() === "txt" ||
+                              (file?.content_type &&
+                                file.content_type.includes("text/plain")) ? (
+                                <img
+                                  src="rich.png"
+                                  alt=""
+                                  className="w-4 h-4"
+                                />
+                              ) : null}
+                              {["jpg", "png"].includes(
+                                file?.name.split(".").pop() || ""
+                              ) ||
+                              (file?.content_type &&
+                                (file.content_type.includes("image/jpeg") ||
+                                  file.content_type.includes("image/png"))) ? (
+                                <Gallery className="w-3 h-3 md:w-4 md:h-4" />
+                              ) : null}
+                              {file?.name.split(".").pop() === "pdf" && (
+                                <img
+                                  src="/pdf.png"
+                                  className="w-3 h-3 md:w-4 md:h-4"
+                                />
+                              )}
+                              <p className="whitespace-nowrap">
+                                {file?.name.length > 10
+                                  ? file.name.includes(".")
+                                    ? `${file.name.slice(0, 10)}...${file.name
+                                        .split(".")
+                                        .pop()}`
+                                    : `${file.name.slice(0, 10)}...`
+                                  : file.name}
+                              </p>
+                            </div>
+                          </p>
+                          <div
+                            onClick={(event) =>
+                              handlePopupToggle({ index, event })
+                            }
+                            className="cursor-pointer w-[10%] h-full flex items-center justify-start px-4"
+                          >
+                            <ThreeDots />
+                          </div>
+                        </div>
+                        <div className="h-[50%] w-[85%] flex justify-between items-center">
+                          <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
+                            <NoPerson className={"w-[20px] h-[20px]"} /> _
+                          </p>
+                          <p className=" w-[50%] text-[10px] font-sans h-full flex items-center justify-end px-4">
+                            File size: {(file.size / 1024 ** 2).toFixed(2)} GB
+                          </p>
+                        </div>
                       </div>
-                    )}
-                  </div>
+                      {activeIndex === index && (
+                        <div className="absolute w-auto right-0 top-8 bg-white rounded-lg shadow-lg p-3 border z-50">
+                          <CustomPopup
+                            file={file}
+                            id={file?.id}
+                            name={file?.name}
+                            meta={file?.metadata}
+                            metaToggle={metaToggle}
+                            setMetaToggle={setMetaToggle}
+                            setActiveIndex={setActiveIndex}
+                            handleDeleteClick={() => handleDeleteClick(file.id)}
+                            handleDownloadClick={() =>
+                              handleDownloadClick(
+                                file.id,
+                                file.is_password_protected
+                              )
+                            }
+                            // handleMetaData={() => handleMetaData(item.metadata)}
+                            handleStarClick={() =>
+                              handleStarClick(file.name, file.id)
+                            }
+                            handleUnStarClick={() =>
+                              handleUnStarClick(file.name, file.id)
+                            }
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </>
                 ))}
             </div>
-            {parentFolder?.files
+            {/* {parentFolder?.files
               .filter((item) => (showStarredOnly ? item.is_starred : true))
               .map((file, index) => (
-                <div
-                  onClick={() =>
-                    handleFileOpen(file.id, file.is_password_protected)
-                  }
-                  className="w-full h-[74px] my-2  rounded-tl-[12px] rounded-tr-[12px] bg-[#FFFFFF] md:hidden flex flex-col items-center"
-                >
-                  <div className="h-[50%] w-full bg-[#F1F5FA] rounded-tl-[12px] rounded-tr-[12px] px-2 pr-4 flex justify-between items-center">
-                    <p className="flex items-center font-sans text-[11px]">
-                      <span
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setRadioClick((prev) => !prev);
-                        }}
-                        className="w-auto text-start mr-4 cursor-pointer"
-                      >
-                        <Circle color={radioClick ? "#2676ff" : "none"} />
-                      </span>
-                      {["xls", "xlsx"].includes(
-                        file?.name.split(".").pop() || ""
-                      ) && (
-                        <>
-                          <Xcel className="w-4 h-5 mr-1" />
-                          <p className="whitespace-nowrap ml-1">
-                            {file?.name.length > 10
-                              ? `${file.name.slice(0, 10)}...${file.name
-                                  .split(".")
-                                  .pop()}`
-                              : file.name}
-                          </p>
-                        </>
-                      )}
-                      {["doc", "docx"].includes(
-                        file?.name.split(".").pop() || ""
-                      ) && (
-                        <>
-                          <ShortRich />
-                          <p className="whitespace-nowrap ml-1">
-                            {file?.name.length > 10
-                              ? `${file.name.slice(0, 10)}...${file.name
-                                  .split(".")
-                                  .pop()}`
-                              : file.name}
-                          </p>
-                        </>
-                      )}
-                      {file?.name.split(".").pop() === "txt" && (
-                        <>
-                          {" "}
-                          <img src="rich.png" alt="" className="w-4 h-4" />{" "}
-                          <p className="whitespace-nowrap ml-1">
-                            {file?.name.length > 10
-                              ? `${file.name.slice(0, 10)}...${file.name
-                                  .split(".")
-                                  .pop()}`
-                              : file.name}
-                          </p>
-                        </>
-                      )}
-                      {["jpg", "png"].includes(
-                        file?.name.split(".").pop() || ""
-                      ) && (
-                        <>
-                          <div>
-                            <Gallery className="w-3 h-3 md:w-4 md:h-4" />
-                          </div>
-                          <p className="whitespace-nowrap ml-1">
-                            {file?.name.length > 10
-                              ? `${file.name.slice(0, 10)}...${file.name
-                                  .split(".")
-                                  .pop()}`
-                              : file.name}
-                          </p>
-                        </>
-                      )}
-                      {file?.name.split(".").pop() === "pdf" && (
-                        <>
-                          <img src="/pdf.png" className="w-4 h-4 mr-1" />
-                          <p className="whitespace-nowrap ml-1">
-                            {file?.name.length > 10
-                              ? `${file.name.slice(0, 10)}...${file.name
-                                  .split(".")
-                                  .pop()}`
-                              : file.name}
-                          </p>
-                        </>
-                      )}
-                    </p>
-                    <div
-                      onClick={(event) => {
-                        handlePopupToggle({ index, event }),
-                          event.stopPropagation();
-                      }}
-                      className="cursor-pointer border w-[10%] h-full flex items-center justify-start px-4"
-                    >
-                      <ThreeDots />
-                    </div>
-                    {activeIndex === index && (
-                      <div className="absolute w-auto right-0 -bottom-[164px] bg-white rounded-lg shadow-lg p-3 border z-50">
-                        <CustomPopup
-                          file={file}
-                          id={file?.id}
-                          name={file?.name}
-                          meta={file?.metadata}
-                          metaToggle={metaToggle}
-                          setMetaToggle={setMetaToggle}
-                          setActiveIndex={setActiveIndex}
-                          handleDeleteClick={() => handleDeleteClick(file.id)}
-                          handleDownloadClick={() =>
-                            handleDownloadClick(
-                              file.id,
-                              file.is_password_protected
-                            )
-                          }
-                          // handleMetaData={() => handleMetaData(item.metadata)}
-                          handleStarClick={() =>
-                            handleStarClick(file.name, file.id)
-                          }
-                          handleUnStarClick={() =>
-                            handleUnStarClick(file.name, file.id)
-                          }
-                        />
-                      </div>
-                    )}
-                  </div>
-                  <div className="h-[50%] w-[85%] flex justify-between items-center">
-                    <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
-                      <NoPerson className={"w-[20px] h-[20px]"} /> _
-                    </p>
-                    <p className=" w-[50%] text-[10px] font-sans h-full flex items-center justify-end px-4">
-                      File size: {(file.size / 1024 ** 2).toFixed(2)} GB
-                    </p>
-                  </div>
-                </div>
-              ))}
+            
+              ))} */}
           </div>
         )}
       </div>
@@ -794,11 +739,7 @@ function FileGallery({ showStarredOnly }: any) {
 }
 
 export default FileGallery;
-// function mapContentTypeToFileType(
-//   content_type: any
-// ): "excel" | "word" | "pdf" | "unknown" {
-//   throw new Error("Function not implemented.");
-// }
+
 function mapContentTypeToFileType(
   contentType: string
 ): "excel" | "word" | "pdf" | "unknown" {
