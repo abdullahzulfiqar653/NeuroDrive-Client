@@ -60,7 +60,7 @@ function FileGallery({ showStarredOnly }: any) {
         popupRef.current &&
         !popupRef.current.contains(event.target as Node)
       ) {
-        setActiveIndex(null); // Close the popup
+        setActiveIndex(null);
       }
     }
 
@@ -93,6 +93,7 @@ function FileGallery({ showStarredOnly }: any) {
           isActive: true,
           workType: "downloadOpen",
         }));
+        return;
       }
       const result = await dispatch(
         fetchData({ url: `files/${id}/`, key: "fileFetch" })
@@ -181,8 +182,9 @@ function FileGallery({ showStarredOnly }: any) {
         dispatch(getDirectory(parentFolderId));
         setActiveIndex(null);
       }
-    } catch (error) {}
-    toast.error("Failed to delete file");
+    } catch (error) {
+      toast.error("Failed to delete file");
+    }
   };
 
   const handleDownloadClick = async (id: number, isProtected: boolean) => {
@@ -223,6 +225,7 @@ function FileGallery({ showStarredOnly }: any) {
     <>
       {protectedFile.isActive && (
         <ProtectedPass
+          setFileData={setFileData}
           protectedFile={protectedFile}
           setActiveIndex={setActiveIndex}
           setProtectedFile={setProtectedFile}
@@ -276,11 +279,15 @@ function FileGallery({ showStarredOnly }: any) {
                       ) ? (
                         <>
                           <div className="">
-                            <Xcel
+                            <p
                               className={`${
                                 item?.is_password_protected ? "blur-sm" : ""
-                              }w-[32px] h-[41px] md:w-[77px] md:h-[79px]`}
-                            />
+                              }`}
+                            >
+                              <Xcel
+                                className={`w-[32px] h-[41px] md:w-[77px] md:h-[79px]`}
+                              />
+                            </p>
                             {item?.is_password_protected && (
                               <p className="absolute top-3 right-6 md:top-14 md:right-[75px]">
                                 <GoLock className="text-6xl" />

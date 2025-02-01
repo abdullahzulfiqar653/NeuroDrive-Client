@@ -13,6 +13,7 @@ import MetaData from "./MetaData";
 import ReNameFile from "./ReNameFile";
 import { toast } from "react-toastify";
 import SetPassword from "./SetPassword";
+import Quantumography from "./Quantumography";
 
 const CustomPopup = ({
   file,
@@ -27,6 +28,7 @@ const CustomPopup = ({
 }: any) => {
   const [toggleReName, settoggleReName] = useState(false);
   const [togglePassword, settogglePassword] = useState(false);
+  const [toggleQuantumography, setToggleQuantumography] = useState(false);
   const [metaToggle, setMetaToggle] = useState<boolean>(false);
 
   const handleMetaData = (meta: any) => {
@@ -108,12 +110,15 @@ const CustomPopup = ({
       </div>
       <div
         onClick={() => {
-          // settogglePassword(true);
+          setToggleQuantumography(true);
         }}
         className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer px-1 hover:shadow-md"
       >
         <Encrypt /> Encrypt
       </div>
+      {toggleQuantumography && (
+        <Quantumography setToggleQuantumography={setToggleQuantumography} />
+      )}
 
       <div
         onClick={() => {
