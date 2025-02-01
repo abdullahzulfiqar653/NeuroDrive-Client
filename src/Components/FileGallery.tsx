@@ -180,8 +180,6 @@ function FileGallery({ showStarredOnly }: any) {
         toast.success("File Deleted Successfully");
         dispatch(getDirectory(parentFolderId));
         setActiveIndex(null);
-      } else {
-        toast.error("Failed to delete file");
       }
     } catch (error) {}
     toast.error("Failed to delete file");
