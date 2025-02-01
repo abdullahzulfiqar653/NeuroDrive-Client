@@ -396,17 +396,22 @@ function Login() {
                 >
                   key Seed
                 </label>
-                <div className="flex w-[310px] md:w-full mq1100:w-[451px] gap-[8px] mt-[11px] flex-wrap">
-                  {suggestions.map((seed, index) => (
-                    <span
-                      onClick={() => handleSuggestionClick(seed)}
-                      key={index}
-                      className="min-w-[50px] cursor-pointer md:min-w-[69px] h-[20px] px-1 md:h-[27px] text-[12px] md:text-[16px] border-[1px] border-[#9F42FF] flex justify-center rounded-[4px] md:rounded-[6px] font-sans"
-                    >
-                      {seed}
-                    </span>
-                  ))}
-                </div>
+
+
+  <div className="flex flex-wrap justify-start gap-[5px] w-full">
+    {suggestions.map((seed, index) => (
+      <span
+        onClick={() => handleSuggestionClick(seed)}
+        key={index}
+      className="min-w-[50px] cursor-pointer md:min-w-[69px] h-[20px] px-1 md:h-[27px] text-[12px] md:text-[16px] border-[1px] border-[#9F42FF] flex justify-center rounded-[4px] md:rounded-[6px] font-sans"
+        >
+
+        {seed}
+      </span>
+    ))}
+  </div>
+
+
               </div>
             </div>
             <button
@@ -435,7 +440,6 @@ function Login() {
             background:
               "linear-gradient(155.35deg, #3984FF -4.35%, #6860FE 32.93%, #8C44FD 62.55%, #B325FC 94.21%)",
             height: "100vh",
-            width: "50vw",
           }}
           className="rounded-[22px] w-full h-[50vh]  md:w-[50%] overflow-hidden "
          
