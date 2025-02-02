@@ -18,19 +18,20 @@ function RegisterInfo({ setAcknowledged }: RegisterInfoProps) {
       </div>
 
       <div className="flex flex-col w-[100vw] md:w-[40vw] p-4">
-        <span className="flex gap-2 md:pr-7 items-center md:border-r border-white">
+        <span className="flex gap-2 md:pr-7 items-center justify-center md:mr-[200px] lg:mr-[400px] mt-[2px] md:border-r border-white">
+
           <img src="/logo.svg" alt="" className="w-7 h-6" />
           <p className="font-chakra text-[16px] md:text-[22px] text-black">
             NeuroDrive
           </p>
         </span>
 
-        <div className="flex flex-col items-center justify-center h-full w-full gap-12">
-          <div className="flex flex-col items-center gap-1 text-center">
-            <h1 className="text-[#202343] text-[28px] md:text-[38px] font-bold">
+        <div className="flex flex-col items-center justify-center h-full w-full gap-3">
+          <div className="flex flex-col items-center gap-1 mt-[70px] mb-6 text-center">
+            <h1 className="text-[#202343] text-[20px] lg:text-[48px]  md:text-[38px]  font-bold">
               Register Account
             </h1>
-            <p className="text-[#000000] text-[14px] md:text-[16px] font-sans">
+            <p className="text-[#000000] text-[12px] lg:text-[18px]  md:text-[16px] font-sans">
               Already have an account?{" "}
               <span
                 onClick={() => navigate("/login")}
@@ -41,11 +42,11 @@ function RegisterInfo({ setAcknowledged }: RegisterInfoProps) {
             </p>
           </div>
 
-          <div className="font-sans w-full md:w-[35vw] flex flex-col items-center gap-4 text-center px-2 md:px-0">
-            <p className="text-[16px] md:text-[18px] font-semibold">
+          <div className="font-sans w-full md:w-[35vw] flex flex-col  items-center  text-center px-2 md:px-0">
+            <p className="text-[16px] md:text-[14px] lg:text-[18px] font-[400]">
               Important Note :
             </p>
-            <p className="text-[#000000B2] text-[14px] md:text-[16px] leading-relaxed">
+            <p className="text-[#000000B2] text-[12px] lg:text-[16px] md:text-[16px] leading-relaxed">
               On the next page, you will see a series of 16 words. This is your
               unique and private seed and it is the ONLY way to recover your
               wallet in case of loss. It is your responsibility to write it down
@@ -60,7 +61,7 @@ function RegisterInfo({ setAcknowledged }: RegisterInfoProps) {
               borderImageSource:
                 "linear-gradient(357.47deg, #005EFF 12.36%, rgba(53, 90, 153, 0) 97.89%)",
             }}
-            className="w-full md:w-[319px] h-[48px] text-white hover:shadow-lg shadow-black border-[1.16px] rounded-[13px] text-[15px] font-sans mt-4 px-4 md:px-0"
+            className="w-[240px] lg:w-[319px] md:w-[319px] h-[48px] text-white hover:shadow-lg shadow-black border-[1.16px] rounded-[13px] text-[12px] lg:text-[15.08px] font-sans mt-4 px-4 md:px-0"
           >
             I understand, show me my seed
           </button>
@@ -78,8 +79,14 @@ function RegisterInfo({ setAcknowledged }: RegisterInfoProps) {
         <img
           src="/regis-bg.svg"
           alt=""
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover md:block"
         />
+  <img
+          src="/regis-mob.svg"
+          alt=""
+          className="w-full h-full object-cover block md:hidden"
+        />
+
       </div>
     </div>
   );
