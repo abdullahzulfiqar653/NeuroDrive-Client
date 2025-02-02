@@ -21,7 +21,7 @@ function Register() {
       ) : (
         <RegisterInfo setAcknowledged={setAcknowledged} />
       )}
-      <div className="hidden md:flex items-end absolute bottom-0  w-full font-sans text-[#1E1E1E66] pl-2 pb-1 text-[14px]">
+      <div className="absolute hidden md:flex  items-end  bottom-0  w-full font-sans text-[#1E1E1E66] pl-2 pb-1 text-[14px]">
         <p className="pr-3 border-r-[1.17px] border-[#1E1E1E66]">
           Terms & Conditions
         </p>
