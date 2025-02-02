@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Cross } from "../assets/Icons";
 import { ThreeDots } from "react-loader-spinner";
-import Success from "../../public/success.webm";
 import { toast } from "react-toastify";
 import axios from "axios";
 
@@ -85,6 +84,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
           setStep(2);
           //   setFile(null);
         }
+        return;
       }
       if (step === 2) {
         setIsLoading(true);
@@ -106,6 +106,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
           setShowUpload(true);
           setStep(3);
         }
+        return;
       }
       if (step === 3) {
         setIsLoading(true);
@@ -135,6 +136,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
           setStep(4);
           setShowSteps(true);
         }
+        return;
       }
       if (step === 4) {
         if (downloadUrl !== "") {
@@ -144,8 +146,10 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
+          setToggleQuantumography(false);
           toast.success("File Downloaded Successfully");
         }
+        return;
       }
     } catch (error) {
       toast.warn("Something wents wrong!");
@@ -280,7 +284,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
               <div className="w-full my-9 flex justify-center items-center">
                 <div className="relative flex justify-center items-center bg-transparent">
                   <video
-                    src={Success}
+                    src="success.webm"
                     autoPlay
                     muted
                     className="w-[100px] h-[100px] rounded-lg"
@@ -320,7 +324,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
             </button>
             {step === 4 && (
               <button
-                // onClick={handleSubmit}
+                onClick={handleSubmit}
                 //   disabled={value === ""}
                 style={{
                   background:
