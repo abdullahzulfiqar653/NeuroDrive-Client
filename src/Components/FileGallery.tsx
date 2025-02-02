@@ -240,7 +240,6 @@ function FileGallery({ showStarredOnly }: any) {
                 <div className="relative">
                   <div
                     key={index}
-                    // onClick={() => handleClick(index)}
                     onClick={() =>
                       handleFileOpen(item.id, item.is_password_protected)
                     }
