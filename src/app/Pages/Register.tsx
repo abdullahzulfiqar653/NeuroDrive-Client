@@ -15,13 +15,13 @@ function Register() {
   }
 
   return (
-    <div className="bg-white">
+    <div className="bg-white relative w-full h-dvh">
       {acknowledged ? (
         <RegisterSeeds/>
       ) : (
         <RegisterInfo setAcknowledged={setAcknowledged} />
       )}
-      <div className="flex items-end  w-full font-sans text-[#1E1E1E66] pl-2 pb-1 text-[14px]">
+      <div className="flex items-end absolute bottom-0  w-full font-sans text-[#1E1E1E66] pl-2 pb-1 text-[14px]">
         <p className="pr-3 border-r-[1.17px] border-[#1E1E1E66]">
           Terms & Conditions
         </p>

@@ -49,9 +49,6 @@ export const getFolders = createAsyncThunk('folders/getFolders', async (_, { rej
     if(error instanceof AxiosError)
     return rejectWithValue(error.response?.data);
   }
-  finally{
-    
-  }
 });
 
 

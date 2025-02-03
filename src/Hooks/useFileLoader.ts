@@ -6,7 +6,7 @@ interface UseFileLoaderProps {
   fileType: 'pdf' | 'excel' | 'word';
   fileUrl: string;
   fileName: string;
-  viewerRef: any; // Reference to the Syncfusion component
+  viewerRef: any; 
 }
 
 const useFileLoader = ({ fileType, fileUrl, fileName, viewerRef }: UseFileLoaderProps) => {
@@ -25,19 +25,29 @@ const useFileLoader = ({ fileType, fileUrl, fileName, viewerRef }: UseFileLoader
             toast.success("PDF loaded successfully!");
           }
           else if (fileType === 'excel') {
-            const file = new File([response.data], fileName, {
-                type: response.headers['content-type'],
-              });
-                viewerRef.current.open({ file });
-                toast.success("Document loaded successfully!");
+
+          const contentType = response.headers['content-type'];
+           
+          if (contentType === "text/html") {
+            return;
+          }
+          
+          const fileBlob = new Blob([response.data], {
+              type: response.headers['content-type'],
+          });
+          
+          const updatedFileName = fileName || "Sample.xlsx";
+          const file = new File([fileBlob], updatedFileName, {
+              type: fileBlob.type
+          });
+          
+          viewerRef.current.open({ file });
+          toast.success("Document loaded successfully!");          
           } 
           else if (fileType === 'word') {
             const base64String = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
             viewerRef.current.documentEditor.open(base64String);
             toast.success("Document loaded successfully!");
-            // const sfdtContent = viewerRef.current.documentEditor.serialize();
-            // console.log("SFDT Content:", sfdtContent);
-            // toast.success("Document converted to SFDT!");
           }
         }
       },
@@ -57,3 +67,4 @@ const useFileLoader = ({ fileType, fileUrl, fileName, viewerRef }: UseFileLoader
 };
 
 export default useFileLoader;
+

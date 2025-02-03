@@ -8,22 +8,25 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./AuthContext.tsx";
 import { registerLicense } from "@syncfusion/ej2-base";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { FileProvider } from "./FileContext.tsx";
 
 const queryClient = new QueryClient();
 
 registerLicense(
-  "Ngo9BigBOggjHTQxAR8/V1NMaF5cXmBCf0x1RHxbf1x1ZFNMYFhbRndPMyBoS35Rc0ViWX5ednRRRWBeU0Z0"
+  "Ngo9BigBOggjHTQxAR8/V1NMaF1cXmhKYVFpR2Nbek5xdl9CZ1ZQQWYuP1ZhSXxWdkRgWH9edXZRR2ddVEc="
 );
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <BrowserRouter>
-          <Provider store={store}>
-            <App />
-          </Provider>
-        </BrowserRouter>
+        <FileProvider>
+          <BrowserRouter>
+            <Provider store={store}>
+              <App />
+            </Provider>
+          </BrowserRouter>
+        </FileProvider>
       </AuthProvider>
     </QueryClientProvider>
   </StrictMode>

@@ -4,7 +4,9 @@ import { useAuth } from "../AuthContext";
 import FileGallery from "./FileGallery";
 
 function FilesList() {
-  const { isGridMode, setIsGridMode, toggleComponent } = useAuth();
+  const [showStarredOnly, setShowStarredOnly] = useState<boolean>(false);
+  const { isGridMode, setIsGridMode, toggleComponent, parentFolder } =
+    useAuth();
   const newDocuments = [
     {
       id: "newExcel",
@@ -51,7 +53,11 @@ function FilesList() {
             }}
             className="w-[79px] h-[31px] md:w-[108px] md:h-[42px] rounded-lg flex gap-1 items-center justify-center  text-white font-sans text-[10px] md:text-[14px]"
           >
-            <Add className={"w-4 h-4 md:w-5 md:h-5 mb-1 md:mb-0"} color={"white"} /> Upload
+            <Add
+              className={"w-4 h-4 md:w-5 md:h-5 mb-1 md:mb-0"}
+              color={"white"}
+            />{" "}
+            Upload
           </button>
         </div>
         <div className="flex gap-4 items-start  justify-start w-[96%]">
@@ -75,42 +81,61 @@ function FilesList() {
           ))}
         </div>
       </div>
-      <div className="flex flex-col items-center gap-4 mt-8 w-[96%]">
-        <p className="text-[16px] md:text-[22px] text-start w-[96%]">
-          All Files
-        </p>
-        <div className="flex gap-2 justify-between items-center w-[96%]">
-          <div className="flex gap-2 items-start">
-            <button className="flex items-center justify-start  pl-2 md:pl-3 gap-1 md:gap-2  w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl font-sans border border-[#BFBFBF57]">
-              <Recent /> Recent
-            </button>
-            <button className="flex items-center justify-start pl-2 md:pl-3 gap-1 md:gap-2 w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl  font-sans border border-[#BFBFBF57]">
-              <Starred /> Starred
-            </button>
-          </div>
-          <div className="flex gap-4 items-center">
-            {isGridMode ? (
-              <span
-                className="cursor-pointer"
-                onClick={() => setIsGridMode(false)}
+      {parentFolder && parentFolder?.files.length > 0 ? (
+        <div className="flex flex-col items-center gap-4 mt-8 w-[96%]">
+          <p className="text-[16px] md:text-[22px] text-start w-[96%]">
+            All Files
+          </p>
+          <div className="flex gap-2 justify-between items-center w-[96%]">
+            <div className="flex gap-2 items-start">
+              <button className="flex items-center justify-start  pl-2 md:pl-3 gap-1 md:gap-2  w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl font-sans border border-[#BFBFBF57]">
+                <Recent /> Recent
+              </button>
+              <button
+                onClick={() => setShowStarredOnly((prev) => !prev)}
+                className="flex items-center justify-start pl-2 md:pl-3 gap-1 md:gap-2 w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl  font-sans border border-[#BFBFBF57]"
               >
-                <Box />{" "}
-              </span>
-            ) : (
-              <span
-                className="cursor-pointer"
-                onClick={() => setIsGridMode(true)}
-              >
-                <List />
-              </span>
-            )}
-            <button className="flex items-center justify-start pl-2 md:pl-3 gap-1 md:gap-2 w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl font-sans border border-[#BFBFBF57]">
-              <Filter /> Filter
-            </button>
+                <Starred
+                  className={
+                    showStarredOnly
+                      ? " text-2xl fill-yellow-300"
+                      : "text-black text-2xl"
+                  }
+                />
+                {/* <CiStar /> */}
+                Starred
+              </button>
+            </div>
+            <div className="flex gap-4 items-center">
+              {isGridMode ? (
+                <span
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setIsGridMode(false);
+                  }}
+                >
+                  <Box />{" "}
+                </span>
+              ) : (
+                <span
+                  className="cursor-pointer z-10 flex"
+                  onClick={() => {
+                    setIsGridMode(true);
+                  }}
+                >
+                  <List />
+                </span>
+              )}
+              <button className="flex items-center justify-start pl-2 md:pl-3 gap-1 md:gap-2 w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl font-sans border border-[#BFBFBF57]">
+                <Filter /> Filter
+              </button>
+            </div>
           </div>
+          <FileGallery showStarredOnly={showStarredOnly} />
         </div>
-        <FileGallery />
-      </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 }

@@ -27,9 +27,6 @@ export const fetchSeeds = createAsyncThunk('auth/fetchSeeds', async (_, { reject
     if(error instanceof AxiosError)
     return rejectWithValue(error.response?.data || 'Failed to fetch seeds');
   }
-  finally{
-    
-  }
 });
 
 

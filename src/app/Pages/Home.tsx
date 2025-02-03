@@ -1,5 +1,8 @@
 import Account from "../../Components/Account";
 import { useEffect, useRef, useState } from "react";
+import LinearProgress from "@mui/material/LinearProgress";
+
+import { GaugeComponent } from "react-gauge-component";
 import {
   Add,
   Line,
@@ -14,12 +17,12 @@ import {
 } from "../../assets/Icons";
 import FilesList from "../../Components/FilesList";
 import { useAuth } from "../../AuthContext";
+import { CiUser } from "react-icons/ci";
+import useApi from "../../Hooks/usiApi";
+import { ThreeCircles } from "react-loader-spinner";
 import { AppDispatch, RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getDirectory,
-  getFolders,
-} from "../../features/directories/folderSlice";
+import { getDirectory } from "../../features/directories/folderSlice";
 
 // const folder = [
 //   // "Workspace",
@@ -31,15 +34,42 @@ import {
 // ];
 
 function Home() {
-  const { isAccountOpen, setIsAccountOpen, toggleComponent } = useAuth();
+  const {
+    isAccountOpen,
+    setIsAccountOpen,
+    toggleComponent,
+    setProfile,
+    reGetProfile,
+    setUsedStorage,
+    setTotal_size,
+    setUsed,
+  } = useAuth();
   const [isLeftBar, setLeftBar] = useState(false);
+
   const menuRef = useRef<HTMLDivElement | null>(null);
 
+  const { fetch: profileFetch, reset: profileReset } = useApi("getProfile");
+  const data = useSelector((state: RootState) => state.api.calls?.getProfile);
   const handleClickOutside = (event: MouseEvent | TouchEvent) => {
     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
       setLeftBar(false);
     }
   };
+  useEffect(() => {
+    profileFetch("/user/profile/");
+  }, [reGetProfile]);
+  const size = data?.response?.data?.features_data;
+  setUsed(size?.total_size);
+  setTotal_size(size?.size_allowed);
+
+  const average = size?.total_size / size?.size_allowed;
+
+  // Handle cases where size_allowed is 0 to avoid division by zero
+  setUsedStorage(size?.size_allowed !== 0 ? average : 0);
+
+  useEffect(() => {
+    setProfile(data?.response?.data.url);
+  }, [data, profileReset]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -52,7 +82,8 @@ function Home() {
     <>
       <div className="flex w-[100vw] relative bg-[#f6f8fc] h-screen overflow-x-hidden">
         {/* left side bar  */}
-        <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl overflow-hidden flex-[0.2]  h-[100vh] min-h-[600px] desktop-view-table hidden md:flex flex-col justify-between">
+
+        <div className="bg-[#F1F5FA] rounded-br-2xl rounded-tr-2xl relative overflow-hidden flex-[0.2]  h-[100vh] min-h-[600px] desktop-view-table hidden md:flex flex-col">
           <LeftBar />
         </div>
         {/* content main  */}
@@ -91,12 +122,19 @@ function Home() {
                   onClick={() => setIsAccountOpen((prev) => !prev)}
                   className="flex items-center cursor-pointer gap-2 bg-[#F8FAFC] border border-[#BFBFBF57] p-2 h-[42px] rounded-[12px]"
                 >
-                  <div className=" h-[35px] w-[35px] rounded-full cursor-pointer  overflow-hidden">
-                    <img
-                      src="https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg"
-                      className="w-full h-full object-cover "
-                    />
+                  <div className="h-[35px] w-[35px] rounded-full cursor-pointer overflow-hidden">
+                    {data?.isLoading ? (
+                      <ThreeCircles height="30" width="30" color="black" />
+                    ) : data?.response?.data?.url ? (
+                      <img
+                        src={String(data?.response?.data?.url)}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <CiUser className="h-9 w-8" />
+                    )}
                   </div>
+
                   <span className="flex items-center justify-center gap-1">
                     <p className="text-[#40566D] text-[12px] font-[600] font-sans text-right leading-[18px]">
                       Kevin
@@ -106,6 +144,7 @@ function Home() {
                 </div>
                 {isAccountOpen && (
                   <Account
+                    profileLoading={data?.isLoading}
                     className={
                       "left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"
                     }
@@ -136,12 +175,19 @@ function Home() {
                 onClick={() => setIsAccountOpen((prev) => !prev)}
                 className=" h-[35px] w-[35px] rounded-full cursor-pointer overflow-hidden"
               >
-                <img
-                  src="https://s3-alpha-sig.figma.com/img/5298/20ef/398885b3c44f2931c974eeab97452589?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gN2NdKafXBlh4NOklHHV1eMk5pPgM~xzInElAs6jU43hBLK1ZqyuFdVoaaAzSzJT35DEQIT702OG~38L5UL9QTt8vQPXaNa3OeRLdVgCdTCbbG6Mkiu~nrG3CdZjQllT4cZvq~pEPeHhdwKuBLJ~dWRP1X~mbGHgXTVIkyXyBkY1XEz8VBFmqnP6cQ7Pg1fl96tzu2PFVIET7I10KKdq3ddZFMFYLrrJcy6nXs8OCNl2qjz5NQt0F9~A6BtdCmPsne-a~xpOt6pJCzsBPz9VmItNEdCfyO17bdhhUQmLiwttWqiveWZ1YFLf4bHEXmjuWO0mhvKQ063l5E0G-YZL6Q__"
-                  className="w-full h-full object-cover "
-                />
+                {data?.isLoading ? (
+                  <ThreeCircles height="30" width="30" color="black" />
+                ) : data?.response?.data.url ? (
+                  <img
+                    src={String(data?.response?.data.url)}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <CiUser className="h-9 w-8" />
+                )}
                 {isAccountOpen && (
                   <Account
+                    profileLoading={data?.isLoading}
                     className={
                       "left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"
                     }
@@ -166,7 +212,7 @@ function Home() {
               >
                 <Cross className={"h-[14px] w-[14px]"} />
               </span>
-              <LeftBar setLeftBar={setLeftBar} />
+              <LeftBar setLeftBar={setLeftBar}/>
             </section>
           </section>
         )}
@@ -180,10 +226,18 @@ export default Home;
 type LeftBarProps = {
   setLeftBar?: React.Dispatch<React.SetStateAction<boolean>>;
 };
-function LeftBar({ setLeftBar }: LeftBarProps) {
+
+function LeftBar({setLeftBar}:LeftBarProps) {
   const dispatch = useDispatch<AppDispatch>();
+  const [isFolderName, setFolderName] = useState<string>("");
   const { directory } = useSelector((state: RootState) => state.folders);
-  const { toggleComponent, parentFolder, setParentFolder } = useAuth();
+  const {
+    toggleComponent,
+    parentFolder,
+    setParentFolder,
+    used,
+    total_size,
+  } = useAuth();
 
   useEffect(() => {
     if (!parentFolder) {
@@ -199,6 +253,12 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
     }
   }, []);
 
+  useEffect(() => {
+    if (directory) {
+      setParentFolder(directory);
+    }
+  }, [directory, getDirectory]);
+
   const handleClickFolder = (folder_id: string) => {
     dispatch(getDirectory(folder_id))
       .unwrap()
@@ -213,7 +273,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-start px-2 pt-4 gap-3 w-full">
+      <div className="flex flex-col justify-center items-start pt-4 gap-3 w-full">
         <img
           src="/logoName.svg"
           className="w-[150px] mb-1 md:mb-0 md:pl-1 pl-5"
@@ -221,7 +281,10 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         {/* <Line className={"my-1 md:hidden block"} /> */}
         <div className="flex flex-col gap-2 md:pl-1 pl-5 mt-3">
           <div
-            onClick={() => handleClickFolder("main")}
+            onClick={() => {
+              handleClickFolder("main");
+              setFolderName("FOLDERS");
+            }}
             className="cursor-pointer bg-[#3984FF] w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center shadow-md"
           >
             <div className="flex items-center gap-3">
@@ -253,14 +316,14 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
           </div>
         </div>
         <Line className={"mt-2 min-w-[230px] w-full"} />
-      </div>
+     
       <div className="flex flex-col items-center gap-2 my-2 h-[30vh] overflow-auto">
         <div className="flex items-center justify-between w-full px-2 pb-2">
           <h1 className="flex text-[14px] text-[#9F9F9F] gap-1 items-center">
             <span>
               <Arrow color="#9F9F9F" />
             </span>
-            FOLDERS
+            {isFolderName !== "" ? isFolderName : "FOLDERS"}
           </h1>
           <span
             onClick={() => toggleComponent("newFolder")}
@@ -273,57 +336,97 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
           {directory?.children && directory.children.length > 0 ? (
             directory.children.map((child) => (
               <h1
-                onClick={() => handleClickFolder(child.id)}
+                onClick={() => {
+                  handleClickFolder(child.id);
+                  setFolderName(child.name);
+                  (setLeftBar ?? (() => {}))(false);
+                }}
                 key={child.id}
-                className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 font-sans"
+                className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 "
               >
                 <Folder />{" "}
-                <span className="truncate w-[60%]">{child.name}</span>
+                <span className="truncate w-[60%] font-sans ">
+                  {child.name}
+                </span>
               </h1>
             ))
           ) : (
-            <p className="whitespace-nowrap hover:shadow-lg rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
-              No folder
+            <p className="whitespace-nowrap rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
+              No folders
             </p>
           )}
         </div>
       </div>
-      <div className="flex flex-col justify-center items-center gap-4">
-        <div
+      <div className="flex flex-col justify-center items-center gap-4 absolute bottom-0 w-full">
+        {/* <div
           onClick={() => {
             setLeftBar?.((prev) => !prev);
           }}
           className="text-[#40566D] text-[14px] pl-4 pr-4 flex font-sans justify-between md:hidden items-start w-full"
         >
-          {/* <span className="flex items-center  gap-2">
+          <span className="flex items-center  gap-2">
             <MobileWallet />
             My Wallets
-          </span> */}
+          </span>
           <Arrow className={"w-[8px] h-[22px]"} />
-        </div>
+        </div> */}
+
         <div
+          className="md:block  text-[#FFFFFF] rounded-tr-2xl rounded-tl-2xl flex flex-col"
           style={{
-            background: "linear-gradient(180deg, #1D203E 0%, #4D55A4 130.53%)",
+            background: "linear-gradient(to top, #4D55A4, #1D203E)",
+            borderTopLeftRadius: "15px",
+            borderTopRightRadius: "15px",
+            // padding: "20px"
+            // borderRadius: "10px",
+            width: "100%",
+            height: "100%",
           }}
-          className="w-[75vw]  md:w-full py-2 text-[#FFFFFF] rounded-tr-2xl rounded-tl-2xl flex flex-col justify-center items-center"
         >
-          <div className="flex justify-between w-[90%]">
-            <p className="text-[16px] font-[600]">Available Space</p>
-            <p className="text-[16px]">30%</p>
+          <div className="mb-6 mt-3">
+            <div className="flex justify-between px-4">
+              <p className="font-bold text-xl">Available Space</p>
+              <p className=" text-xl font-sans">{100 - used}%</p>
+            </div>
+            <p className="font-sans font-thin text-[10px] opacity-70 px-4">
+              Expire on: 12.12.24
+            </p>
           </div>
-          <p className="text-[#FFFFFF80] text-[10px] text-start w-[90%]">
-            Expire on: 12.12.24
-          </p>
-          <img src="progressbar.svg" />
-          <div
-            style={{
-              background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
+          <div className="font-sans px-4 flex justify-between">
+            <p>{total_size} GB</p>
+            <p className="opacity-75">{used} GB used</p>
+          </div>
+          <LinearProgress
+            className=""
+            sx={{
+              marginLeft: "13px",
+              marginBottom: "20px",
+              width: "90%", // Makes it fully responsive
+              maxWidth: "300px", // Maximum width for larger screens
+              height: 10,
+              borderRadius: 5,
+              backgroundColor: "#e0e0e0",
+              "& .MuiLinearProgress-bar": {
+                background:
+                  "linear-gradient(to left, #B325FC, #8C44FD, #6860FE, #3983FF)",
+              },
             }}
-            className="flex justify-center items-center mt-2 w-[90%] text-[white] text-[14px] rounded-xl h-[39px]"
-          >
-            ⚡️ Buy more space
+            variant="determinate"
+            value={used}
+          />
+
+          <div className="flex justify-center mb-3">
+            <div
+              style={{
+                background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
+              }}
+              className="flex justify-center items-center mt-2 w-[90%] text-[white] text-[14px] rounded-xl h-[39px]"
+            >
+              ⚡️ Buy more space
+            </div>
           </div>
         </div>
+      </div>
       </div>
     </>
   );

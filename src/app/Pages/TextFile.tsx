@@ -1,14 +1,24 @@
-
 import { useAuth } from "../../AuthContext";
 import Account from "../../Components/Account";
-import { Arrow, Download, Invite, Print, SixDots, Xcel } from "../../assets/Icons";
+import {
+  Arrow,
+  BackArrow,
+  Download,
+  Invite,
+  Print,
+  SixDots,
+  Xcel,
+} from "../../assets/Icons";
 import Word from "../../Components/Word";
 import ExcelSheet from "../../Components/ExcelSheet";
 import { useFileContext } from "../../FileContext";
 import PDF from "../../Components/PDF";
+import { useNavigate } from "react-router-dom";
 
 function TextFile() {
-  const { isAccountOpen, setIsAccountOpen, toggleComponent } = useAuth();
+  const navigate =useNavigate();
+  const { isAccountOpen, setIsAccountOpen, toggleComponent, profile } =
+    useAuth();
   // const queryParams = new URLSearchParams(location.search);
   // const Type = queryParams.get('type');
   const { fileUrl, fileType, fileName } = useFileContext();
@@ -19,9 +29,10 @@ function TextFile() {
         style={{
           background: "linear-gradient(90deg, #1D203E 0%, #4D55A4 100%)",
         }}
-        className="flex w-full h-[10vh] min-h-[68px] items-center justify-between md:pl-4 px-2 md:pr-5"
+        className="flex w-full h-[10vh] min-h-[68px] items-center justify-between md:pl-3 px-2 md:pr-5"
       >
         <div className="flex items-center">
+         <span className="cursor-pointer mr-3" onClick={()=>navigate('/')}><BackArrow className={"w-6 h-8"}/></span> 
           <span className="flex gap-2 md:pr-7 items-center md:border-r border-white">
             <img src="/logo.svg" alt="" className="w-7 h-6" />
             <p className="font-chakra text-[16px] md:text-[22px] text-white">
@@ -37,7 +48,7 @@ function TextFile() {
               {fileType === "pdf" && (
                 <img src="/pdf.png" alt="" className="w-[26px] h-[26px]" />
               )}
-              <p className="font-sans text-[14px] text-white">{fileName}</p>
+              <p className="font-sans text-[14px] text-white w-[20vw] truncate">{fileName}</p>
             </>
           </span>
         </div>
@@ -73,10 +84,7 @@ function TextFile() {
               className="flex items-center cursor-pointer gap-2 md:bg-[#F8FAFC] md:border border-[#BFBFBF57] md:p-2 h-[42px] rounded-[12px]"
             >
               <div className=" h-[35px] w-[35px] rounded-full cursor-pointer  overflow-hidden">
-                <img
-                  src="https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg"
-                  className="w-full h-full object-cover "
-                />
+                <img src={profile} className="w-full h-full object-cover " />
               </div>
               <span className="md:flex items-center justify-center gap-1 hidden">
                 <p className="text-[#40566D] text-[12px] font-[600] font-sans text-right leading-[18px]">
@@ -90,6 +98,7 @@ function TextFile() {
                 className={
                   "left-[-220px] md:left-[-230px] top-[42px] md:top-[50px]"
                 }
+                profileLoading={false}
               />
             )}
           </div>

@@ -1,4 +1,10 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useEffect,
+} from "react";
 import { Folder } from "./features/directories/folderSlice";
 
 type OpenComponentsState = {
@@ -7,17 +13,27 @@ type OpenComponentsState = {
 
 // Define types for AuthContext
 interface AuthContextType {
+  profile: string;
+  total_size: number;
+  used: number;
   isGridMode: boolean;
-  parentFolder:Folder| null;
+  usedStorage: number;
+  parentFolder: Folder | null;
   isAccountOpen: boolean;
   isAuthenticated: boolean;
+  reGetProfile: boolean;
   isOpenComponent: OpenComponentsState;
   login: () => void;
   signup: () => void;
   logout: () => void;
+  setProfile: any;
   setIsGridMode: (isGridMode: boolean) => void;
   setParentFolder: (component: Folder) => void;
+  setTotal_size: React.Dispatch<React.SetStateAction<number>>;
+  setUsed: React.Dispatch<React.SetStateAction<number>>;
+  setUsedStorage: React.Dispatch<React.SetStateAction<number>>;
   toggleComponent: (component: string, isOpen?: boolean) => void;
+  setReGetProfile: React.Dispatch<React.SetStateAction<boolean>>;
   setIsAccountOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -27,8 +43,25 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+const isTokenValid = () => {
+  const token = localStorage.getItem("access_token");
+  if (!token) return false;
+  try {
+    const { exp } = JSON.parse(atob(token.split(".")[1]));
+    const currentTime = Math.floor(Date.now() / 1000);
+    return exp > currentTime;
+  } catch (error) {
+    return false;
+  }
+};
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAccountOpen, setIsAccountOpen] = useState<boolean>(false);
+  const [profile, setProfile] = useState<string>("");
+  const [total_size, setTotal_size] = useState(0);
+  const [used, setUsed] = useState(0);
+  const [usedStorage, setUsedStorage] = useState<number>(0);
+  const [reGetProfile, setReGetProfile] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [isGridMode, setIsGridMode] = useState<boolean>(false);
   const [parentFolder, setParentFolder] = useState<Folder | null>(null);
@@ -38,18 +71,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     newFolder: false,
     newExcel: false,
     newDocs: false,
+    reName: false,
+    meta: false,
   });
- 
+
   useEffect(() => {
-    const parentId = localStorage.getItem('parent_id');
-    if (parentId) {
-      setParentFolder((prev) => ({
-        ...prev,
-        id: parentId,
-      } as Folder));
+    if (isTokenValid()) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
     }
   }, []);
 
+  useEffect(() => {
+    const parentId = localStorage.getItem("parent_id");
+    if (parentId) {
+      setParentFolder(
+        (prev) =>
+          ({
+            ...prev,
+            id: parentId,
+          } as Folder)
+      );
+    }
+  }, []);
 
   const toggleComponent = (component: string, isOpen?: boolean) => {
     setOpenComponent((prevState) => ({
@@ -67,20 +112,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = () => {
-    setIsAuthenticated(false);
+    window.location.reload();
     localStorage.removeItem("access_token");
   };
 
   return (
     <AuthContext.Provider
       value={{
+        used,
+        setUsed,
         login,
         signup,
         logout,
+        profile,
+        setProfile,
+        total_size,
+        setTotal_size,
         isGridMode,
+        usedStorage,
+        setUsedStorage,
         parentFolder,
         setIsGridMode,
         isAccountOpen,
+        reGetProfile,
+        setReGetProfile,
         setParentFolder,
         setIsAccountOpen,
         isOpenComponent,
