@@ -59,7 +59,6 @@ function RegisterSeeds() {
         <img src="/img2.png" alt="" className="w-20 h-20" />
       </div>
       <div className="flex flex-col w-[100vw] md:w-[40vw] p-4">
-        {/* <span className="flex gap-2 md:pr-7 items-center md:border-r border-white"> */}
         <span className="flex gap-2 md:pr-7 items-center justify-center md:mr-[200px] lg:mr-[400px] mt-[23px] md:border-r border-white">
           <img src="/logo.svg" alt="" className="w-7 h-6" />
           <p className="font-chakra text-[16px] md:text-[22px] text-black">
@@ -67,7 +66,7 @@ function RegisterSeeds() {
           </p>
         </span>
         <div className="flex flex-col items-center justify-center h-full w-full gap-[5vh]">
-          <div className="flex flex-col items-center  gap-1">
+          <div className="flex flex-col items-center lg:justify-center mt-[40px] lg:mt-0 lg:pb-0 gap-1">
             <img
               src="seeds.svg"
               alt=""
@@ -87,7 +86,7 @@ function RegisterSeeds() {
             </p>
           </div>
 
-          <div className="relative w-[38vw]">
+          <div className="relative lg:w-[38vw]">
             <span className="absolute -top-7 right-2">
               {isSeedsLoading ? (
                 <ThreeCircles height="20" width="20" color="black" />
@@ -95,6 +94,7 @@ function RegisterSeeds() {
                 <CheckMark className="h-6 w-6" />
               )}
             </span>
+
             <div className="w-[356px] lg:w-[610px] h-[152px] lg:h-[208.87px] justify-center pb-1 pt-3 border border-[#c53636] rounded-lg">
               <label
                 htmlFor="key"
@@ -119,7 +119,7 @@ function RegisterSeeds() {
             </div>
 
             <div className="flex flex-wrap font-sans gap-4 mt-2 justify-between items-center w-[144px] lg:w-[627px] text-xs md:text-sm">
-              <p className="text-[#BABABACC] flex-1 min-w-[150px] text-[12px] lg:text-[16px]">
+              <p className="text-[#BABABACC] flex-1 min-w-[150px] md:min-w-[300px] text-[12px] lg:text-[16px] md:text-[16px] whitespace-nowrap">
                 Please write these down in case you lose your seed.
               </p>
               <p className="text-[#000000A1] flex gap-1 items-center cursor-pointer">
@@ -153,7 +153,7 @@ function RegisterSeeds() {
               borderImageSource:
                 "linear-gradient(357.47deg, #005EFF 12.36%, rgba(53, 90, 153, 0) 97.89%)",
             }}
-            className="w-[202px] h-[48px] disabled:opacity-75 disabled:cursor-not-allowed flex justify-center items-center text-white hover:shadow-lg shadow-black border-[1.16px] rounded-[13px] text-[15px] font-sans text-center"
+            className="w-[252px]  h-[48.71px]  disabled:opacity-75 disabled:cursor-not-allowed flex justify-center items-center text-white hover:shadow-lg shadow-black border-[1.16px] rounded-[13px] text-[15px] font-sans text-center"
           >
             Next
             {isTokenLoading && (
@@ -170,7 +170,7 @@ function RegisterSeeds() {
             "linear-gradient(155.35deg, #3984FF -4.35%, #6860FE 32.93%, #8C44FD 62.55%, #B325FC 94.21%)",
           height: "100vh",
         }}
-        className="rounded-[22px] w-full h-[50vh]  md:w-[50%] overflow-hidden "
+        className="rounded-[22px] w-full min-h-screen md:w-[50%] overflow-auto"
       >
         <img
           src="/login-bg.svg"
@@ -179,9 +179,9 @@ function RegisterSeeds() {
         />
 
         <img
-          src="/login-mobile.svg"
+          src="/seed-mob.svg"
           alt=""
-          className="w-full h-[60vh] object-cover block md:hidden"
+          className="w-full h-auto min-h-screen object-contain block md:hidden"
         />
       </div>
     </div>

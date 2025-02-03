@@ -119,7 +119,7 @@ function Login() {
             </span>
           </p>
 
-          <div className="relative">
+          <div className="relative lg:w-[38vw]">
             <div className="w-[356px] h-152px lg:h-[191.35px] lg:w-[610px] lg:ml-3 px-2.5 pb-2.5  pt-6 border border-[#BABABA] rounded-lg">
               <div
                 className={`${

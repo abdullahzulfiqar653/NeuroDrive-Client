@@ -27,7 +27,7 @@ function RegisterInfo({ setAcknowledged }: RegisterInfoProps) {
         </span>
 
         <div className="flex flex-col items-center justify-center h-full w-full gap-3">
-          <div className="flex flex-col items-center gap-1 mt-[70px] mb-6 text-center">
+          <div className="flex flex-col items-center gap-1 mt-[50px] mb-6 text-center">
             <h1 className="text-[#202343] text-[20px] lg:text-[48px]  md:text-[38px]  font-bold">
               Register Account
             </h1>
