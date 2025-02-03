@@ -643,11 +643,8 @@ function FileGallery({ showStarredOnly }: any) {
                           </div>
                         </p>
                         <div
-                          onClick={(event) => {
-                            handlePopupToggle({ index, event }),
-                              event.stopPropagation();
-                          }}
-                          className="cursor-pointer w-[10%] h-full flex items-center justify-start px-4"
+                          onClick={(event) => handlePopupToggle({ index, event })}
+                          className="cursor-pointer w-full h-full flex items-center justify-end px-4"
                         >
                           <ThreeDots />
                         </div>
@@ -662,7 +659,10 @@ function FileGallery({ showStarredOnly }: any) {
                       </div>
                     </div>
                     {activeIndex === index && (
-                      <div  ref={popupRef} className="absolute w-auto right-0 top-8 bg-white rounded-lg shadow-lg p-3 border z-50">
+                      <div
+                        ref={popupRef}
+                        className="absolute w-auto right-0 top-8 bg-white rounded-lg shadow-lg p-3 border z-50"
+                      >
                         <CustomPopup
                           file={file}
                           id={file?.id}
