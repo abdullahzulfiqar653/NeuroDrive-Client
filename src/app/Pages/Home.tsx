@@ -212,7 +212,7 @@ function Home() {
               >
                 <Cross className={"h-[14px] w-[14px]"} />
               </span>
-              <LeftBar />
+              <LeftBar setLeftBar={setLeftBar}/>
             </section>
           </section>
         )}
@@ -223,11 +223,11 @@ function Home() {
 
 export default Home;
 
-// type LeftBarProps = {
-//   setLeftBar?: React.Dispatch<React.SetStateAction<boolean>>;
-// };
+type LeftBarProps = {
+  setLeftBar?: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-function LeftBar() {
+function LeftBar({setLeftBar}:LeftBarProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [isFolderName, setFolderName] = useState<string>("");
   const { directory } = useSelector((state: RootState) => state.folders);
@@ -235,7 +235,6 @@ function LeftBar() {
     toggleComponent,
     parentFolder,
     setParentFolder,
-    usedStorage,
     used,
     total_size,
   } = useAuth();
@@ -274,7 +273,7 @@ function LeftBar() {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-start px-2 pt-4 gap-3 w-full">
+      <div className="flex flex-col justify-center items-start pt-4 gap-3 w-full">
         <img
           src="/logoName.svg"
           className="w-[150px] mb-1 md:mb-0 md:pl-1 pl-5"
@@ -317,7 +316,7 @@ function LeftBar() {
           </div>
         </div>
         <Line className={"mt-2 min-w-[230px] w-full"} />
-      </div>
+     
       <div className="flex flex-col items-center gap-2 my-2 h-[30vh] overflow-auto">
         <div className="flex items-center justify-between w-full px-2 pb-2">
           <h1 className="flex text-[14px] text-[#9F9F9F] gap-1 items-center">
@@ -340,6 +339,7 @@ function LeftBar() {
                 onClick={() => {
                   handleClickFolder(child.id);
                   setFolderName(child.name);
+                  (setLeftBar ?? (() => {}))(false);
                 }}
                 key={child.id}
                 className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 "
@@ -426,6 +426,7 @@ function LeftBar() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </>
   );
