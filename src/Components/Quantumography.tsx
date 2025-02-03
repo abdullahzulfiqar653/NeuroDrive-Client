@@ -13,7 +13,6 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
   const [File, setFile] = useState<File | null>(null);
-  const [fileName, setFileName] = useState<string>("");
 
   const MAX_FILE_SIZE = 500 * 1024;
 
@@ -31,8 +30,8 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
         return;
       }
       setFile(file);
-      setFileName(file.name);
     }
+    event.target.value = "";
   };
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -53,7 +52,6 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
         return;
       }
       setFile(file);
-      setFileName(file.name);
     }
   };
   const handleSubmit = async () => {
@@ -78,11 +76,10 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
           }
         );
         if (data) {
-          //   setFileName("");
           setIsLoading(false);
           setCoverUrl(data?.image_url);
           setStep(2);
-          //   setFile(null);
+          setFile(null);
         }
         return;
       }
@@ -243,7 +240,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                 </svg>
 
                 <h2 className="mt-1 font-medium tracking-wide text-[#005EFF]">
-                  {fileName || (step === 1 ? "Cover File" : "Secret File")}
+                  {File?.name || (step === 1 ? "Cover File" : "Secret File")}
                 </h2>
 
                 <p className="mt-2 text-xs tracking-wide text-[#005EFF]">
@@ -270,7 +267,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                     className="w-32 h-32 object-cover rounded-lg shadow-lg"
                   />
                   {/* Display File Name */}
-                  <p className="text-lg mt-2 text-gray-700">{fileName}</p>
+                  <p className="text-lg mt-2 text-gray-700">{File.name}</p>
                 </div>
               )}
             </div>
