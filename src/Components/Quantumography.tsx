@@ -158,7 +158,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
 
   return (
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center">
-      <div className="relative py-6 w-[60vw] px-3 md:px-4 flex flex-col items-center justify-center rounded-lg bg-[#ffffff]">
+      <div className="relative py-6 w-[80vw] md:w-[60vw] px-3 md:px-4 flex flex-col items-center justify-center rounded-lg bg-[#ffffff]">
         <span
           onClick={() => {
             setToggleQuantumography(false);
@@ -168,7 +168,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
           <Cross className="w-[11px] h-[11px] md:w-3 md:h-3" color="#000000" />
         </span>
         <div className="flex flex-col px-6 items-start w-full justify-start text-[12px] md:text-[14px] text-black">
-          <h1 className="font-bold text-3xl text-center w-full">
+          <h1 className=" font-[600] md:font-bold text-[17px] md:text-3xl text-center w-full">
             Quantumography
           </h1>
           {showSteps ? (
@@ -179,12 +179,12 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                 <p
                   className={`${
                     step === 1 ? "text-black" : "text-gray-400"
-                  } text-[10px] font-thin`}
+                  } text-[8.5px] md:text-[10px] whitespace-nowrap font-thin`}
                 >
                   1/3 {step === 1 && "- Upload cover file"}
                 </p>
                 <div
-                  className={`w-32 h-1 rounded ${
+                  className={`w-20 md:w-32 h-1 rounded ${
                     step === 1 ? "bg-[#005EFF]" : "bg-[#87acec]"
                   }`}
                 ></div>
@@ -193,12 +193,12 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                 <p
                   className={`${
                     step === 2 ? "text-black" : "text-gray-400"
-                  } text-[10px] font-thin`}
+                  } text-[8.5px] md:text-[10px] whitespace-nowrap  font-thin`}
                 >
                   2/3 {step === 2 && "- Upload private file"}
                 </p>
                 <div
-                  className={`w-32 h-1 rounded ${
+                  className={`w-20 md:w-32  h-1 rounded ${
                     step === 2 ? "bg-[#005EFF]" : "bg-[#87acec]"
                   }`}
                 ></div>
@@ -207,12 +207,12 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                 <p
                   className={`${
                     step === 3 ? "text-black" : "text-gray-400"
-                  } text-[10px] font-thin`}
+                  } text-[8.5px] md:text-[10px] whitespace-nowrap  font-thin`}
                 >
                   3/3 {step === 3 && "- Downalod file"}
                 </p>
                 <div
-                  className={`w-32 h-1 rounded ${
+                  className={`w-20 md:w-32  h-1 rounded ${
                     step === 3 ? "bg-[#005EFF]" : "bg-[#87acec]"
                   }`}
                 ></div>
@@ -297,7 +297,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
           <div
             className={`${
               step === 3 ? "flex justify-between" : ""
-            } w-full flex`}
+            } w-full flex justify-center`}
           >
             <button
               onClick={handleSubmit}
@@ -307,7 +307,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                 borderImageSource:
                   "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)",
               }}
-              className="mx-auto w-[170px] h-[34px] disabled:opacity-75 disabled:cursor-not-allowed md:w-[173px] md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
+              className="mx-auto w-[160px] h-[30px] disabled:opacity-75 disabled:cursor-not-allowed md:w-[173px] md:h-[42px] rounded-md md:rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
             >
               {step === 1
                 ? "Upload cover file!"
