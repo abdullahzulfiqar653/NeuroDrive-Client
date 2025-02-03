@@ -413,7 +413,7 @@ function FileGallery({ showStarredOnly }: any) {
                   {activeIndex === index && (
                     <div
                       ref={popupRef}
-                      className="absolute w-auto right-6 -bottom-[164px]  bg-white rounded-lg shadow-lg p-3 border z-50"
+                      className="absolute w-auto right-3 md:right-6 -bottom-[164px]  bg-white rounded-lg shadow-lg p-3 border z-50"
                     >
                       <CustomPopup
                         file={item}
@@ -445,8 +445,8 @@ function FileGallery({ showStarredOnly }: any) {
           </div>
         ) : (
           <div className="container md:rounded-xl md:border w-full h-full my-4">
-            <div className="h-full rounded-xl bg-[#F1F5FA] w-[full] hidden md:flex flex-col ">
-              <div className="overflow-hidden rounded-xl  bg-[#F1F5FA] w-[full] text-[14px] h-[57px]  font-sans flex  justify-between items-center">
+            <div className="h-full rounded-xl bg-[#F1F5FA] w-[full] flex flex-col ">
+              <div className="overflow-hidden rounded-xl hidden md:flex bg-[#F1F5FA] w-[full] text-[14px] h-[57px]  font-sans  justify-between items-center">
                 <p className="border w-[30%] gap-2 h-full flex items-center justify-start px-4">
                   <span
                     onClick={() => setRadioClick((prev) => !prev)}
@@ -476,7 +476,7 @@ function FileGallery({ showStarredOnly }: any) {
                       onClick={() =>
                         handleFileOpen(file.id, file.is_password_protected)
                       }
-                      className="overflow-hidden cursor-pointer bg-white hover:bg-[#f2f3f3] w-[full] text-[14px] h-[57px] font-sans flex justify-between items-center"
+                      className="overflow-hidden cursor-pointer bg-white hover:bg-[#f2f3f3] w-[full] text-[14px] h-[57px] hidden font-sans md:flex justify-between items-center"
                     >
                       <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
                         <span
@@ -492,198 +492,54 @@ function FileGallery({ showStarredOnly }: any) {
                         </span>
 
                         {/* Check file extension and content type */}
-                        {["xls", "xlsx"].includes(
-                          file?.name.split(".").pop() || ""
-                        ) ||
-                        (file?.content_type &&
-                          (file.content_type.includes("excel") ||
-                            file.content_type.includes("spreadsheet"))) ? (
-                          <>
-                            <div className="">
-                              {" "}
-                              <p
-                                className={`${
-                                  file?.is_password_protected
-                                    ? "blur-[2px]"
-                                    : ""
-                                }`}
-                              >
-                                <Xcel className={`w-4 h-4`} />
-                              </p>
-                              {file?.is_password_protected && (
-                                <p className="absolute top-5">
-                                  <GoLock />
-                                </p>
-                              )}
-                            </div>
-                            <p className="whitespace-nowrap">
-                              {file?.name.length > 10
-                                ? file.name.includes(".")
-                                  ? `${file.name.slice(0, 10)}...${file.name
-                                      .split(".")
-                                      .pop()}`
-                                  : `${file.name.slice(0, 10)}...`
-                                : file.name}
-                            </p>
-                          </>
-                        ) : null}
-
-                        {["doc", "docx"].includes(
-                          file?.name.split(".").pop() || ""
-                        ) ||
-                        (file?.content_type &&
-                          (file.content_type.includes("application/msword") ||
-                            file.content_type.includes(
-                              "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                            ))) ? (
-                          <>
-                            <div className="relative">
-                              <p
-                                className={`${
-                                  file?.is_password_protected
-                                    ? "blur-[2px]"
-                                    : ""
-                                }`}
-                              >
-                                {" "}
-                                <ShortRich />
-                              </p>
-                              <p>
-                                {" "}
-                                {file?.is_password_protected && (
-                                  <p className="absolute top-1 right-[2px]">
-                                    <GoLock />
-                                  </p>
-                                )}
-                              </p>
-                            </div>
-                            <p className="whitespace-nowrap">
-                              {file?.name.length > 10
-                                ? file.name.includes(".")
-                                  ? `${file.name.slice(0, 10)}...${file.name
-                                      .split(".")
-                                      .pop()}`
-                                  : `${file.name.slice(0, 10)}...`
-                                : file.name}
-                            </p>
-                          </>
-                        ) : null}
-
-                        {file?.name.split(".").pop() === "txt" ||
-                        (file?.content_type &&
-                          file.content_type.includes("text/plain")) ? (
-                          <>
-                            <div className="">
-                              <p
-                                className={`${
-                                  file?.is_password_protected
-                                    ? "blur-[2px]"
-                                    : ""
-                                }`}
-                              >
-                                <img
-                                  src="rich.png"
-                                  alt=""
-                                  className="w-4 h-4"
-                                />
-                              </p>
-                              <p>
-                                {" "}
-                                {file?.is_password_protected && (
-                                  <p className="absolute top-5">
-                                    <GoLock />
-                                  </p>
-                                )}
-                              </p>
-                            </div>
-                            <p className="whitespace-nowrap">
-                              {file?.name.length > 10
-                                ? file.name.includes(".")
-                                  ? `${file.name.slice(0, 10)}...${file.name
-                                      .split(".")
-                                      .pop()}`
-                                  : `${file.name.slice(0, 10)}...`
-                                : file.name}
-                            </p>
-                          </>
-                        ) : null}
-
-                        {["jpg", "png"].includes(
-                          file?.name.split(".").pop() || ""
-                        ) ||
-                        (file?.content_type &&
-                          (file.content_type.includes("image/jpeg") ||
-                            file.content_type.includes("image/png"))) ? (
-                          <>
-                            <div>
-                              <div className="">
-                                <p
-                                  className={`${
-                                    file?.is_password_protected
-                                      ? "blur-[2px]"
-                                      : ""
-                                  }`}
-                                >
-                                  {" "}
-                                  <Gallery className="w-3 h-3 md:w-4 md:h-4" />
-                                </p>
-                                <p>
-                                  {" "}
-                                  {file?.is_password_protected && (
-                                    <p className="absolute top-5">
-                                      <GoLock />
-                                    </p>
-                                  )}
-                                </p>
-                              </div>
-                            </div>
-                            <p className="whitespace-nowrap">
-                              {file?.name.length > 10
-                                ? file.name.includes(".")
-                                  ? `${file.name.slice(0, 10)}...${file.name
-                                      .split(".")
-                                      .pop()}`
-                                  : `${file.name.slice(0, 10)}...`
-                                : file.name}
-                            </p>
-                          </>
-                        ) : null}
-
-                        {file?.name.split(".").pop() === "pdf" && (
-                          <>
-                            <div className="">
-                              <p
-                                className={`${
-                                  file?.is_password_protected
-                                    ? "blur-[2px]"
-                                    : ""
-                                }`}
-                              >
-                                <img
-                                  src="/pdf.png"
-                                  className="w-3 h-3 md:w-4 md:h-4"
-                                />
-                              </p>
-                              <p>
-                                {" "}
-                                {file?.is_password_protected && (
-                                  <p className="absolute top-5">
-                                    <GoLock />
-                                  </p>
-                                )}
-                              </p>
-                            </div>
-                            <p className="whitespace-nowrap">
-                              {file?.name.length > 10
-                                ? file.name.includes(".")
-                                  ? `${file.name.slice(0, 10)}...${file.name
-                                      .split(".")
-                                      .pop()}`
-                                  : `${file.name.slice(0, 10)}...`
-                                : file.name}
-                            </p>
-                          </>
-                        )}
+                        <div className="flex justify-center gap-1 ">
+                          {["xls", "xlsx"].includes(
+                            file?.name.split(".").pop() || ""
+                          ) ||
+                          (file?.content_type &&
+                            (file.content_type.includes("excel") ||
+                              file.content_type.includes("spreadsheet"))) ? (
+                            <Xcel className="w-4 h-4" />
+                          ) : null}
+                          {["doc", "docx"].includes(
+                            file?.name.split(".").pop() || ""
+                          ) ||
+                          (file?.content_type &&
+                            (file.content_type.includes("application/msword") ||
+                              file.content_type.includes(
+                                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                              ))) ? (
+                            <ShortRich />
+                          ) : null}
+                          {file?.name.split(".").pop() === "txt" ||
+                          (file?.content_type &&
+                            file.content_type.includes("text/plain")) ? (
+                            <img src="rich.png" alt="" className="w-4 h-4" />
+                          ) : null}
+                          {["jpg", "png"].includes(
+                            file?.name.split(".").pop() || ""
+                          ) ||
+                          (file?.content_type &&
+                            (file.content_type.includes("image/jpeg") ||
+                              file.content_type.includes("image/png"))) ? (
+                            <Gallery className="w-3 h-3 md:w-4 md:h-4" />
+                          ) : null}
+                          {file?.name.split(".").pop() === "pdf" && (
+                            <img
+                              src="/pdf.png"
+                              className="w-3 h-3 md:w-4 md:h-4"
+                            />
+                          )}
+                          <p className="whitespace-nowrap">
+                            {file?.name.length > 10
+                              ? file.name.includes(".")
+                                ? `${file.name.slice(0, 10)}...${file.name
+                                    .split(".")
+                                    .pop()}`
+                                : `${file.name.slice(0, 10)}...`
+                              : file.name}
+                          </p>
+                        </div>
                       </p>
                       <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
                         {Array.isArray(file.shared_with) &&
@@ -717,8 +573,96 @@ function FileGallery({ showStarredOnly }: any) {
                         <ThreeDots />
                       </div>
                     </div>
+                    <div
+                      onClick={() =>
+                        handleFileOpen(file.id, file.is_password_protected)
+                      }
+                      className="w-full h-[74px] my-2  rounded-tl-[12px] rounded-tr-[12px] bg-[#FFFFFF] md:hidden flex flex-col items-center"
+                    >
+                      <div className="h-[50%] w-full bg-[#F1F5FA] rounded-tl-[12px] rounded-tr-[12px] px-2 pr-4 flex justify-between items-center">
+                        <p className="flex items-center font-sans text-[11px]">
+                          <span
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setRadioClick((prev) => !prev);
+                            }}
+                            className="w-auto text-start mr-4 cursor-pointer"
+                          >
+                            <Circle color={radioClick ? "#2676ff" : "none"} />
+                          </span>
+                          {/* Check file extension and content type */}
+                          <div className="flex justify-center gap-1 ">
+                            {["xls", "xlsx"].includes(
+                              file?.name.split(".").pop() || ""
+                            ) ||
+                            (file?.content_type &&
+                              (file.content_type.includes("excel") ||
+                                file.content_type.includes("spreadsheet"))) ? (
+                              <Xcel className="w-4 h-4" />
+                            ) : null}
+                            {["doc", "docx"].includes(
+                              file?.name.split(".").pop() || ""
+                            ) ||
+                            (file?.content_type &&
+                              (file.content_type.includes(
+                                "application/msword"
+                              ) ||
+                                file.content_type.includes(
+                                  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                ))) ? (
+                              <ShortRich />
+                            ) : null}
+                            {file?.name.split(".").pop() === "txt" ||
+                            (file?.content_type &&
+                              file.content_type.includes("text/plain")) ? (
+                              <img src="rich.png" alt="" className="w-4 h-4" />
+                            ) : null}
+                            {["jpg", "png"].includes(
+                              file?.name.split(".").pop() || ""
+                            ) ||
+                            (file?.content_type &&
+                              (file.content_type.includes("image/jpeg") ||
+                                file.content_type.includes("image/png"))) ? (
+                              <Gallery className="w-3 h-3 md:w-4 md:h-4" />
+                            ) : null}
+                            {file?.name.split(".").pop() === "pdf" && (
+                              <img
+                                src="/pdf.png"
+                                className="w-3 h-3 md:w-4 md:h-4"
+                              />
+                            )}
+                            <p className="whitespace-nowrap">
+                              {file?.name.length > 10
+                                ? file.name.includes(".")
+                                  ? `${file.name.slice(0, 10)}...${file.name
+                                      .split(".")
+                                      .pop()}`
+                                  : `${file.name.slice(0, 10)}...`
+                                : file.name}
+                            </p>
+                          </div>
+                        </p>
+                        <div
+                          onClick={(event) => {
+                            handlePopupToggle({ index, event }),
+                              event.stopPropagation();
+                          }}
+                          className="cursor-pointer w-[10%] h-full flex items-center justify-start px-4"
+                        >
+                          <ThreeDots />
+                        </div>
+                      </div>
+                      <div className="h-[50%] w-[85%] flex justify-between items-center">
+                        <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
+                          <NoPerson className={"w-[20px] h-[20px]"} /> _
+                        </p>
+                        <p className=" w-[50%] text-[10px] font-sans h-full flex items-center justify-end px-4">
+                          File size: {(file.size / 1024 ** 2).toFixed(2)} GB
+                        </p>
+                      </div>
+                    </div>
                     {activeIndex === index && (
-                      <div className="absolute w-auto right-0 top-8 bg-white rounded-lg shadow-lg p-3 border z-50">
+                      <div  ref={popupRef} className="absolute w-auto right-0 top-8 bg-white rounded-lg shadow-lg p-3 border z-50">
                         <CustomPopup
                           file={file}
                           id={file?.id}
@@ -747,143 +691,6 @@ function FileGallery({ showStarredOnly }: any) {
                   </div>
                 ))}
             </div>
-            {parentFolder?.files
-              .filter((item) => (showStarredOnly ? item.is_starred : true))
-              .map((file, index) => (
-                <div
-                  onClick={() =>
-                    handleFileOpen(file.id, file.is_password_protected)
-                  }
-                  className="w-full h-[74px] my-2  rounded-tl-[12px] rounded-tr-[12px] bg-[#FFFFFF] md:hidden flex flex-col items-center"
-                >
-                  <div className="h-[50%] w-full bg-[#F1F5FA] rounded-tl-[12px] rounded-tr-[12px] px-2 pr-4 flex justify-between items-center">
-                    <p className="flex items-center font-sans text-[11px]">
-                      <span
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setRadioClick((prev) => !prev);
-                        }}
-                        className="w-auto text-start mr-4 cursor-pointer"
-                      >
-                        <Circle color={radioClick ? "#2676ff" : "none"} />
-                      </span>
-                      {["xls", "xlsx"].includes(
-                        file?.name.split(".").pop() || ""
-                      ) && (
-                        <>
-                          <Xcel className="w-4 h-5 mr-1" />
-                          <p className="whitespace-nowrap ml-1">
-                            {file?.name.length > 10
-                              ? `${file.name.slice(0, 10)}...${file.name
-                                  .split(".")
-                                  .pop()}`
-                              : file.name}
-                          </p>
-                        </>
-                      )}
-                      {["doc", "docx"].includes(
-                        file?.name.split(".").pop() || ""
-                      ) && (
-                        <>
-                          <ShortRich />
-                          <p className="whitespace-nowrap ml-1">
-                            {file?.name.length > 10
-                              ? `${file.name.slice(0, 10)}...${file.name
-                                  .split(".")
-                                  .pop()}`
-                              : file.name}
-                          </p>
-                        </>
-                      )}
-                      {file?.name.split(".").pop() === "txt" && (
-                        <>
-                          {" "}
-                          <img src="rich.png" alt="" className="w-4 h-4" />{" "}
-                          <p className="whitespace-nowrap ml-1">
-                            {file?.name.length > 10
-                              ? `${file.name.slice(0, 10)}...${file.name
-                                  .split(".")
-                                  .pop()}`
-                              : file.name}
-                          </p>
-                        </>
-                      )}
-                      {["jpg", "png"].includes(
-                        file?.name.split(".").pop() || ""
-                      ) && (
-                        <>
-                          <div>
-                            <Gallery className="w-3 h-3 md:w-4 md:h-4" />
-                          </div>
-                          <p className="whitespace-nowrap ml-1">
-                            {file?.name.length > 10
-                              ? `${file.name.slice(0, 10)}...${file.name
-                                  .split(".")
-                                  .pop()}`
-                              : file.name}
-                          </p>
-                        </>
-                      )}
-                      {file?.name.split(".").pop() === "pdf" && (
-                        <>
-                          <img src="/pdf.png" className="w-4 h-4 mr-1" />
-                          <p className="whitespace-nowrap ml-1">
-                            {file?.name.length > 10
-                              ? `${file.name.slice(0, 10)}...${file.name
-                                  .split(".")
-                                  .pop()}`
-                              : file.name}
-                          </p>
-                        </>
-                      )}
-                    </p>
-                    <div
-                      onClick={(event) => {
-                        handlePopupToggle({ index, event }),
-                          event.stopPropagation();
-                      }}
-                      className="cursor-pointer border w-[10%] h-full flex items-center justify-start px-4"
-                    >
-                      <ThreeDots />
-                    </div>
-                    {activeIndex === index && (
-                      <div className="absolute w-auto right-0 -bottom-[164px] bg-white rounded-lg shadow-lg p-3 border z-50">
-                        <CustomPopup
-                          file={file}
-                          id={file?.id}
-                          name={file?.name}
-                          meta={file?.metadata}
-                          metaToggle={metaToggle}
-                          setMetaToggle={setMetaToggle}
-                          setActiveIndex={setActiveIndex}
-                          handleDeleteClick={() => handleDeleteClick(file.id)}
-                          handleDownloadClick={() =>
-                            handleDownloadClick(
-                              file.id,
-                              file.is_password_protected
-                            )
-                          }
-                          // handleMetaData={() => handleMetaData(item.metadata)}
-                          handleStarClick={() =>
-                            handleStarClick(file.name, file.id)
-                          }
-                          handleUnStarClick={() =>
-                            handleUnStarClick(file.name, file.id)
-                          }
-                        />
-                      </div>
-                    )}
-                  </div>
-                  <div className="h-[50%] w-[85%] flex justify-between items-center">
-                    <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
-                      <NoPerson className={"w-[20px] h-[20px]"} /> _
-                    </p>
-                    <p className=" w-[50%] text-[10px] font-sans h-full flex items-center justify-end px-4">
-                      File size: {(file.size / 1024 ** 2).toFixed(2)} GB
-                    </p>
-                  </div>
-                </div>
-              ))}
           </div>
         )}
       </div>

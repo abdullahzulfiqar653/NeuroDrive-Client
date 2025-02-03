@@ -60,7 +60,7 @@ function ReNameFile({
         </span>
 
         <div className="flex flex-col items-start w-full justify-start text-[12px] md:text-[14px] text-black">
-          <p className="font-sans text-2xl font-bold mb-3">
+          <p className="font-sans text-[16px] md:text-2xl font-bold mb-3">
             Enter new file name
           </p>
           <div className="h-[36px] mb-4 w-[97%] md:h-[54px] bg-[#ECECEC] rounded-md px-3">
@@ -69,7 +69,7 @@ function ReNameFile({
               onChange={(e) => setValue(e.target.value)}
               type="text"
               placeholder="New name"
-              className="w-full h-full outline-none text-[12px] font-sans font-[600] md:text-[16px] bg-[#ffffff00] placeholder:text-sm placeholder:text-gray-400"
+              className="w-full h-full outline-none text-[12px] font-sans font-[500] md:font-[600] md:text-[16px] bg-[#ffffff00] placeholder:text-sm placeholder:text-gray-400"
             />
           </div>
         </div>
@@ -82,7 +82,7 @@ function ReNameFile({
             borderImageSource:
               "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)",
           }}
-          className="w-[132px] h-[34px] disabled:opacity-75 disabled:cursor-not-allowed md:w-[163px] md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
+          className="w-[122px] h-[30px] disabled:opacity-75 disabled:cursor-not-allowed md:w-[163px] md:h-[42px] rounded-xl text-white font-sans text-[11.5px] md:text-[13px] mt-3 md:mt-5 flex justify-center items-center"
         >
           Confirm
           {data?.isLoading && (

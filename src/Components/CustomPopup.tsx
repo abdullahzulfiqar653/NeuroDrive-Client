@@ -45,7 +45,7 @@ const CustomPopup = ({
   };
 
   return (
-    <div className="flex flex-col gap-2 font-sans text-[14px] z-50">
+    <div className="flex flex-col gap-[6px] md:gap-2 font-sans text-[11.5px] md:text-[14px] z-50">
       <div className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer rounded px-1 hover:shadow-md">
         <NoPerson className="w-4 h-4" /> Share
       </div>
