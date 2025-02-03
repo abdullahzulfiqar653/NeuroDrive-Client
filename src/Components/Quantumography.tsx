@@ -66,7 +66,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
         const formData = new FormData();
         formData.append("file", File);
         formData.append("type", "cover");
-        const { data, status } = await axios.post(
+        const { data } = await axios.post(
           "https://qa.neuronus.net/upload-file",
           formData,
           {
@@ -88,7 +88,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
         const formData = new FormData();
         formData.append("file", File);
         formData.append("type", "secret");
-        const { data, status } = await axios.post(
+        const { data } = await axios.post(
           "https://qa.neuronus.net/upload-file",
           formData,
           {
@@ -115,7 +115,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
           is_paid: 1,
           secret_file: secertUrl,
         };
-        const { data, status } = await axios.post(
+        const { data } = await axios.post(
           "https://qa.neuronus.net/vangonography_encode",
           paylod,
           {

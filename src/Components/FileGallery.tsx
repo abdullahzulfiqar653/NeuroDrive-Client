@@ -25,7 +25,7 @@ function FileGallery({ showStarredOnly }: any) {
   const { isGridMode, parentFolder } = useAuth();
   const [isSelected, setIsSelected] = useState<number | null>(null);
   const [metaToggle, setMetaToggle] = useState<boolean>(false);
-  const [fileExtension, setFileExtension] = useState("");
+  // const [fileExtension, setFileExtension] = useState("");
   const [radioClick, setRadioClick] = useState(false);
   const { reset } = useApi("getSingleFile");
   const { post } = useApi("starFile");
@@ -102,7 +102,7 @@ function FileGallery({ showStarredOnly }: any) {
         const { content_type, url, name } = result.data;
         const allowedExtensions = ["png", "jpg", "jpeg"];
         const fileExtension = content_type?.split("/")?.pop()?.toLowerCase();
-        setFileExtension(fileExtension);
+        // setFileExtension(fileExtension);
         if (!fileExtension) {
           alert("Invalid file type. Unable to process.");
           return;

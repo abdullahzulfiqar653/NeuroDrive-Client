@@ -1,8 +1,6 @@
 import Account from "../../Components/Account";
 import { useEffect, useRef, useState } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
-
-import { GaugeComponent } from "react-gauge-component";
 import {
   Add,
   Line,
