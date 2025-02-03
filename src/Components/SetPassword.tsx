@@ -73,11 +73,13 @@ function SetPassword({
             <BlurLock />
             <p className="absolute text-4xl top-[10px] left-3">🔒</p>
           </p>
-          <p className="text-2xl font-bold">Set Password to secure File </p>
+          <p className="sm:text-2xl text-lg font-bold">
+            Set Password to secure File{" "}
+          </p>
         </div>
 
         <div className="flex flex-col items-start w-full justify-center text-[12px] md:text-[14px] text-black">
-          <p className="font-sans text-xl flex items-center justify-center mb-1">
+          <p className="font-sans sm:text-xl  flex items-center justify-center mb-1">
             🔒 <p className="opacity-50">Enter Password</p>
           </p>
           <div className="h-[36px] flex items-center justify-center mb-4 w-full md:h-[54px] bg-[#ECECEC] rounded-md px-3">
@@ -109,7 +111,7 @@ function SetPassword({
           )}
         </div>
         <div className="flex flex-col items-start w-full justify-center text-[12px] md:text-[14px] text-black">
-          <p className="font-sans text-xl flex items-center justify-center mb-1">
+          <p className="font-sans sm:text-xl flex items-center justify-center mb-1">
             🔒 <p className="opacity-50">Confirm Password</p>
           </p>
           <div className="h-[36px] flex items-center justify-center mb-4 w-full md:h-[54px] bg-[#ECECEC] rounded-md px-3">
