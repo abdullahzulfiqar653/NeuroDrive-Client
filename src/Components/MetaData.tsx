@@ -21,10 +21,16 @@ interface MetaDataProps {
   setMetaToggle: React.Dispatch<React.SetStateAction<boolean>>;
   name: string;
   id: number;
-  setActiveIndex:any;
+  setActiveIndex: any;
 }
 
-const MetaData = ({ meta, name, id, setMetaToggle,setActiveIndex }: MetaDataProps) => {
+const MetaData = ({
+  meta,
+  name,
+  id,
+  setMetaToggle,
+  setActiveIndex,
+}: MetaDataProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleRemove = async (id: number) => {
@@ -44,19 +50,19 @@ const MetaData = ({ meta, name, id, setMetaToggle,setActiveIndex }: MetaDataProp
       if (data.status === 200) {
         toast.success("Meta data is removed");
         setMetaToggle(false);
-        setActiveIndex(null)
+        setActiveIndex(null);
         dispatch(getDirectory(parentFolderId));
       }
     } catch (error) {
       toast.warn("Error in removing meta data");
       setMetaToggle(false);
-      setActiveIndex(null)
+      setActiveIndex(null);
     }
   };
 
   return (
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center">
-      <div className="w-[70vw] md:w-[90vw] sm:w-[90vw] h-[85vh]  relative max-w-[901px] md:min-w-[493px] md:min-h-[506px] rounded-lg px-2 sm:px-4 py-2 bg-[#ffffff] items-center justify-center sm:flex sm:h-[80vh] md:h-[80vh] md:flex sm:justify-around md:justify-around md:gap-4">
+      <div className="w-[70vw] md:w-[90vw] sm:w-[90vw] h-[85vh]  relative max-w-[901px] md:min-w-[493px] md:min-h-[506px] rounded-lg px-2 sm:px-4 py-2 bg-[#ffffff] items-center justify-center sm:flex sm:h-[80vh] md:h-[85vh] md:flex sm:justify-around md:justify-around md:gap-4">
         <div className="flex flex-col gap-2 sm:gap-5 items-center justify-center">
           <div className="flex justify-start w-full">
             <p onClick={() => setMetaToggle(false)}>
@@ -89,7 +95,7 @@ const MetaData = ({ meta, name, id, setMetaToggle,setActiveIndex }: MetaDataProp
             Details
           </h1>
           <p className="text-[11px] sm:text-[16px] font-[500]">{name}</p>
-          <div className="bg-[#ECECEC6B] w-full sm:w-[300px] md:w-full font-[500] font-sans h-[31vh] sm:h-full rounded-md p-3 overflow-y-auto">
+          <div className="bg-[#ECECEC6B] w-full sm:w-[300px] md:w-full font-[500] font-sans h-[31vh] sm:h-full rounded-md px-3 pt-3 overflow-y-auto">
             {Object.entries(meta ?? {}).map(([key, value]) => (
               <div key={key} className="flex border-b-2 pb-2">
                 <h1 className="opacity-35 w-36 mr-2 sm:mr-5 text-[10px] sm:text-[16px]">
