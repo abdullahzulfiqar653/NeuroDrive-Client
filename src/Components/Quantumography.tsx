@@ -6,6 +6,7 @@ import axios from "axios";
 import { postData } from "../features/ApiSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../app/store";
+import { getDirectory } from "../features/directories/folderSlice";
 
 const Quantumography = ({ setToggleQuantumography }: any) => {
   const [step, setStep] = useState(1);
@@ -161,7 +162,9 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
           });
           const link = document.createElement("a");
           link.href = URL.createObjectURL(blob);
-          link.download = `file_${Date.now()}.png`; // Set filename for the download
+          const filename =
+            downloadUrl.split("/").pop() || `download_${Date.now()}.png`;
+          link.download = filename;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
@@ -196,7 +199,9 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
           type: response.headers["content-type"],
         });
         const formData = new FormData();
-        formData.append("file", blob, `file_${Date.now()}.png`);
+        const filename =
+          downloadUrl.split("/").pop() || `file_${Date.now()}.png`;
+        formData.append("file", blob, filename);
         const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
 
         await dispatch(
@@ -208,6 +213,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
           })
         ).unwrap();
         toast.success("File uploaded Successfully");
+        dispatch(getDirectory(parentFolderId));
       }
     } catch (error) {
       console.log(error);
