@@ -3,6 +3,10 @@ import { Cross } from "../assets/Icons";
 import { ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { postData } from "../features/ApiSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../app/store";
+import { getDirectory } from "../features/directories/folderSlice";
 
 const Quantumography = ({ setToggleQuantumography }: any) => {
   const [step, setStep] = useState(1);
@@ -14,6 +18,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
   const [showUpload, setShowUpload] = useState(false);
   const [File, setFile] = useState<File | null>(null);
 
+  const dispatch = useDispatch<AppDispatch>();
   const MAX_FILE_SIZE = 500 * 1024;
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -137,19 +142,81 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
       }
       if (step === 4) {
         if (downloadUrl !== "") {
+          const paylod = {
+            url: downloadUrl,
+          };
+          const response = await axios.post(
+            "https://drive.api.azsoft.dev/api/media/file-download/",
+            paylod,
+            {
+              headers: {
+                accept: "application/json",
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                "Content-Type": "application/json",
+              },
+              responseType: "blob",
+            }
+          );
+          const blob = new Blob([response.data], {
+            type: response.headers["content-type"],
+          });
           const link = document.createElement("a");
-          link.href = downloadUrl;
-          link.download = downloadUrl.split("/").pop() || "download.png";
+          link.href = URL.createObjectURL(blob);
+          const filename =
+            downloadUrl.split("/").pop() || `download_${Date.now()}.png`;
+          link.download = filename;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
-          setToggleQuantumography(false);
           toast.success("File Downloaded Successfully");
         }
         return;
       }
     } catch (error) {
       toast.warn("Something wents wrong!");
+    }
+  };
+
+  const handleFileUpload = async () => {
+    try {
+      if (downloadUrl !== "") {
+        const paylod = {
+          url: downloadUrl,
+        };
+        const response = await axios.post(
+          "https://drive.api.azsoft.dev/api/media/file-download/",
+          paylod,
+          {
+            headers: {
+              accept: "application/json",
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+              "Content-Type": "application/json",
+            },
+            responseType: "blob",
+          }
+        );
+        const blob = new Blob([response.data], {
+          type: response.headers["content-type"],
+        });
+        const formData = new FormData();
+        const filename =
+          downloadUrl.split("/").pop() || `file_${Date.now()}.png`;
+        formData.append("file", blob, filename);
+        const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
+
+        await dispatch(
+          postData({
+            url: `/directories/${parentFolderId}/files/`,
+            payload: formData,
+            method: "post",
+            key: "uploadFile",
+          })
+        ).unwrap();
+        toast.success("File uploaded Successfully");
+        dispatch(getDirectory(parentFolderId));
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -206,7 +273,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                     step === 3 ? "text-black" : "text-gray-400"
                   } text-[8.5px] md:text-[10px] whitespace-nowrap  font-thin`}
                 >
-                  3/3 {step === 3 && "- Downalod file"}
+                  3/3 {step === 3 && "- Encrpt file"}
                 </p>
                 <div
                   className={`w-20 md:w-32  h-1 rounded ${
@@ -321,7 +388,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
             </button>
             {step === 4 && (
               <button
-                onClick={handleSubmit}
+                onClick={handleFileUpload}
                 //   disabled={value === ""}
                 style={{
                   background:
