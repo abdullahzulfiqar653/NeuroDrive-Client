@@ -109,7 +109,7 @@ function Login() {
             </h1>
           </div>
 
-          <p className="text-[#202343] text-[12px] md:text-[18px] lg:text-[20px] font-[400px]  text-center flex flex-col-1 md:flex-row md:items-center ">
+          <p className="text-[#202343] text-[12px] md:text-[18px] lg:text-[20px] font-sans font-[400px]  text-center flex flex-col-1 md:flex-row md:items-center ">
             Don’t have any account?{" "}
             <span
               onClick={() => navigate("/register")}
@@ -195,9 +195,8 @@ function Login() {
         style={{
           background:
             "linear-gradient(155.35deg, #3984FF -4.35%, #6860FE 32.93%, #8C44FD 62.55%, #B325FC 94.21%)",
-          height: "100vh",
         }}
-        className="rounded-[22px] w-full h-[50vh]  md:w-[50%] overflow-hidden "
+        className="rounded-[22px] w-full h-[50vh] md:h-[100vh]  md:w-[50%] overflow-hidden "
       >
         <img
           src="/login-bg.svg"
