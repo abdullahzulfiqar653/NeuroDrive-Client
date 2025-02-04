@@ -1172,6 +1172,7 @@ export const Lock = () => (
   </svg>
 );
 
+
 export const BlurLock = () => (
   <svg
     width="75"
@@ -1243,3 +1244,4 @@ export const BlurLock = () => (
     </defs>
   </svg>
 );
+

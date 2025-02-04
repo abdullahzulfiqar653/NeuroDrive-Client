@@ -44,6 +44,7 @@ function FileGallery({ showStarredOnly }: any) {
     workType: "",
   });
 
+
   const handlePopupToggle = ({ index, event }: any) => {
     event.stopPropagation();
     setActiveIndex((prev) => (prev === index ? null : index));
@@ -495,6 +496,7 @@ function FileGallery({ showStarredOnly }: any) {
                           (file?.content_type &&
                             (file.content_type.includes("excel") ||
                               file.content_type.includes("spreadsheet"))) ? (
+
                             <div className="">
                               {" "}
                               <p
@@ -512,6 +514,7 @@ function FileGallery({ showStarredOnly }: any) {
                                 </p>
                               )}
                             </div>
+
                           ) : null}
                           {["doc", "docx"].includes(
                             file?.name.split(".").pop() || ""
@@ -521,6 +524,7 @@ function FileGallery({ showStarredOnly }: any) {
                               file.content_type.includes(
                                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                               ))) ? (
+
                             <div className="relative">
                               <p
                                 className={`${
@@ -541,10 +545,12 @@ function FileGallery({ showStarredOnly }: any) {
                                 )}
                               </p>
                             </div>
+
                           ) : null}
                           {file?.name.split(".").pop() === "txt" ||
                           (file?.content_type &&
                             file.content_type.includes("text/plain")) ? (
+
                             <div className="">
                               <p
                                 className={`${
@@ -575,50 +581,52 @@ function FileGallery({ showStarredOnly }: any) {
                           (file?.content_type &&
                             (file.content_type.includes("image/jpeg") ||
                               file.content_type.includes("image/png"))) ? (
-                            <div className="">
-                              <p
-                                className={`${
-                                  file?.is_password_protected
-                                    ? "blur-[2px]"
-                                    : ""
-                                }`}
-                              >
-                                {" "}
-                                <Gallery className="w-3 h-3 md:w-4 md:h-4" />
-                              </p>
-                              <p>
-                                {" "}
-                                {file?.is_password_protected && (
-                                  <p className="absolute top-5">
-                                    <GoLock />
-                                  </p>
-                                )}
-                              </p>
-                            </div>
+
+                                <div className="">
+                                <p
+                                  className={`${
+                                    file?.is_password_protected
+                                      ? "blur-[2px]"
+                                      : ""
+                                  }`}
+                                >
+                                  {" "}
+                                  <Gallery className="w-3 h-3 md:w-4 md:h-4" />
+                                </p>
+                                <p>
+                                  {" "}
+                                  {file?.is_password_protected && (
+                                    <p className="absolute top-5">
+                                      <GoLock />
+                                    </p>
+                                  )}
+                                </p>
+                              </div>
                           ) : null}
                           {file?.name.split(".").pop() === "pdf" && (
-                            <div className="">
-                              <p
-                                className={`${
-                                  file?.is_password_protected
-                                    ? "blur-[2px]"
-                                    : ""
-                                }`}
-                              >
-                                <img
-                                  src="/pdf.png"
-                                  className="w-3 h-3 md:w-4 md:h-4"
-                                />
-                              </p>
-                              <p>
-                                {" "}
-                                {file?.is_password_protected && (
-                                  <p className="absolute top-5">
-                                    <GoLock />
-                                  </p>
-                                )}
-                              </p>
-                            </div>
+                           <div className="">
+                           <p
+                             className={`${
+                               file?.is_password_protected
+                                 ? "blur-[2px]"
+                                 : ""
+                             }`}
+                           >
+                             <img
+                               src="/pdf.png"
+                               className="w-3 h-3 md:w-4 md:h-4"
+                             />
+                           </p>
+                           <p>
+                             {" "}
+                             {file?.is_password_protected && (
+                               <p className="absolute top-5">
+                                 <GoLock />
+                               </p>
+                             )}
+                           </p>
+                         </div>
+
                           )}
                           <p className="whitespace-nowrap">
                             {file?.name.length > 10
@@ -682,13 +690,15 @@ function FileGallery({ showStarredOnly }: any) {
                           </span>
                           {/* Check file extension and content type */}
                           <div className="flex justify-center gap-1 ">
-                            {["xls", "xlsx"].includes(
-                              file?.name.split(".").pop() || ""
-                            ) ||
-                            (file?.content_type &&
-                              (file.content_type.includes("excel") ||
-                                file.content_type.includes("spreadsheet"))) ? (
-                              <div className="">
+
+                          {["xls", "xlsx"].includes(
+                            file?.name.split(".").pop() || ""
+                          ) ||
+                          (file?.content_type &&
+                            (file.content_type.includes("excel") ||
+                              file.content_type.includes("spreadsheet"))) ? (
+                                <div className="">
+
                                 {" "}
                                 <p
                                   className={`${
@@ -705,18 +715,17 @@ function FileGallery({ showStarredOnly }: any) {
                                   </p>
                                 )}
                               </div>
-                            ) : null}
-                            {["doc", "docx"].includes(
-                              file?.name.split(".").pop() || ""
-                            ) ||
-                            (file?.content_type &&
-                              (file.content_type.includes(
-                                "application/msword"
-                              ) ||
-                                file.content_type.includes(
-                                  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                ))) ? (
-                              <div className="relative">
+
+                          ) : null}
+                          {["doc", "docx"].includes(
+                            file?.name.split(".").pop() || ""
+                          ) ||
+                          (file?.content_type &&
+                            (file.content_type.includes("application/msword") ||
+                              file.content_type.includes(
+                                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                              ))) ? (
+                                <div className="relative">
                                 <p
                                   className={`${
                                     file?.is_password_protected
@@ -736,41 +745,43 @@ function FileGallery({ showStarredOnly }: any) {
                                   )}
                                 </p>
                               </div>
-                            ) : null}
-                            {file?.name.split(".").pop() === "txt" ||
-                            (file?.content_type &&
-                              file.content_type.includes("text/plain")) ? (
+
+                          ) : null}
+                          {file?.name.split(".").pop() === "txt" ||
+                          (file?.content_type &&
+                            file.content_type.includes("text/plain")) ? (
                               <div className="">
-                                <p
-                                  className={`${
-                                    file?.is_password_protected
-                                      ? "blur-[2px]"
-                                      : ""
-                                  }`}
-                                >
-                                  <img
-                                    src="rich.png"
-                                    alt=""
-                                    className="w-4 h-4"
-                                  />
-                                </p>
-                                <p>
-                                  {" "}
-                                  {file?.is_password_protected && (
-                                    <p className="absolute top-5">
-                                      <GoLock />
-                                    </p>
-                                  )}
-                                </p>
-                              </div>
-                            ) : null}
-                            {["jpg", "png"].includes(
-                              file?.name.split(".").pop() || ""
-                            ) ||
-                            (file?.content_type &&
-                              (file.content_type.includes("image/jpeg") ||
-                                file.content_type.includes("image/png"))) ? (
-                              <div className="">
+                              <p
+                                className={`${
+                                  file?.is_password_protected
+                                    ? "blur-[2px]"
+                                    : ""
+                                }`}
+                              >
+                                <img
+                                  src="rich.png"
+                                  alt=""
+                                  className="w-4 h-4"
+                                />
+                              </p>
+                              <p>
+                                {" "}
+                                {file?.is_password_protected && (
+                                  <p className="absolute top-5">
+                                    <GoLock />
+                                  </p>
+                                )}
+                              </p>
+                            </div>
+                          ) : null}
+                          {["jpg", "png"].includes(
+                            file?.name.split(".").pop() || ""
+                          ) ||
+                          (file?.content_type &&
+                            (file.content_type.includes("image/jpeg") ||
+                              file.content_type.includes("image/png"))) ? (
+                                <div className="">
+
                                 <p
                                   className={`${
                                     file?.is_password_protected
@@ -790,47 +801,47 @@ function FileGallery({ showStarredOnly }: any) {
                                   )}
                                 </p>
                               </div>
-                            ) : null}
-                            {file?.name.split(".").pop() === "pdf" && (
-                              <div className="">
-                                <p
-                                  className={`${
-                                    file?.is_password_protected
-                                      ? "blur-[2px]"
-                                      : ""
-                                  }`}
-                                >
-                                  <img
-                                    src="/pdf.png"
-                                    className="w-3 h-3 md:w-4 md:h-4"
-                                  />
-                                </p>
-                                <p>
-                                  {" "}
-                                  {file?.is_password_protected && (
-                                    <p className="absolute top-5">
-                                      <GoLock />
-                                    </p>
-                                  )}
-                                </p>
-                              </div>
-                            )}
-                            <p className="whitespace-nowrap">
-                              {file?.name.length > 10
-                                ? file.name.includes(".")
-                                  ? `${file.name.slice(0, 10)}...${file.name
-                                      .split(".")
-                                      .pop()}`
-                                  : `${file.name.slice(0, 10)}...`
-                                : file.name}
-                            </p>
-                          </div>
+
+                          ) : null}
+                          {file?.name.split(".").pop() === "pdf" && (
+                           <div className="">
+                           <p
+                             className={`${
+                               file?.is_password_protected
+                                 ? "blur-[2px]"
+                                 : ""
+                             }`}
+                           >
+                             <img
+                               src="/pdf.png"
+                               className="w-3 h-3 md:w-4 md:h-4"
+                             />
+                           </p>
+                           <p>
+                             {" "}
+                             {file?.is_password_protected && (
+                               <p className="absolute top-5">
+                                 <GoLock />
+                               </p>
+                             )}
+                           </p>
+                         </div>
+                          )}
+                          <p className="whitespace-nowrap">
+                            {file?.name.length > 10
+                              ? file.name.includes(".")
+                                ? `${file.name.slice(0, 10)}...${file.name
+                                    .split(".")
+                                    .pop()}`
+                                : `${file.name.slice(0, 10)}...`
+                              : file.name}
+                          </p>
+                        </div>
                         </p>
                         <div
-                          onClick={(event) =>
-                            handlePopupToggle({ index, event })
-                          }
-                          className="cursor-pointer  h-full flex items-center justify-end px-4"
+                          onClick={(event) => handlePopupToggle({ index, event })}
+                          className="cursor-pointer w-full h-full flex items-center justify-end px-4"
+
                         >
                           <ThreeDots />
                         </div>
