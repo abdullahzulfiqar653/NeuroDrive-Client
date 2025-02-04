@@ -57,7 +57,7 @@ function SetPassword({
 
   return (
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center">
-      <div className="relative py-11 w-[59vw] px-3 md:px-4 flex flex-col items-center justify-center rounded-lg bg-[#ffffff]">
+      <div className="relative py-11 w-[70vw] md:w-[45vw] px-3 md:px-4 flex flex-col items-center justify-center rounded-lg bg-[#ffffff]">
         <span
           onClick={() => {
             settogglePassword(false);
