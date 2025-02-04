@@ -14,6 +14,8 @@ type OpenComponentsState = {
 // Define types for AuthContext
 interface AuthContextType {
   profile: string;
+  total_size: number;
+  used: number;
   isGridMode: boolean;
   usedStorage: number;
   parentFolder: Folder | null;
@@ -27,6 +29,8 @@ interface AuthContextType {
   setProfile: any;
   setIsGridMode: (isGridMode: boolean) => void;
   setParentFolder: (component: Folder) => void;
+  setTotal_size: React.Dispatch<React.SetStateAction<number>>;
+  setUsed: React.Dispatch<React.SetStateAction<number>>;
   setUsedStorage: React.Dispatch<React.SetStateAction<number>>;
   toggleComponent: (component: string, isOpen?: boolean) => void;
   setReGetProfile: React.Dispatch<React.SetStateAction<boolean>>;
@@ -54,6 +58,8 @@ const isTokenValid = () => {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAccountOpen, setIsAccountOpen] = useState<boolean>(false);
   const [profile, setProfile] = useState<string>("");
+  const [total_size, setTotal_size] = useState(0);
+  const [used, setUsed] = useState(0);
   const [usedStorage, setUsedStorage] = useState<number>(0);
   const [reGetProfile, setReGetProfile] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
@@ -66,6 +72,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     newExcel: false,
     newDocs: false,
     reName: false,
+    meta: false,
   });
 
   useEffect(() => {
@@ -112,11 +119,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
+        used,
+        setUsed,
         login,
         signup,
         logout,
         profile,
         setProfile,
+        total_size,
+        setTotal_size,
         isGridMode,
         usedStorage,
         setUsedStorage,

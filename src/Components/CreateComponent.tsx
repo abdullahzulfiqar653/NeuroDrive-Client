@@ -5,7 +5,10 @@ import { FileViewer } from "../Hooks/FileViewer";
 import { AppDispatch } from "../app/store";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { createFolders, getDirectory } from "../features/directories/folderSlice";
+import {
+  createFolders,
+  getDirectory,
+} from "../features/directories/folderSlice";
 import { ThreeDots } from "react-loader-spinner";
 
 function CreateComponent() {
@@ -41,7 +44,13 @@ function CreateComponent() {
   };
 
   const createBlankFile = (type: "excel" | "word" | "pdf") => {
-    const fileName = `${value.name || "New File"}.${type}`;
+    const extensionMap: { [key in "excel" | "word" | "pdf"]: string } = {
+      excel: "xlsx",
+      word: "docx",
+      pdf: "pdf",
+    };
+
+    const fileName = `${value.name}.${extensionMap[type] || "New File"}`;
     let fileUrl = "";
 
     if (type === "excel") {
@@ -53,6 +62,7 @@ function CreateComponent() {
     }
 
     setFileData({ fileUrl, fileType: type, fileName });
+
     setTimeout(() => {
       toggleComponent("newDocs", false);
       toggleComponent("newFolder", false);
@@ -61,6 +71,7 @@ function CreateComponent() {
   };
 
   const handleSubmit = () => {
+    localStorage.removeItem("fileId");
     if (isOpenComponent.newExcel) {
       createBlankFile("excel");
     } else if (isOpenComponent.newDocs) {
@@ -124,8 +135,8 @@ function CreateComponent() {
                   ? "Enter your folder name"
                   : "Enter your file name"
               }
-              className={`w-full h-full outline-none text-[12px] font-sans font-[600] md:text-[16px] bg-[#ffffff00] placeholder:text-[#000000ac] placeholder:font-[500] placeholder:text-[black]`}
-              />
+              className={`w-full h-full outline-none text-[12px] font-sans font-[600] md:text-[16px] bg-[#ffffff00] placeholder:text-[#000000ac] placeholder:font-[500]  placeholder:text-[#292828]`}
+            />
           </div>
         </div>
         <button
@@ -136,7 +147,7 @@ function CreateComponent() {
             borderImageSource:
               "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)",
           }}
-          className="w-[132px] h-[34px] disabled:opacity-75 disabled:cursor-not-allowed md:w-[163px] md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
+          className="w-[132px] h-[34px] z-20 disabled:opacity-75 disabled:cursor-not-allowed md:w-[163px] md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
         >
           Create
           {loading && (

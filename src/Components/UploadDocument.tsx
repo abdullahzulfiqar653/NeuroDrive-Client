@@ -1,20 +1,20 @@
 import { useRef, useState } from "react";
 import { Cross, Upload } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
-// import useApi from "../Hooks/usiApi";
 import { ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { getDirectory } from "../features/directories/folderSlice";
 import { postData } from "../features/ApiSlice";
+import * as XLSX from "xlsx";
 
 function UploadDocument() {
   const { toggleComponent } = useAuth();
   const [dragging, setDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  // const { post, reset } = useApi("uploadFile");
+
   const res = useSelector((state: RootState) => state.api.calls?.uploadFile);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -26,7 +26,7 @@ function UploadDocument() {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
-      setFile(selectedFile); // Store the file in state
+      setFile(selectedFile); 
     }
   };
 
@@ -45,36 +45,78 @@ function UploadDocument() {
 
     const droppedFile = event.dataTransfer.files[0];
     if (droppedFile) {
-      setFile(droppedFile); // Store the dropped file in state
-      // console.log("Dropped file:", droppedFile);
+      setFile(droppedFile); 
     }
   };
+
+
+  const convertXlsToXlsx = async (xlsFile : any) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = (e:any) => {
+            try {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: "array" });
+
+                const newWorkbook = XLSX.utils.book_new();
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+
+                XLSX.utils.book_append_sheet(newWorkbook, worksheet, sheetName);
+
+                const newXlsxData = XLSX.write(newWorkbook, { bookType: "xlsx", type: "array" });
+                const newXlsxBlob = new Blob([newXlsxData], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+
+                const newFile = new File([newXlsxBlob], xlsFile.name.replace(".xls", ".xlsx"), {
+                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                });
+
+                resolve(newFile);
+            } catch (error) {
+                reject(error);
+            }
+        };
+
+        reader.readAsArrayBuffer(xlsFile);
+    });
+};
+
 
   const handleSubmit = async () => {
     if (!file) return;
-  
+
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
-  
-      await dispatch(
-        postData({
-          url: `/directories/${parentFolderId}/files/`,
-          payload: formData,
-          method: "post",
-          key: "uploadFile", 
-        })
-      ).unwrap();
-      dispatch(getDirectory(parentFolderId));
-      toast.success("Fille Upload Successful");
-      toggleComponent("upload");
+
+      let fileToUpload: File = file; 
+      if (file.name.endsWith(".xls")) {
+          const convertedFile = await convertXlsToXlsx(file);
+          if (convertedFile instanceof File) {
+              fileToUpload = convertedFile; 
+          }
+      }
+        const formData = new FormData();
+        formData.append("file", fileToUpload);
+        const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
+
+        await dispatch(
+            postData({
+                url: `/directories/${parentFolderId}/files/`,
+                payload: formData,
+                method: "post",
+                key: "uploadFile",
+            })
+        ).unwrap();
+
+        dispatch(getDirectory(parentFolderId));
+        toast.success("File Upload Successful");
+        toggleComponent("upload");
 
     } catch (error) {
-      toast.error("Error uploading file");
-      toggleComponent("upload");
+        toast.error("Error uploading file");
+        toggleComponent("upload");
     }
-  };
+};
   
 
  
@@ -134,6 +176,7 @@ function UploadDocument() {
               ref={fileInputRef}
               onChange={handleFileChange}
             />
+
             <p className="text-[#B3B3B3] text-[11px] font-sans text-center">
               Supported: JPG,JPEG, PNG, PDF, XLS , doc. File size should be
               maximum 25mb and it shouldn’t be password protected
