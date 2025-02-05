@@ -10,8 +10,8 @@ import {
   Folder,
   Blocks,
   Invite,
-  Search,
   SixDots,
+  Search,
 } from "../../assets/Icons";
 import FilesList from "../../Components/FilesList";
 import { useAuth } from "../../AuthContext";
@@ -210,7 +210,7 @@ function Home() {
               >
                 <Cross className={"h-[14px] w-[14px]"} />
               </span>
-              <LeftBar setLeftBar={setLeftBar}/>
+              <LeftBar setLeftBar={setLeftBar} />
             </section>
           </section>
         )}
@@ -225,17 +225,12 @@ type LeftBarProps = {
   setLeftBar?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function LeftBar({setLeftBar}:LeftBarProps) {
+function LeftBar({ setLeftBar }: LeftBarProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [isFolderName, setFolderName] = useState<string>("");
   const { directory } = useSelector((state: RootState) => state.folders);
-  const {
-    toggleComponent,
-    parentFolder,
-    setParentFolder,
-    used,
-    total_size,
-  } = useAuth();
+  const { toggleComponent, parentFolder, setParentFolder, used, total_size } =
+    useAuth();
 
   useEffect(() => {
     if (!parentFolder) {
@@ -314,49 +309,47 @@ function LeftBar({setLeftBar}:LeftBarProps) {
           </div>
         </div>
         <Line className={"mt-2 min-w-[230px] w-full"} />
-     
-      <div className="flex flex-col items-center gap-2 my-2 h-[30vh] overflow-auto">
-        <div className="flex items-center justify-between w-full px-2 pb-2">
-          <h1 className="flex text-[14px] text-[#9F9F9F] gap-1 items-center">
-            <span>
-              <Arrow color="#9F9F9F" />
+
+        <div className="flex flex-col items-center gap-2 my-2 h-[30vh] overflow-auto">
+          <div className="flex items-center justify-between w-full px-2 pb-2">
+            <h1 className="flex text-[14px] text-[#9F9F9F] gap-1 items-center">
+              <span>
+                <Arrow color="#9F9F9F" />
+              </span>
+              {isFolderName !== "" ? isFolderName : "FOLDERS"}
+            </h1>
+            <span
+              onClick={() => toggleComponent("newFolder")}
+              className="cursor-pointer"
+            >
+              <Add />
             </span>
-            {isFolderName !== "" ? isFolderName : "FOLDERS"}
-          </h1>
-          <span
-            onClick={() => toggleComponent("newFolder")}
-            className="cursor-pointer"
-          >
-            <Add />
-          </span>
+          </div>
+          <div className="flex flex-col justify-start gap-2 px-3">
+            {directory?.children && directory.children.length > 0 ? (
+              directory.children.map((child) => (
+                <h1
+                  onClick={() => {
+                    handleClickFolder(child.id);
+                    setFolderName(child.name);
+                    (setLeftBar ?? (() => {}))(false);
+                  }}
+                  key={child.id}
+                  className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 "
+                >
+                  <Folder />{" "}
+                  <span className="truncate font-sans ">{child.name}</span>
+                </h1>
+              ))
+            ) : (
+              <p className="whitespace-nowrap rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
+                No folders
+              </p>
+            )}
+          </div>
         </div>
-        <div className="flex flex-col justify-start gap-2 w-[90%] px-3">
-          {directory?.children && directory.children.length > 0 ? (
-            directory.children.map((child) => (
-              <h1
-                onClick={() => {
-                  handleClickFolder(child.id);
-                  setFolderName(child.name);
-                  (setLeftBar ?? (() => {}))(false);
-                }}
-                key={child.id}
-                className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 "
-              >
-                <Folder />{" "}
-                <span className="truncate w-[60%] font-sans ">
-                  {child.name}
-                </span>
-              </h1>
-            ))
-          ) : (
-            <p className="whitespace-nowrap rounded-xl py-1  gap-3 w-[90%] font-sans px-3">
-              No folders
-            </p>
-          )}
-        </div>
-      </div>
-      <div className="flex flex-col justify-center items-center gap-4 absolute bottom-0 w-full">
-        {/* <div
+        <div className="flex flex-col justify-center items-center gap-4 absolute bottom-0 w-full">
+          {/* <div
           onClick={() => {
             setLeftBar?.((prev) => !prev);
           }}
@@ -369,62 +362,63 @@ function LeftBar({setLeftBar}:LeftBarProps) {
           <Arrow className={"w-[8px] h-[22px]"} />
         </div> */}
 
-        <div
-          className="md:block  text-[#FFFFFF] rounded-tr-2xl rounded-tl-2xl flex flex-col"
-          style={{
-            background: "linear-gradient(to top, #4D55A4, #1D203E)",
-            borderTopLeftRadius: "15px",
-            borderTopRightRadius: "15px",
-            // padding: "20px"
-            // borderRadius: "10px",
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          <div className="mb-6 mt-3">
-            <div className="flex justify-between px-4">
-              <p className="font-bold text-xl">Available Space</p>
-              <p className=" text-xl font-sans">{100 - used}%</p>
-            </div>
-            <p className="font-sans font-thin text-[10px] opacity-70 px-4">
-              Expire on: 12.12.24
-            </p>
-          </div>
-          <div className="font-sans px-4 flex justify-between">
-            <p>{total_size} GB</p>
-            <p className="opacity-75">{used} GB used</p>
-          </div>
-          <LinearProgress
-            className=""
-            sx={{
-              marginLeft: "13px",
-              marginBottom: "20px",
-              width: "90%", // Makes it fully responsive
-              maxWidth: "300px", // Maximum width for larger screens
-              height: 10,
-              borderRadius: 5,
-              backgroundColor: "#e0e0e0",
-              "& .MuiLinearProgress-bar": {
-                background:
-                  "linear-gradient(to left, #B325FC, #8C44FD, #6860FE, #3983FF)",
-              },
+          <div
+            className="md:block  text-[#FFFFFF] rounded-tr-2xl rounded-tl-2xl flex flex-col"
+            style={{
+              background: "linear-gradient(to top, #4D55A4, #1D203E)",
+              borderTopLeftRadius: "15px",
+              borderTopRightRadius: "15px",
+              // padding: "20px"
+              // borderRadius: "10px",
+              width: "100%",
+              height: "100%",
             }}
-            variant="determinate"
-            value={used}
-          />
-
-          <div className="flex justify-center mb-3">
-            <div
-              style={{
-                background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
+          >
+            <div className="mb-6 mt-3">
+              <div className="flex justify-between px-4">
+                <p className="font-bold text-xl">Available Space</p>
+                <p className=" text-xl font-sans">{100 - used}%</p>
+              </div>
+              <p className="font-sans font-thin text-[10px] opacity-70 px-4">
+                Expire on: 12.12.24
+              </p>
+            </div>
+            <div className="font-sans px-4 flex justify-between">
+              <p>{total_size} GB</p>
+              <p className="opacity-75">{used} GB used</p>
+            </div>
+            <LinearProgress
+              className=""
+              sx={{
+                marginLeft: "13px",
+                marginBottom: "20px",
+                width: "90%", // Makes it fully responsive
+                maxWidth: "300px", // Maximum width for larger screens
+                height: 10,
+                borderRadius: 5,
+                backgroundColor: "#e0e0e0",
+                "& .MuiLinearProgress-bar": {
+                  background:
+                    "linear-gradient(to left, #B325FC, #8C44FD, #6860FE, #3983FF)",
+                },
               }}
-              className="flex justify-center items-center mt-2 w-[90%] text-[white] text-[14px] rounded-xl h-[39px]"
-            >
-              ⚡️ Buy more space
+              variant="determinate"
+              value={used}
+            />
+
+            <div className="flex justify-center mb-3">
+              <div
+                style={{
+                  background:
+                    "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
+                }}
+                className="flex justify-center items-center mt-2 w-[90%] text-[white] text-[14px] rounded-xl h-[39px]"
+              >
+                ⚡️ Buy more space
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
     </>
   );
