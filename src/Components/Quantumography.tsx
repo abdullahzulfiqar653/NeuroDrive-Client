@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Cross } from "../assets/Icons";
+import { Cross, Gallery, ShortRich, Xcel } from "../assets/Icons";
 import { ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -15,6 +15,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
   const [downloadUrl, setDownloadUrl] = useState("");
   const [showSteps, setShowSteps] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadLoading, setUploadLoading] = useState<boolean>(false);
   const [showUpload, setShowUpload] = useState(false);
   const [File, setFile] = useState<File | null>(null);
 
@@ -24,7 +25,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (!["image/jpeg", "image/jpg"].includes(file?.type)) {
+      if (step === 1 && !["image/jpeg", "image/jpg"].includes(file.type)) {
         toast.warn("Wrong file type!");
         setFile(null);
         return;
@@ -46,7 +47,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
     e.preventDefault();
     const file = e.dataTransfer?.files[0];
     if (file) {
-      if (!["image/jpeg", "image/jpg"].includes(file?.type)) {
+      if (step === 1 && !["image/jpeg", "image/jpg"].includes(file.type)) {
         toast.warn("Wrong file type!");
         setFile(null);
         return;
@@ -145,6 +146,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
           const paylod = {
             url: downloadUrl,
           };
+          setIsLoading(true);
           const response = await axios.post(
             "https://drive.api.azsoft.dev/api/media/file-download/",
             paylod,
@@ -168,6 +170,8 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
+          setIsLoading(false);
+          setToggleQuantumography(false);
           toast.success("File Downloaded Successfully");
         }
         return;
@@ -183,6 +187,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
         const paylod = {
           url: downloadUrl,
         };
+        setUploadLoading(true);
         const response = await axios.post(
           "https://drive.api.azsoft.dev/api/media/file-download/",
           paylod,
@@ -212,8 +217,10 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
             key: "uploadFile",
           })
         ).unwrap();
-        toast.success("File uploaded Successfully");
         dispatch(getDirectory(parentFolderId));
+        setUploadLoading(false);
+        toast.success("File uploaded Successfully");
+        setToggleQuantumography(false);
       }
     } catch (error) {
       console.log(error);
@@ -283,11 +290,11 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
               </div>
             </div>
           )}
-          <div>
-            {!showUpload && (
+          {!showUpload && (
+            <div className="w-full flex items-center justify-center">
               <label
                 htmlFor="dropzone-file"
-                className="flex flex-col items-center w-[50vw] ml-3 p-5 my-5 mt-2 text-center bg-white border-2 border-gray-300 border-dashed cursor-pointer rounded-xl"
+                className="flex flex-col items-center w-[50vw] p-5 my-5 mt-2 text-center bg-white border-2 border-gray-300 border-dashed cursor-pointer rounded-xl"
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
               >
@@ -311,7 +318,8 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                 </h2>
 
                 <p className="mt-2 text-xs tracking-wide text-[#005EFF]">
-                  Upload or darg & drop your file JPG or JPEG.{" "}
+                  Upload or darg & drop your file{" "}
+                  {step === 1 && " JPG or JPEG."}{" "}
                 </p>
 
                 <input
@@ -321,30 +329,65 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                   onChange={handleFileChange}
                 />
               </label>
-            )}
-          </div>
-          {step === 3 && (
+            </div>
+          )}
+          {/* {step === 3 && (
             <div className="text-3xl my-6 w-full">
               {File && (
                 <div className="flex flex-col items-center justify-center">
-                  {/* Display Image Preview */}
                   <img
                     src={URL.createObjectURL(File)}
                     alt="Selected File"
                     className="w-32 h-32 object-cover rounded-lg shadow-lg"
                   />
+                  <p className="text-lg mt-2 text-gray-700">{File.name}</p>
+                </div>
+              )}
+            </div>
+          )} */}
+          {step === 3 && (
+            <div className="text-3xl my-6 w-full">
+              {File && (
+                <div className="flex flex-col items-center justify-center">
+                  {/* Display preview based on file type */}
+                  {File.type?.startsWith("image/") ? (
+                    <img
+                      src={URL.createObjectURL(File)}
+                      alt="Selected File"
+                      className="w-32 h-32 object-cover rounded-lg shadow-lg"
+                    />
+                  ) : File.type === "application/pdf" ? (
+                    <img
+                      src="/pdf.png"
+                      alt="PDF File"
+                      className="w-[32px] h-[41px] md:w-[77px] md:h-[79px]"
+                    />
+                  ) : File.type?.includes("excel") ||
+                    File.name?.endsWith(".xls") ||
+                    File.name?.endsWith(".xlsx") ? (
+                    <Xcel className="w-20 h-20 text-green-500" />
+                  ) : (
+                    <img
+                      src="/rich.png"
+                      alt="Other File Type"
+                      className="w-[40px] h-[40px] md:w-[77px] md:h-[77px]"
+                    />
+                  )}
+
                   {/* Display File Name */}
                   <p className="text-lg mt-2 text-gray-700">{File.name}</p>
                 </div>
               )}
             </div>
           )}
-          {step === 4 &&
-            (isLoading ? (
-              <div className="w-full my-9 flex justify-center items-center">
-                <ThreeDots />
-              </div>
-            ) : (
+
+          {
+            step === 4 && (
+              // (isLoading ? (
+              //   <div className="w-full my-9 flex justify-center items-center">
+              //     <ThreeDots />
+              //   </div>
+              // ) : (
               <div className="w-full my-9 flex justify-center items-center">
                 <div className="relative flex justify-center items-center bg-transparent">
                   <video
@@ -356,12 +399,14 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                 </div>
                 <p>Your encrypted file is ready.</p>
               </div>
-            ))}
+            )
+            // ))
+          }
 
           <div
             className={`${
               step === 3 ? "flex justify-between" : ""
-            } w-full flex justify-center`}
+            } w-full flex justify-center gap-2`}
           >
             <button
               onClick={handleSubmit}
@@ -379,7 +424,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                 ? "Upload secret file!"
                 : step === 3
                 ? "Start encryption"
-                : "Download encrypted file!"}
+                : "Download file!"}
               {isLoading && (
                 <span className="ml-2">
                   <ThreeDots height="25" width="25" color="white" />
@@ -396,10 +441,10 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                   borderImageSource:
                     "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)",
                 }}
-                className="mx-auto w-[170px] h-[34px] disabled:opacity-75 disabled:cursor-not-allowed md:w-[173px] md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
+                className="mx-auto w-[150px] h-[30px] disabled:opacity-75 disabled:cursor-not-allowed md:w-[173px] md:h-[42px] rounded-md text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
               >
-                Upload to folder
-                {isLoading && (
+                Upload to drive
+                {uploadLoading && (
                   <span className="ml-2">
                     <ThreeDots height="25" width="25" color="white" />
                   </span>
