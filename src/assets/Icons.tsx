@@ -733,8 +733,8 @@ export const Rename = () => (
 
 export const Starred = ({ className }: IconsProps) => (
   <svg
-    width="21"
-    height="21"
+    width="16"
+    height="16"
     viewBox="0 0 21 21"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -1172,7 +1172,6 @@ export const Lock = () => (
   </svg>
 );
 
-
 export const BlurLock = () => (
   <svg
     width="75"
@@ -1244,4 +1243,3 @@ export const BlurLock = () => (
     </defs>
   </svg>
 );
-

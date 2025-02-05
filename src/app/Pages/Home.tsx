@@ -142,6 +142,7 @@ function Home() {
                 </div>
                 {isAccountOpen && (
                   <Account
+                    address={data?.response?.data?.address}
                     profileLoading={data?.isLoading}
                     className={
                       "left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"
@@ -185,6 +186,7 @@ function Home() {
                 )}
                 {isAccountOpen && (
                   <Account
+                    address={data?.response?.data?.address}
                     profileLoading={data?.isLoading}
                     className={
                       "left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"

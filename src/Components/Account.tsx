@@ -5,15 +5,17 @@ import { CiUser } from "react-icons/ci";
 import { ThreeCircles } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import { AppDispatch, RootState } from "../app/store";
+import { IoMdCopy } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { postData } from "../features/ApiSlice";
 
 interface AccountProps {
   className: string;
   profileLoading: boolean;
+  address: string;
 }
 
-function Account({ className, profileLoading }: AccountProps) {
+function Account({ className, profileLoading, address }: AccountProps) {
   const { profile } = useAuth();
   const navigate = useNavigate();
   const { logout, setIsAccountOpen, setReGetProfile } = useAuth();
@@ -22,6 +24,13 @@ function Account({ className, profileLoading }: AccountProps) {
 
   // const { post: uploadPost, reset: uploadReset } = useApi("postProfile");
   const data = useSelector((state: RootState) => state.api.calls?.postProfile);
+
+  const handleCopy = () => {
+    navigator.clipboard
+      .writeText(address)
+      .then(() => toast.success("Copied to clipboard!"))
+      .catch((err) => console.error("Failed to copy: ", err));
+  };
 
   const handleUpload = async (event: any) => {
     const file = event.target.files[0];
@@ -93,9 +102,9 @@ function Account({ className, profileLoading }: AccountProps) {
         </div>
         <div className="w-[226px] md:w-[293px] h-[40px] md:h-[52px] bg-[#F8FBFD] rounded-[99px] pl-2 md:pl-3 mb-3 flex items-center justify-between">
           <p
-            onClick={() => {
-              navigate("/create-mail");
-            }}
+            // onClick={() => {
+            //   navigate("/create-mail");
+            // }}
             className="text-[9px] md:text-[11px] cursor-pointer flex items-center w-[55%] md:w-[50%]"
           >
             <span className="mr-1">
@@ -118,6 +127,18 @@ function Account({ className, profileLoading }: AccountProps) {
               <Signout className={"h-[11px] w-[12px]"} />
             </span>
             Sign out
+          </p>
+        </div>
+      </div>
+      <div className="bg-[#F8FBFD] px-4 w-[226px] md:w-[293px] rounded-lg">
+        <h1 className="text-xs ">Address:</h1>
+        <div
+          onClick={handleCopy}
+          className="flex items-center justify-between text-[10px]"
+        >
+          <p>{address}</p>
+          <p>
+            <IoMdCopy className="text-sm cursor-pointer" />
           </p>
         </div>
       </div>

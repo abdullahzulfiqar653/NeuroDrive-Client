@@ -73,7 +73,7 @@ function SetPassword({
             <BlurLock />
             <p className="absolute text-4xl top-[10px] left-3">🔒</p>
           </p>
-          <p className="sm:text-2xl text-lg font-bold">
+          <p className="sm:text-2xl text-sm font-bold">
             Set Password to secure File{" "}
           </p>
         </div>
