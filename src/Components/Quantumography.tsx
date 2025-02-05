@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Cross, Gallery, ShortRich, Xcel } from "../assets/Icons";
+import { Cross, Xcel } from "../assets/Icons";
 import { ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../app/store";
 import { getDirectory } from "../features/directories/folderSlice";
 
-const Quantumography = ({ setToggleQuantumography }: any) => {
+const Quantumography = ({ setToggleQuantumography, fileId }: any) => {
   const [step, setStep] = useState(1);
   const [coverUrl, setCoverUrl] = useState("");
   const [secertUrl, setSecertUrl] = useState("");
@@ -32,12 +32,11 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
       }
       if (file.size > MAX_FILE_SIZE) {
         toast.warn("File size must be less than 500KB!");
-        setFile(null);
+        // setFile(null);
         return;
       }
       setFile(file);
     }
-    event.target.value = "";
   };
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -84,34 +83,48 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
         if (data) {
           setIsLoading(false);
           setCoverUrl(data?.image_url);
-          setStep(2);
-          setFile(null);
         }
-        return;
+        try {
+          const response = await axios.get(
+            `https://drive.api.azsoft.dev/api/files/${fileId}/`,
+            {
+              headers: {
+                accept: "application/json",
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                "Content-Type": "application/json",
+              },
+              responseType: "blob",
+            }
+          );
+          const blob = new Blob([response.data], {
+            type: response.headers["content-type"],
+          });
+          const formData = new FormData();
+          const filename =
+            downloadUrl.split("/").pop() || `file_${Date.now()}.png`;
+          formData.append("file", blob, filename);
+          formData.append("type", "secret");
+          const { data } = await axios.post(
+            "https://qa.neuronus.net/upload-file",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+          if (data) {
+            console.log(data);
+            setIsLoading(false);
+            setSecertUrl(data?.image_url);
+            setShowUpload(true);
+            setStep(2);
+          }
+        } catch (error) {
+          console.log(error);
+        }
       }
       if (step === 2) {
-        setIsLoading(true);
-        const formData = new FormData();
-        formData.append("file", File);
-        formData.append("type", "secret");
-        const { data } = await axios.post(
-          "https://qa.neuronus.net/upload-file",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        if (data) {
-          setIsLoading(false);
-          setSecertUrl(data?.image_url);
-          setShowUpload(true);
-          setStep(3);
-        }
-        return;
-      }
-      if (step === 3) {
         setIsLoading(true);
         const paylod = {
           original: coverUrl,
@@ -136,12 +149,12 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
           setIsLoading(false);
           setSecertUrl(data);
           setShowUpload(true);
-          setStep(4);
+          setStep(3);
           setShowSteps(true);
         }
         return;
       }
-      if (step === 4) {
+      if (step === 3) {
         if (downloadUrl !== "") {
           const paylod = {
             url: downloadUrl,
@@ -223,7 +236,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
         setToggleQuantumography(false);
       }
     } catch (error) {
-      console.log(error);
+      toast.warn("Something wents wrong");
     }
   };
 
@@ -250,12 +263,12 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                 <p
                   className={`${
                     step === 1 ? "text-black" : "text-gray-400"
-                  } text-[8.5px] md:text-[10px] whitespace-nowrap font-thin`}
+                  } text-[8.5px] md:text-[13px] whitespace-nowrap font-thin`}
                 >
-                  1/3 {step === 1 && "- Upload cover file"}
+                  1/2 {step === 1 && "- Upload cover file"}
                 </p>
                 <div
-                  className={`w-20 md:w-32 h-1 rounded ${
+                  className={`w-20 md:w-40 h-1 rounded ${
                     step === 1 ? "bg-[#005EFF]" : "bg-[#87acec]"
                   }`}
                 ></div>
@@ -264,27 +277,13 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                 <p
                   className={`${
                     step === 2 ? "text-black" : "text-gray-400"
-                  } text-[8.5px] md:text-[10px] whitespace-nowrap  font-thin`}
+                  } text-[8.5px] md:text-[13px] whitespace-nowrap  font-thin`}
                 >
-                  2/3 {step === 2 && "- Upload private file"}
+                  2/2 {step === 2 && "- Encrpt file"}
                 </p>
                 <div
-                  className={`w-20 md:w-32  h-1 rounded ${
+                  className={`w-20 md:w-40  h-1 rounded ${
                     step === 2 ? "bg-[#005EFF]" : "bg-[#87acec]"
-                  }`}
-                ></div>
-              </div>
-              <div className="">
-                <p
-                  className={`${
-                    step === 3 ? "text-black" : "text-gray-400"
-                  } text-[8.5px] md:text-[10px] whitespace-nowrap  font-thin`}
-                >
-                  3/3 {step === 3 && "- Encrpt file"}
-                </p>
-                <div
-                  className={`w-20 md:w-32  h-1 rounded ${
-                    step === 3 ? "bg-[#005EFF]" : "bg-[#87acec]"
                   }`}
                 ></div>
               </div>
@@ -314,7 +313,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                 </svg>
 
                 <h2 className="mt-1 font-medium tracking-wide text-[#005EFF]">
-                  {File?.name || (step === 1 ? "Cover File" : "Secret File")}
+                  {File?.name || (step === 1 && "Cover File")}
                 </h2>
 
                 <p className="mt-2 text-xs tracking-wide text-[#005EFF]">
@@ -331,21 +330,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
               </label>
             </div>
           )}
-          {/* {step === 3 && (
-            <div className="text-3xl my-6 w-full">
-              {File && (
-                <div className="flex flex-col items-center justify-center">
-                  <img
-                    src={URL.createObjectURL(File)}
-                    alt="Selected File"
-                    className="w-32 h-32 object-cover rounded-lg shadow-lg"
-                  />
-                  <p className="text-lg mt-2 text-gray-700">{File.name}</p>
-                </div>
-              )}
-            </div>
-          )} */}
-          {step === 3 && (
+          {step === 2 && (
             <div className="text-3xl my-6 w-full">
               {File && (
                 <div className="flex flex-col items-center justify-center">
@@ -382,7 +367,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
           )}
 
           {
-            step === 4 && (
+            step === 3 && (
               // (isLoading ? (
               //   <div className="w-full my-9 flex justify-center items-center">
               //     <ThreeDots />
@@ -405,7 +390,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
 
           <div
             className={`${
-              step === 3 ? "flex justify-between" : ""
+              step === 2 ? "flex justify-between" : ""
             } w-full flex justify-center gap-2`}
           >
             <button
@@ -416,13 +401,11 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                 borderImageSource:
                   "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)",
               }}
-              className="mx-auto w-[160px] h-[30px] disabled:opacity-75 disabled:cursor-not-allowed md:w-[173px] md:h-[42px] rounded-md md:rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
+              className="mx-auto w-[160px] h-[30px] disabled:opacity-75 disabled:cursor-not-allowed md:w-[173px] md:h-[42px] rounded-md md:rounded-xl text-white font-sans text-[8px] md:text-[13px] mt-3 md:mt-5 flex justify-center items-center"
             >
               {step === 1
                 ? "Upload cover file!"
                 : step === 2
-                ? "Upload secret file!"
-                : step === 3
                 ? "Start encryption"
                 : "Download file!"}
               {isLoading && (
@@ -431,7 +414,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                 </span>
               )}
             </button>
-            {step === 4 && (
+            {step === 3 && (
               <button
                 onClick={handleFileUpload}
                 //   disabled={value === ""}
@@ -441,7 +424,7 @@ const Quantumography = ({ setToggleQuantumography }: any) => {
                   borderImageSource:
                     "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)",
                 }}
-                className="mx-auto w-[150px] h-[30px] disabled:opacity-75 disabled:cursor-not-allowed md:w-[173px] md:h-[42px] rounded-md text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
+                className="mx-auto w-[150px] h-[30px] disabled:opacity-75 disabled:cursor-not-allowed md:w-[173px] md:h-[42px] rounded-md md:rounded-xl text-white font-sans text-[8px] md:text-[13px]  mt-3 md:mt-5 flex justify-center items-center"
               >
                 Upload to drive
                 {uploadLoading && (

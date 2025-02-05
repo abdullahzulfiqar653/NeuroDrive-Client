@@ -25,6 +25,7 @@ const CustomPopup = ({
   meta,
   name,
   id,
+  isProtected,
 }: any) => {
   const [toggleReName, settoggleReName] = useState(false);
   const [togglePassword, settogglePassword] = useState(false);
@@ -43,7 +44,6 @@ const CustomPopup = ({
       // setActiveIndex(null);
     }
   };
-
   return (
     <div className="flex flex-col gap-[6px] md:gap-2 font-sans text-[11.5px] md:text-[14px] z-50">
       <div className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer rounded px-1 hover:shadow-md">
@@ -108,16 +108,21 @@ const CustomPopup = ({
       >
         <Trash className="w-4 h-4" /> Move to Trash
       </div>
-      <div
-        onClick={() => {
-          setToggleQuantumography(true);
-        }}
-        className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer px-1 hover:shadow-md"
-      >
-        <Encrypt /> Encrypt
-      </div>
+      {!isProtected && (
+        <div
+          onClick={() => {
+            setToggleQuantumography(true);
+          }}
+          className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer px-1 hover:shadow-md"
+        >
+          <Encrypt /> Encrypt
+        </div>
+      )}
       {toggleQuantumography && (
-        <Quantumography setToggleQuantumography={setToggleQuantumography} />
+        <Quantumography
+          setToggleQuantumography={setToggleQuantumography}
+          fileId={id}
+        />
       )}
 
       <div
