@@ -39,11 +39,10 @@ function TextFile() {
               NeuroDrive
             </p>
           </span>
+
           <span className="md:flex items-center gap-2 pl-7 hidden">
             <>
-              {fileType === "word" && (
-                <img src="/rich.png" alt="" className="w-[26px] h-[26px]" />
-              )}
+              {fileType === "word" && (<img src="/rich.png" alt="" className="w-[26px] h-[26px]" />)}
               {fileType === "excel" && <Xcel className="w-[26px] h-[26px]" />}
               {fileType === "pdf" && (
                 <img src="/pdf.png" alt="" className="w-[26px] h-[26px]" />
@@ -51,6 +50,8 @@ function TextFile() {
               <p className="font-sans text-[14px] text-white w-[20vw] truncate">{fileName}</p>
             </>
           </span>
+
+
         </div>
 
         <div className="flex items-center gap-2">

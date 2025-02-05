@@ -18,8 +18,7 @@ function RegisterInfo({ setAcknowledged }: RegisterInfoProps) {
       </div>
 
       <div className="flex flex-col w-[100vw] md:w-[40vw] p-4">
-        <span className="flex gap-2 md:pr-7 items-center justify-center md:mr-[200px] lg:mr-[400px] mt-[2px] md:border-r border-white">
-
+        <span className="flex gap-2 md:pr-18 items-center justify-center md:mr-[159px] lg:mr-[400px] mt-[2px] md:border-r border-white">
           <img src="/logo.svg" alt="" className="w-7 h-6" />
           <p className="font-chakra text-[16px] md:text-[22px] text-black">
             NeuroDrive
@@ -81,12 +80,11 @@ function RegisterInfo({ setAcknowledged }: RegisterInfoProps) {
           alt=""
           className="w-full h-full object-cover md:block"
         />
-  <img
+        <img
           src="/regis-mob.svg"
           alt=""
           className="w-full h-full object-cover block md:hidden"
         />
-
       </div>
     </div>
   );

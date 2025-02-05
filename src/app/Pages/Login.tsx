@@ -95,32 +95,34 @@ function Login() {
       </div>
 
       <div className="flex flex-col w-[100vw] md:w-[40vw] p-4">
-        <span className="flex gap-2 md:pr-7 items-center justify-center md:mr-[200px] lg:mr-[400px] mt-[23px] md:border-r border-white">
+        <span className="flex gap-2  items-center justify-center md:mr-[170px] lg:mr-[400px] mt-[23px] md:border-r border-white">
           <img src="/logo.svg" alt="" className="w-7 h-6" />
           <p className="font-chakra text-[16px] md:text-[22px] text-black">
             NeuroDrive
           </p>
         </span>
 
-        <div className="flex flex-col items-center justify-center h-full w-full gap-3">
-          <div className="flex-col justify-center items-center">
-            <h1 className="text-[#202343] mt-4 text-[20px] lg:mb-8  lg:text-[48px] md:text-[40px]">
-              Login Account
-            </h1>
+        <div className="flex flex-col items-center justify-center h-full w-full gap-4">
+          <div className="gap-1 lg:mb-12">
+            <div className="flex flex-col items-center  mt-[50px] mb-2 text-center">
+              <h1 className="text-[#202343]  text-[20px] lg:mt-0 lg:pb-0 gap-0 lg:text-[48px] md:text-[40px]">
+                Login Account
+              </h1>
+            </div>
+
+            <p className="text-[#202343] text-[12px]  md:text-[18px] lg:text-[20px] font-[400px] font-sans text-center flex flex-col-1 md:flex-row md:items-center">
+              Don’t have any account?{" "}
+              <span
+                onClick={() => navigate("/register")}
+                className="text-blue-600 cursor-pointer "
+              >
+                Register here
+              </span>
+            </p>
           </div>
 
-          <p className="text-[#202343] text-[12px] md:text-[18px] lg:text-[20px] font-[400px]  text-center flex flex-col-1 md:flex-row md:items-center ">
-            Don’t have any account?{" "}
-            <span
-              onClick={() => navigate("/register")}
-              className="text-blue-600 cursor-pointer "
-            >
-              Register here
-            </span>
-          </p>
-
           <div className="relative lg:w-[38vw]">
-            <div className="w-[356px] h-152px lg:h-[191.35px] lg:w-[610px] lg:ml-3 px-2.5 pb-2.5  pt-6 border border-[#BABABA] rounded-lg">
+            <div className="w-[356px] md:h-auto lg:h-[191.35px] lg:w-[610px] lg:ml-3 px-2.5 pb-2.5  pt-6 border border-[#BABABA] rounded-lg">
               <div
                 className={`${
                   seedsValue.length < 16 ? "border-b" : "border-none"
@@ -150,11 +152,12 @@ function Login() {
                   />
                 )}
               </div>
+
               <label
                 htmlFor="key"
-                className="absolute text-lg font-sans text-black dark:text-gray-400  transform -translate-y-4 ml-2 scale-75 top-1 z-10 origin-[0] bg-white  px-2  start-1"
+                className="absolute text-lg lg:text-[24px] font-sans text-black dark:text-gray-400 -translate-y-4 scale-75 top-1 left-2 z-10 bg-white px-2"
               >
-                key Seed
+                Key Seed
               </label>
 
               <div className="flex flex-wrap justify-start gap-[5px] w-full">
@@ -179,7 +182,7 @@ function Login() {
               borderImageSource:
                 "linear-gradient(357.47deg, #005EFF 12.36%, rgba(53, 90, 153, 0) 97.89%)",
             }}
-            className="w-[132px] h-[34px]  md:w-[202.95px] md:h-[48.71px] md:top-[362px] md:left-[130px] md:rounded-[9.72px] md:border-[0.81px] disabled:opacity-75 disabled:cursor-not-allowed flex justify-center items-center text-white hover:shadow-lg shadow-black border-[1.16px] rounded-[7px] text-[12px] font-sans text-center"
+            className="w-[132px] h-[34px] mt-6 md:w-[202.95px] md:h-[48.71px] md:top-[362px] md:left-[130px] md:rounded-[9.72px] md:border-[0.81px] disabled:opacity-75 disabled:cursor-not-allowed flex justify-center items-center text-white hover:shadow-lg shadow-black border-[1.16px] rounded-[7px] text-[12px] font-sans text-center"
           >
             Login Now
             {isTokenLoading && (
@@ -211,7 +214,6 @@ function Login() {
         alt=""
         className="w-full h-[60vh] object-cover  block md:hidden"
       />
-  
 
       <div className="hidden md:flex items-end bottom-0 absolute  w-full font-sans text-[#1E1E1E66] pl-2 pb-1 text-[14px]">
         <p className="pr-3 border-r-[1.17px] border-[#1E1E1E66]">

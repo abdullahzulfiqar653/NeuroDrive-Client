@@ -59,7 +59,7 @@ function RegisterSeeds() {
         <img src="/img2.png" alt="" className="w-20 h-20" />
       </div>
       <div className="flex flex-col w-[100vw] md:w-[40vw] p-4">
-        <span className="flex gap-2 md:pr-7 items-center justify-center md:mr-[200px] lg:mr-[400px] mt-[23px] md:border-r border-white">
+        <span className="flex gap-2  items-center justify-center md:mr-[159px] lg:mr-[400px] mt-[23px] md:border-r border-white">
           <img src="/logo.svg" alt="" className="w-7 h-6" />
           <p className="font-chakra text-[16px] md:text-[22px] text-black">
             NeuroDrive
@@ -76,10 +76,10 @@ function RegisterSeeds() {
               Your Seed
             </h1>
             <p className="text-[#202343] text-[12px] lg:text-[18px] font-sans m-2">
-              Already have an account
+              Already have an account?
               <span
                 onClick={() => navigate("/login")}
-                className="text-blue-600 cursor-pointer"
+                className="text-blue-600 cursor-pointer m-1"
               >
                 Login here
               </span>
@@ -95,7 +95,7 @@ function RegisterSeeds() {
               )}
             </span>
 
-            <div className="w-[356px] lg:w-[610px] h-[152px] lg:h-[208.87px] justify-center pb-1 pt-3 border border-[#c53636] rounded-lg">
+            <div className="w-[356px] lg:w-[610px] h-auto  justify-center pb-1 pt-3 border border-[#BABABA] rounded-lg">
               <label
                 htmlFor="key"
                 className="absolute  text-lg font-sans text-black dark:text-gray-400  transform -translate-y-4 ml-2 scale-75 top-1 z-10 origin-[0] bg-white px-2  start-1"
@@ -118,7 +118,7 @@ function RegisterSeeds() {
               </div>
             </div>
 
-            <div className="flex flex-wrap font-sans gap-4 mt-2 justify-between items-center w-[144px] lg:w-[627px] text-xs md:text-sm">
+            <div className="flex flex-wrap font-sans gap-4 mt-2 justify-between md:mr-[50px] items-center w-[144px] lg:w-[627px] text-xs md:text-sm">
               <p className="text-[#BABABACC] flex-1 min-w-[150px] md:min-w-[300px] text-[12px] lg:text-[16px] md:text-[16px] whitespace-nowrap">
                 Please write these down in case you lose your seed.
               </p>
