@@ -32,7 +32,6 @@ const Quantumography = ({ setToggleQuantumography, fileId }: any) => {
       }
       if (file.size > MAX_FILE_SIZE) {
         toast.warn("File size must be less than 500KB!");
-        // setFile(null);
         return;
       }
       setFile(file);
@@ -114,14 +113,13 @@ const Quantumography = ({ setToggleQuantumography, fileId }: any) => {
             }
           );
           if (data) {
-            console.log(data);
             setIsLoading(false);
             setSecertUrl(data?.image_url);
             setShowUpload(true);
             setStep(2);
           }
         } catch (error) {
-          console.log(error);
+          toast.warn("Somethong wents wrong");
         }
       }
       if (step === 2) {
@@ -144,7 +142,6 @@ const Quantumography = ({ setToggleQuantumography, fileId }: any) => {
           }
         );
         if (data) {
-          console.log(data?.path);
           setDownloadUrl(data?.path);
           setIsLoading(false);
           setSecertUrl(data);
