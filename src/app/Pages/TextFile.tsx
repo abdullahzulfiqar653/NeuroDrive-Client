@@ -39,7 +39,7 @@ function TextFile() {
               NeuroDrive
             </p>
           </span>
-
+{/* changes */}
           <span className="md:flex items-center gap-2 pl-7 hidden">
             <>
               {fileType === "word" && (<img src="/rich.png" alt="" className="w-[26px] h-[26px]" />)}
