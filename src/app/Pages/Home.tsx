@@ -35,7 +35,6 @@ function Home() {
   const {
     isAccountOpen,
     setIsAccountOpen,
-    toggleComponent,
     setProfile,
     reGetProfile,
     setUsedStorage,
@@ -56,6 +55,7 @@ function Home() {
   useEffect(() => {
     profileFetch("/user/profile/");
   }, [reGetProfile]);
+  console.log(data);
   const size = data?.response?.data?.features_data;
   setUsed(size?.total_size);
   setTotal_size(size?.size_allowed);
@@ -98,7 +98,7 @@ function Home() {
             </div>
             <div className="flex gap-4 items-center">
               <div
-                onClick={() => toggleComponent("share")}
+                // onClick={() => toggleComponent("share")}
                 style={{
                   background:
                     "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",

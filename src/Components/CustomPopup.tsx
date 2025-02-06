@@ -15,6 +15,7 @@ import ReNameFile from "./ReNameFile";
 import { toast } from "react-toastify";
 import SetPassword from "./SetPassword";
 import Quantumography from "./Quantumography";
+import ShareFile from "./ShareFile";
 
 const CustomPopup = ({
   file,
@@ -29,6 +30,7 @@ const CustomPopup = ({
   isProtected,
 }: any) => {
   const [toggleReName, settoggleReName] = useState(false);
+  const [isShare, setIsShare] = useState<boolean>(false);
   const [togglePassword, settogglePassword] = useState(false);
   const [toggleQuantumography, setToggleQuantumography] = useState(false);
   const [metaToggle, setMetaToggle] = useState<boolean>(false);
@@ -47,15 +49,19 @@ const CustomPopup = ({
   };
   return (
     <div className="flex flex-col gap-[6px] md:gap-2 font-sans text-[11.5px] md:text-[14px] z-50">
-      <div className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer rounded hover:shadow-md">
+      <div
+        onClick={() => setIsShare(true)}
+        className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer rounded hover:shadow-md"
+      >
         <NoPerson className="w-4 h-4" /> Share
       </div>
+      {isShare && <ShareFile file={file} setShare={setIsShare} />}
       {file?.is_starred ? (
         <div
           onClick={handleUnStarClick}
           className="flex gap-2 items-center whitespace-nowrap cursor-pointer "
         >
-          <CiStar className="fill-yellow-300" /> Unstarred
+          <CiStar className="w-5 h-5 fill-yellow-400" /> Unstarred
         </div>
       ) : (
         <div
