@@ -1171,3 +1171,77 @@ export const Lock = () => (
     </defs>
   </svg>
 );
+
+
+export const BlurLock = () => (
+  <svg
+    width="75"
+    height="75"
+    viewBox="0 0 75 75"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle
+      cx="37.5"
+      cy="37.5"
+      r="37.5"
+      fill="url(#paint0_linear_0_1)"
+      fill-opacity="0.5"
+    />
+    <circle
+      cx="37"
+      cy="38"
+      r="25"
+      transform="rotate(-180 37 38)"
+      fill="url(#paint1_linear_0_1)"
+      fill-opacity="0.5"
+    />
+    <path d="M26 47.61H49V24.61H26V47.61Z" fill="black" fill-opacity="0.6" />
+    <g filter="url(#filter0_f_0_1)">
+      <ellipse cx="37.5" cy="49.5" rx="10.5" ry="1.5" fill="#3580FF" />
+    </g>
+    <defs>
+      <filter
+        id="filter0_f_0_1"
+        x="25"
+        y="46"
+        width="25"
+        height="7"
+        filterUnits="userSpaceOnUse"
+        color-interpolation-filters="sRGB"
+      >
+        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="BackgroundImageFix"
+          result="shape"
+        />
+        <feGaussianBlur stdDeviation="1" result="effect1_foregroundBlur_0_1" />
+      </filter>
+      <linearGradient
+        id="paint0_linear_0_1"
+        x1="37.5"
+        y1="0"
+        x2="37.5"
+        y2="75"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="#005EFF" />
+        <stop offset="1" stop-color="#7FAEFF" />
+      </linearGradient>
+      <linearGradient
+        id="paint1_linear_0_1"
+        x1="37"
+        y1="13"
+        x2="37"
+        y2="63"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="#005EFF" />
+        <stop offset="1" stop-color="#7FAEFF" />
+      </linearGradient>
+    </defs>
+  </svg>
+);
+
