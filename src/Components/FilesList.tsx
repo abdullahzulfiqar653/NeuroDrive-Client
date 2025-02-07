@@ -88,9 +88,9 @@ function FilesList() {
           </p>
           <div className="flex gap-2 justify-between items-center w-[96%]">
             <div className="flex gap-2 items-start">
-              <button className="flex items-center justify-start  pl-2 md:pl-3 gap-1 md:gap-2  w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl font-sans border border-[#BFBFBF57]">
+              {/* <button className="flex items-center justify-start  pl-2 md:pl-3 gap-1 md:gap-2  w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl font-sans border border-[#BFBFBF57]">
                 <Recent /> Recent
-              </button>
+              </button> */}
               <button
                 onClick={() => setShowStarredOnly((prev) => !prev)}
                 className="flex items-center justify-start pl-2 md:pl-3 gap-1 md:gap-2 w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl  font-sans border border-[#BFBFBF57]"
@@ -126,9 +126,9 @@ function FilesList() {
                   <List />
                 </span>
               )}
-              <button className="flex items-center justify-start pl-2 md:pl-3 gap-1 md:gap-2 w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl font-sans border border-[#BFBFBF57]">
+              {/* <button className="flex items-center justify-start pl-2 md:pl-3 gap-1 md:gap-2 w-[69px] h-[27px] md:w-[107px] md:h-[42px] text-[10px] md:text-[12px] bg-white rounded-lg md:rounded-xl font-sans border border-[#BFBFBF57]">
                 <Filter /> Filter
-              </button>
+              </button> */}
             </div>
           </div>
           <FileGallery showStarredOnly={showStarredOnly} />

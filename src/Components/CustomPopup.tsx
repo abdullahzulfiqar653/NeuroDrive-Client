@@ -50,20 +50,27 @@ const CustomPopup = ({
         <NoPerson className="w-4 h-4" /> Share
       </div>
       {file?.is_starred ? (
+       
         <div
+        
           onClick={handleUnStarClick}
-          className="flex gap-2 items-center whitespace-nowrap cursor-pointer "
+          className="flex gap-3 md:gap-2 lg:gap-2 items-center whitespace-nowrap cursor-pointer hover:shadow-md"
         >
-          <Starred className="w-4 h-4 fill-yellow-300" /> Unstarred
+          <Starred className="w-4 h-4  fill-yellow-300" /> Unstarred
         </div>
       ) : (
         <div
           onClick={handleStarClick}
-          className="flex gap-2 items-center text-black whitespace-nowrap cursor-pointer px-1 hover:shadow-md"
+          className="flex gap-3 md:gap-2 lg:gap-2 items-center whitespace-nowrap cursor-pointer hover:shadow-md"
+
+
         >
           <Starred className="w-4 h-4" /> Starred
         </div>
+
       )}
+
+    
       <div
         onClick={() => {
           settoggleReName(true);

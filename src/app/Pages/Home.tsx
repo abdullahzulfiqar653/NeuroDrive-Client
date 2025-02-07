@@ -97,7 +97,7 @@ function Home() {
               />
             </div>
             <div className="flex gap-4 items-center">
-              <div
+              {/* <div
                 onClick={() => toggleComponent("share")}
                 style={{
                   background:
@@ -109,7 +109,7 @@ function Home() {
               >
                 <Invite />
                 <p className="text-[14px] text-[white]">Invite Friends</p>
-              </div>
+              </div> */}
 
               <div className="w-[47px] h-[42px] bg-[#F8FAFC] rounded-[12px] border border-[#BFBFBF57] flex items-center justify-center">
                 <SixDots />

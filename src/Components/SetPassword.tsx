@@ -57,7 +57,7 @@ function SetPassword({
 
   return (
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center">
-      <div className="relative py-11 w-[70vw] md:w-[45vw] px-3 md:px-4 flex flex-col items-center justify-center rounded-lg bg-[#ffffff]">
+      <div className="relative py-11 w-[70vw] md:w-[45vw] px-3 md:px-4  flex flex-col items-center justify-center rounded-lg bg-[#ffffff]">
         <span
           onClick={() => {
             settogglePassword(false);
@@ -67,11 +67,11 @@ function SetPassword({
           <Cross className="w-[11px] h-[11px] md:w-3 md:h-3" color="#000000" />
         </span>
 
-        <div className="flex flex-col items-center justify-center mb-10">
+        <div className="flex flex-col items-center  justify-center mb-10">
           {" "}
-          <p className="relative">
+          <p className="relative bg-transparent shadow-none">
             <BlurLock />
-            <p className="absolute text-4xl top-[10px] left-3">🔒</p>
+            <p className="absolute text-[14.31px] top-[24px] left-7 z-10">🔒</p>
           </p>
           <p className="sm:text-2xl text-lg font-bold">
             Set Password to secure File{" "}
@@ -79,8 +79,8 @@ function SetPassword({
         </div>
 
         <div className="flex flex-col items-start w-full justify-center text-[12px] md:text-[14px] text-black">
-          <p className="font-sans sm:text-xl  flex items-center justify-center mb-1">
-            🔒 <p className="opacity-50">Enter Password</p>
+          <p className="font-sans sm:text-xl text-[5px] flex items-center justify-center mb-1">
+            🔒 <p className="opacity-50 m-2">Enter Password</p>
           </p>
           <div className="h-[36px] flex items-center justify-center mb-4 w-full md:h-[54px] bg-[#ECECEC] rounded-md px-3">
             <input
@@ -111,8 +111,8 @@ function SetPassword({
           )}
         </div>
         <div className="flex flex-col items-start w-full justify-center text-[12px] md:text-[14px] text-black">
-          <p className="font-sans sm:text-xl flex items-center justify-center mb-1">
-            🔒 <p className="opacity-50">Confirm Password</p>
+          <p className="font-sans sm:text-xl flex  items-center justify-center mb-1">
+            🔒 <p className="opacity-50 m-2">Confirm Password</p>
           </p>
           <div className="h-[36px] flex items-center justify-center mb-4 w-full md:h-[54px] bg-[#ECECEC] rounded-md px-3">
             <input
