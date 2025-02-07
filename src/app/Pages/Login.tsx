@@ -95,7 +95,7 @@ function Login() {
       </div>
 
       <div className="flex flex-col w-[100vw] md:w-[40vw] p-4">
-        <span className="flex gap-2  items-center justify-center md:mr-[170px] lg:mr-[400px] mt-[23px] md:border-r border-white">
+      <span className="flex gap-2  items-center justify-center md:mr-[170px] lg:mr-[400px] mt-[23px] md:border-r border-white">
           <img src="/logo.svg" alt="" className="w-7 h-6" />
           <p className="font-chakra text-[16px] md:text-[22px] text-black">
             NeuroDrive
@@ -121,7 +121,7 @@ function Login() {
             </p>
           </div>
 
-          <p className="text-[#202343] text-[12px] md:text-[18px] lg:text-[20px] font-sans font-[400px]  text-center flex flex-col-1 md:flex-row md:items-center ">
+          {/* <p className="text-[#202343] text-[12px] md:text-[18px] lg:text-[20px] font-sans font-[400px]  text-center flex flex-col-1 md:flex-row md:items-center ">
             Don’t have any account?{" "}
             <span
               onClick={() => navigate("/register")}
@@ -129,9 +129,9 @@ function Login() {
             >
               Register here
             </span>
-          </p>
+          </p> */}
 
-          <div className="relative lg:w-[38vw]">
+<div className="relative lg:w-[38vw]">
             <div className="w-[356px] md:h-auto lg:h-[191.35px] lg:w-[610px] lg:ml-3 px-2.5 pb-2.5  pt-6 border border-[#BABABA] rounded-lg">
               <div
                 className={`${
