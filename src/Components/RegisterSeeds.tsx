@@ -95,7 +95,7 @@ function RegisterSeeds() {
               )}
             </span>
 
-            <div className="w-[356px] lg:w-[610px] h-auto  justify-center pb-1 pt-3 border border-[#BABABA] rounded-lg">
+            <div className="w-[356px] md:w-[45vw] h-auto justify-center pb-1 pt-3 border border-[#c53636] rounded-lg">
               <label
                 htmlFor="key"
                 className="absolute  text-lg font-sans text-black dark:text-gray-400  transform -translate-y-4 ml-2 scale-75 top-1 z-10 origin-[0] bg-white px-2  start-1"
@@ -118,7 +118,7 @@ function RegisterSeeds() {
               </div>
             </div>
 
-            <div className="flex flex-wrap font-sans gap-4 mt-2 justify-between md:mr-[50px] items-center w-[144px] lg:w-[627px] text-xs md:text-sm">
+            <div className="flex flex-wrap font-sans gap-4 mt-2 justify-between items-center w-[144px] md:w-[45vw] text-xs md:text-sm">
               <p className="text-[#BABABACC] flex-1 min-w-[150px] md:min-w-[300px] text-[12px] lg:text-[16px] md:text-[16px] whitespace-nowrap">
                 Please write these down in case you lose your seed.
               </p>
@@ -181,7 +181,7 @@ function RegisterSeeds() {
         <img
           src="/seed-mob.svg"
           alt=""
-          className="w-full h-auto min-h-screen object-contain block md:hidden"
+          className="w-full h-full object-cover block md:hidden"
         />
       </div>
     </div>
