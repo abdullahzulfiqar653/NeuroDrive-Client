@@ -12,6 +12,7 @@ import {
   Invite,
   SixDots,
   Search,
+  Shared,
 } from "../../assets/Icons";
 import FilesList from "../../Components/FilesList";
 import { useAuth } from "../../AuthContext";
@@ -229,6 +230,7 @@ type LeftBarProps = {
 
 function LeftBar({ setLeftBar }: LeftBarProps) {
   const dispatch = useDispatch<AppDispatch>();
+  const [activeFolder, setActiveFolder] = useState("allFiles");
   const [isFolderName, setFolderName] = useState<string>("");
   const { directory } = useSelector((state: RootState) => state.folders);
   const { toggleComponent, parentFolder, setParentFolder, used, total_size } =
@@ -275,38 +277,40 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         />
         {/* <Line className={"my-1 md:hidden block"} /> */}
         <div className="flex flex-col gap-2 md:pl-1 pl-5 mt-3">
+          {/* All Files Option */}
           <div
             onClick={() => {
-              handleClickFolder("main");
-              setFolderName("FOLDERS");
+              setActiveFolder("allFiles");
             }}
-            className="cursor-pointer bg-[#3984FF] w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center shadow-md"
+            className={`cursor-pointer w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center
+          ${
+            activeFolder === "allFiles"
+              ? "bg-[#3984FF] text-white"
+              : "hover:bg-[#3984FF] hover:text-white"
+          }`}
           >
             <div className="flex items-center gap-3">
-              <Blocks />
-              <p className="text-[14px] font-sans text-white leading-[20px]">
-                All Files
-              </p>
+              <Blocks color={activeFolder === "allFiles" ? "white" : "black"} />
+              <p className="text-[14px] font-sans leading-[20px]">All Files</p>
             </div>
           </div>
-          <div className="cursor-pointer hover:bg-[#3984FF] hover:text-white w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center hover:shadow-md">
-            <div className="flex items-center gap-3">
-              <img src="/shared.svg" />
-              <p className="text-[14px] font-sans  leading-[20px]">Shared</p>
-            </div>
-          </div>
-          <div className="cursor-pointer hover:bg-[#3984FF] hover:text-white w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center hover:shadow-md">
-            <div className="flex items-center gap-3">
-              <Trash />
-              <p className="text-[14px] font-sans  leading-[20px]">
-                Deleted Files
-              </p>
-            </div>
-          </div>
-          <div className="cursor-pointer hover:bg-[#3984FF] hover:text-white w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center hover:shadow-md">
-            <div className="flex items-center gap-3">
-              <img src="/setting.svg" />
-              <p className="text-[14px] font-sans  leading-[20px]">Settings</p>
+
+          {/* Shared Option */}
+          <div
+            onClick={() => setActiveFolder("shared")}
+            className={`cursor-pointer w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center 
+          ${
+            activeFolder === "shared"
+              ? "bg-[#3984FF] text-white shadow-md"
+              : "hover:bg-[#3984FF] hover:text-white"
+          }`}
+          >
+            <div
+              onClick={() => handleClickFolder("shared")}
+              className="flex items-center gap-3"
+            >
+              <Shared color={activeFolder === "shared" ? "white" : "black"} />
+              <p className="text-[14px] font-sans leading-[20px]">Shared</p>
             </div>
           </div>
         </div>
