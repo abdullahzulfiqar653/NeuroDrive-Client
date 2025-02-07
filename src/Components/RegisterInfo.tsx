@@ -26,7 +26,7 @@ function RegisterInfo({ setAcknowledged }: RegisterInfoProps) {
         </span>
 
         <div className="flex flex-col items-center justify-center h-full w-full gap-3">
-          <div className="flex flex-col items-center gap-1 mt-[50px] mb-6 text-center">
+          <div className="flex flex-col items-center gap-1 mt-[20px] mb-6 text-center">
             <h1 className="text-[#202343] text-[20px] lg:text-[48px]  md:text-[38px]  font-bold">
               Register Account
             </h1>
@@ -60,7 +60,7 @@ function RegisterInfo({ setAcknowledged }: RegisterInfoProps) {
               borderImageSource:
                 "linear-gradient(357.47deg, #005EFF 12.36%, rgba(53, 90, 153, 0) 97.89%)",
             }}
-            className="w-[240px] lg:w-[319px] md:w-[319px] h-[48px] text-white hover:shadow-lg shadow-black border-[1.16px] rounded-[13px] text-[12px] lg:text-[15.08px] font-sans mt-4 px-4 md:px-0"
+            className="w-[240px] lg:w-[319px] md:w-[319px] h-[32px] md:h-[48px] text-white hover:shadow-lg shadow-black border-[1.16px] rounded-md md:rounded-[13px] text-[12px] lg:text-[15.08px] font-sans mt-4 px-4 md:px-0"
           >
             I understand, show me my seed
           </button>

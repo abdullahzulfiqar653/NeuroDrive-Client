@@ -104,7 +104,7 @@ function Login() {
 
         <div className="flex flex-col items-center justify-center h-full w-full gap-4">
           <div className="gap-1 lg:mb-12">
-            <div className="flex flex-col items-center  mt-[50px] mb-2 text-center">
+            <div className="flex flex-col items-center  mt-[30px] mb-2 text-center">
               <h1 className="text-[#202343]  text-[20px] lg:mt-0 lg:pb-0 gap-0 lg:text-[48px] md:text-[40px]">
                 Login Account
               </h1>
@@ -131,8 +131,8 @@ function Login() {
             </span>
           </p> */}
 
-<div className="relative lg:w-[38vw]">
-            <div className="w-[356px] md:h-auto lg:h-[191.35px] lg:w-[610px] lg:ml-3 px-2.5 pb-2.5  pt-6 border border-[#BABABA] rounded-lg">
+           <div className="relative lg:w-[38vw]">
+            <div className="w-[356px] md:h-auto  lg:w-[40vw] lg:ml-3 px-2.5 pb-2.5  pt-6 border border-[#BABABA] rounded-lg">
               <div
                 className={`${
                   seedsValue.length < 16 ? "border-b" : "border-none"
@@ -192,7 +192,7 @@ function Login() {
               borderImageSource:
                 "linear-gradient(357.47deg, #005EFF 12.36%, rgba(53, 90, 153, 0) 97.89%)",
             }}
-            className="w-[132px] h-[34px] mt-6 md:w-[202.95px] md:h-[48.71px] md:top-[362px] md:left-[130px] md:rounded-[9.72px] md:border-[0.81px] disabled:opacity-75 disabled:cursor-not-allowed flex justify-center items-center text-white hover:shadow-lg shadow-black border-[1.16px] rounded-[7px] text-[12px] font-sans text-center"
+            className="w-[132px] h-[34px] mt-6 md:w-[202.95px] md:h-[48.71px] md:top-[362px] md:left-[130px] md:rounded-[9.72px] md:border-[0.81px] disabled:opacity-75 disabled:cursor-not-allowed flex justify-center items-center text-white hover:shadow-lg shadow-black border-[1.16px] rounded-[7px] text-[12px] md:text-[16px] font-sans text-center"
           >
             Login Now
             {isTokenLoading && (

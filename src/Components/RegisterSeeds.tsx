@@ -66,7 +66,7 @@ function RegisterSeeds() {
           </p>
         </span>
         <div className="flex flex-col items-center justify-center h-full w-full gap-[5vh]">
-          <div className="flex flex-col items-center lg:justify-center mt-[40px] lg:mt-0 lg:pb-0 gap-1">
+          <div className="flex flex-col items-center lg:justify-center mt-[20px] lg:mt-0 lg:pb-0 gap-1">
             <img
               src="seeds.svg"
               alt=""
@@ -95,7 +95,7 @@ function RegisterSeeds() {
               )}
             </span>
 
-            <div className="w-[356px] lg:w-[610px] h-auto  justify-center pb-1 pt-3 border border-[#BABABA] rounded-lg">
+            <div className="w-[356px] lg:w-[40vw] h-auto  justify-center pb-1 pt-3 border border-[#BABABA] rounded-lg">
               <label
                 htmlFor="key"
                 className="absolute  text-lg font-sans text-black dark:text-gray-400  transform -translate-y-4 ml-2 scale-75 top-1 z-10 origin-[0] bg-white px-2  start-1"
@@ -118,7 +118,7 @@ function RegisterSeeds() {
               </div>
             </div>
 
-            <div className="flex flex-wrap font-sans gap-4 mt-2 justify-between md:mr-[50px] items-center w-[144px] lg:w-[627px] text-xs md:text-sm">
+            <div className="flex flex-wrap font-sans gap-4 mt-2 justify-between md:mr-[50px] items-center w-[144px] lg:w-[40vw] text-xs md:text-sm">
               <p className="text-[#BABABACC] flex-1 min-w-[150px] md:min-w-[300px] text-[12px] lg:text-[16px] md:text-[16px] whitespace-nowrap">
                 Please write these down in case you lose your seed.
               </p>
@@ -153,7 +153,7 @@ function RegisterSeeds() {
               borderImageSource:
                 "linear-gradient(357.47deg, #005EFF 12.36%, rgba(53, 90, 153, 0) 97.89%)",
             }}
-            className="w-[252px]  h-[48.71px]  disabled:opacity-75 disabled:cursor-not-allowed flex justify-center items-center text-white hover:shadow-lg shadow-black border-[1.16px] rounded-[13px] text-[15px] font-sans text-center"
+            className="w-[150px] md:w-[252px] h-[34px]  md:h-[48.71px]  disabled:opacity-75 disabled:cursor-not-allowed flex justify-center items-center text-white hover:shadow-lg shadow-black border-[1.16px] rounded-md md:rounded-[13px] text-[15px] font-sans text-center"
           >
             Next
             {isTokenLoading && (

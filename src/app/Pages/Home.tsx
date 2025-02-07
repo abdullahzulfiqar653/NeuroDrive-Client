@@ -272,7 +272,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
           className="w-[150px] mb-1 md:mb-0 md:pl-1 pl-5"
         />
         {/* <Line className={"my-1 md:hidden block"} /> */}
-        <div className="flex flex-col gap-2 md:pl-1 pl-5 mt-3">
+        <div className="flex flex-col w-full gap-2 md:pl-1 pl-5 mt-3">
           <div
             onClick={() => {
               handleClickFolder("main");
@@ -310,8 +310,8 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         </div>
         <Line className={"mt-2 min-w-[230px] w-full"} />
 
-        <div className="flex flex-col items-center gap-2 my-2 h-[30vh] overflow-auto">
-          <div className="flex items-center justify-between w-full px-2 pb-2">
+        <div className="flex flex-col items-center gap-2 my-2 h-[30vh] w-full">
+          <div className="flex items-center justify-between w-full px-2 pb-2 ">
             <h1 className="flex text-[14px] text-[#9F9F9F] gap-1 items-center">
               <span>
                 <Arrow color="#9F9F9F" />
@@ -325,7 +325,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
               <Add />
             </span>
           </div>
-          <div className="flex flex-col justify-start gap-2 px-3">
+          <div className="flex flex-col justify-start gap-2 px-3 w-full h-full overflow-y-auto">
             {directory?.children && directory.children.length > 0 ? (
               directory.children.map((child) => (
                 <h1

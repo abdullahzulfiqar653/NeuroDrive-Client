@@ -134,7 +134,7 @@ function UploadDocument() {
               color="#000000"
             />
           </span>
-          <p className="text-[22px] text-[#202343] mt-6">Upload document</p>
+          <p className="text-[22px] text-[#202343] mt-6 font-[500]">Upload document</p>
           <div
             className={`flex flex-col items-center gap-3 w-[90%] h-[55%] justify-center text-[black] border ${
               dragging
@@ -152,15 +152,15 @@ function UploadDocument() {
               </p>
             ) : (
               <>
-                <p className="text-[16px] font-sans font-[500]">
+                <p className="text-[13px] md:text-[16px] font-sans font-[500]">
                   Drag and drop files here
                 </p>
-                <p className="text-[16px] font-sans font-[500] text-[#0000004D]">
+                <p className="text-[13px] md:text-[16px] font-sans font-[500] text-[#0000004D]">
                   OR
                 </p>
                 <button
                   onClick={handleButtonClick}
-                  className="w-[239px] h-[43px] rounded-md border border-[#A9A9A9] hover:bg-[#e9e9e968] hover:shadow-xl font-sans text-[14px] text-[#5160F3]"
+                  className="w-[190px] md:w-[239px] h-[35px] md:h-[43px] rounded-md border border-[#A9A9A9] hover:bg-[#e9e9e968] hover:shadow-xl font-sans text-[12px] md:text-[14px] text-[#5160F3]"
                 >
                   Click here to upload
                 </button>
@@ -177,7 +177,7 @@ function UploadDocument() {
               onChange={handleFileChange}
             />
 
-            <p className="text-[#B3B3B3] text-[11px] font-sans text-center">
+            <p className="text-[#B3B3B3] text-[9px] md:text-[11px] font-sans text-center">
               Supported: JPG,JPEG, PNG, PDF, XLS , doc. File size should be
               maximum 25mb and it shouldn’t be password protected
             </p>
