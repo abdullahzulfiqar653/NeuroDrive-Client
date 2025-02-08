@@ -4,8 +4,11 @@ import React, {
   useContext,
   ReactNode,
   useEffect,
+  useCallback,
 } from "react";
-import { Folder } from "./features/directories/folderSlice";
+
+import { FilesResponse, Folder } from "./features/directories/folderSlice";
+import { debounce } from "@mui/material";
 
 type OpenComponentsState = {
   [key: string]: boolean;
@@ -16,8 +19,11 @@ interface AuthContextType {
   profile: string;
   total_size: number;
   used: number;
+  search: string;
   isGridMode: boolean;
   usedStorage: number;
+  activeFolder: string;
+  files: FilesResponse | null;
   parentFolder: Folder | null;
   isAccountOpen: boolean;
   isAuthenticated: boolean;
@@ -27,8 +33,12 @@ interface AuthContextType {
   signup: () => void;
   logout: () => void;
   setProfile: any;
+  debouncedSetSearch: (value: string) => void;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
   setIsGridMode: (isGridMode: boolean) => void;
+  setActiveFolder: (activeFolder: string) => void;
   setParentFolder: (component: Folder) => void;
+  setFiles: (component: FilesResponse | null) => void;
   setTotal_size: React.Dispatch<React.SetStateAction<number>>;
   setUsed: React.Dispatch<React.SetStateAction<number>>;
   setUsedStorage: React.Dispatch<React.SetStateAction<number>>;
@@ -56,14 +66,17 @@ const isTokenValid = () => {
 };
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [isAccountOpen, setIsAccountOpen] = useState<boolean>(false);
-  const [profile, setProfile] = useState<string>("");
-  const [total_size, setTotal_size] = useState(0);
   const [used, setUsed] = useState(0);
-  const [usedStorage, setUsedStorage] = useState<number>(0);
+  const [search, setSearch] = useState<string>("");
+  const [total_size, setTotal_size] = useState(0);
+  const [profile, setProfile] = useState<string>("");
   const [reGetProfile, setReGetProfile] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [usedStorage, setUsedStorage] = useState<number>(0);
+  const [activeFolder, setActiveFolder] = useState("allFiles");
   const [isGridMode, setIsGridMode] = useState<boolean>(false);
+  const [files, setFiles] = useState<FilesResponse | null>(null);
+  const [isAccountOpen, setIsAccountOpen] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [parentFolder, setParentFolder] = useState<Folder | null>(null);
   const [isOpenComponent, setOpenComponent] = useState<OpenComponentsState>({
     share: false,
@@ -116,6 +129,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.removeItem("access_token");
   };
 
+  const debouncedSetSearch = useCallback(
+    debounce((value) => {
+      setSearch(value);
+    }, 500),
+    []
+  );
+
   return (
     <AuthContext.Provider
       value={{
@@ -124,10 +144,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         login,
         signup,
         logout,
+        files,
         profile,
+        search,
+        setSearch,
+        setFiles,
         setProfile,
         total_size,
         setTotal_size,
+        activeFolder,
+        setActiveFolder,
         isGridMode,
         usedStorage,
         setUsedStorage,
@@ -141,6 +167,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         isOpenComponent,
         toggleComponent,
         isAuthenticated,
+        debouncedSetSearch,
       }}
     >
       {children}

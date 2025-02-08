@@ -22,7 +22,7 @@ import CustomPopup from "./CustomPopup";
 import ProtectedPass from "./ProtectedPass";
 
 function FileGallery({ showStarredOnly }: any) {
-  const { isGridMode, parentFolder } = useAuth();
+  const { isGridMode, parentFolder, files } = useAuth();
   const [isSelected, setIsSelected] = useState<number | null>(null);
   const [metaToggle, setMetaToggle] = useState<boolean>(false);
   const [radioClick, setRadioClick] = useState(false);
@@ -43,7 +43,7 @@ function FileGallery({ showStarredOnly }: any) {
     isActive: false,
     workType: "",
   });
-
+  console.log(parentFolder);
   const handlePopupToggle = ({ index, event }: any) => {
     event.stopPropagation();
     setActiveIndex((prev) => (prev === index ? null : index));
@@ -81,7 +81,7 @@ function FileGallery({ showStarredOnly }: any) {
     setIsSelected((prev) => (prev === index ? null : index));
   };
 
-  const handleFileOpen = async (id: number, isProtected: boolean) => {
+  const handleFileOpen = async (id: string, isProtected: boolean) => {
     localStorage.setItem("fileId", id.toString());
     try {
       if (isProtected) {
@@ -126,7 +126,7 @@ function FileGallery({ showStarredOnly }: any) {
     }
   };
 
-  const handleStarClick = (name: string, id: number) => {
+  const handleStarClick = (name: string, id: string) => {
     try {
       const paylod = {
         name: name,
@@ -144,7 +144,7 @@ function FileGallery({ showStarredOnly }: any) {
       toast.warning("Error is getting starred");
     }
   };
-  const handleUnStarClick = (name: string, id: number) => {
+  const handleUnStarClick = (name: string, id: string) => {
     try {
       const paylod = {
         name: name,
@@ -163,7 +163,7 @@ function FileGallery({ showStarredOnly }: any) {
     }
   };
 
-  const handleDeleteClick = async (id: number) => {
+  const handleDeleteClick = async (id: string) => {
     try {
       const response = await dispatch(
         postData({
@@ -183,7 +183,7 @@ function FileGallery({ showStarredOnly }: any) {
     }
   };
 
-  const handleDownloadClick = async (id: number, isProtected: boolean) => {
+  const handleDownloadClick = async (id: string, isProtected: boolean) => {
     try {
       if (isProtected) {
         localStorage.setItem("fileId", id.toString());
@@ -230,7 +230,7 @@ function FileGallery({ showStarredOnly }: any) {
       <div className="h-full w-[100%] md:w-[96%]">
         {isGridMode ? (
           <div className="flex flex-wrap justify-center gap-4 md:gap-4 my-2 md:my-4">
-            {parentFolder?.files
+            {files?.results
               ?.filter((item) => (showStarredOnly ? item?.is_starred : true))
               .map((item, index) => (
                 <div className="relative">
@@ -464,7 +464,7 @@ function FileGallery({ showStarredOnly }: any) {
                 </p>
               </div>
 
-              {parentFolder?.files
+              {files?.results
                 .filter((item) => (showStarredOnly ? item?.is_starred : true))
                 .map((file, index) => (
                   <div className="relative">
@@ -489,7 +489,7 @@ function FileGallery({ showStarredOnly }: any) {
                         </span>
 
                         {/* Check file extension and content type */}
-                        <div className="flex justify-center gap-1 ">
+                        <div className="flex justify-center gap-1 items-center">
                           {["xls", "xlsx"].includes(
                             file?.name.split(".").pop() || ""
                           ) ||
@@ -633,11 +633,18 @@ function FileGallery({ showStarredOnly }: any) {
                         </div>
                       </p>
                       <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
-                        {Array.isArray(file.shared_with) &&
-                        file.shared_with.length > 0 ? (
+                        {Array.isArray(file.shared_accesses) &&
+                        file.shared_accesses.length > 0 ? (
                           <>
-                            <img src="per1.png" alt="Person" />{" "}
-                            {file.personName}
+                            {file.shared_accesses?.map((access, index) => (
+                              <img
+                                key={index}
+                                src={access.image}
+                                alt={`Person ${index}`}
+                                className="h-7 w-7 rounded-full object-cover"
+                              />
+                            ))}
+                            {/* {file.personName} */}
                           </>
                         ) : (
                           <>
@@ -682,7 +689,7 @@ function FileGallery({ showStarredOnly }: any) {
                             <Circle color={radioClick ? "#2676ff" : "none"} />
                           </span>
                           {/* Check file extension and content type */}
-                          <div className="flex justify-center gap-1 cursor-pointer">
+                          <div className="flex justify-center items-center gap-1 cursor-pointer">
                             {["xls", "xlsx"].includes(
                               file?.name.split(".").pop() || ""
                             ) ||
@@ -838,7 +845,24 @@ function FileGallery({ showStarredOnly }: any) {
                       </div>
                       <div className="h-[50%] w-[85%] flex justify-between items-center">
                         <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
-                          <NoPerson className={"w-[20px] h-[20px]"} /> _
+                          {Array.isArray(file.shared_accesses) &&
+                          file.shared_accesses.length > 0 ? (
+                            <>
+                              {file.shared_accesses?.map((access, index) => (
+                                <img
+                                  key={index}
+                                  src={access.image}
+                                  alt={`Person ${index}`}
+                                  className="h-5 w-5 rounded-full object-cover"
+                                />
+                              ))}
+                              {/* {file.personName} */}
+                            </>
+                          ) : (
+                            <>
+                              <NoPerson />
+                            </>
+                          )}
                         </p>
                         <p className=" w-[50%] text-[10px] font-sans h-full flex items-center justify-end px-4">
                           File size: {(file.size / 1024 ** 2).toFixed(2)} GB

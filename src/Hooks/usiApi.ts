@@ -21,7 +21,6 @@ const useApi = (key: string) => {
   };
 
   const reset = () => {
-    console.log("Resetting state for key:", key);
     dispatch(resetCallState(key)); // Reset only the state for the specified key
   };
 
