@@ -159,6 +159,3 @@ function ShareFile({ setShare, file }: Props) {
 }
 
 export default ShareFile;
-function dispatch(arg0: any) {
-  throw new Error("Function not implemented.");
-}
