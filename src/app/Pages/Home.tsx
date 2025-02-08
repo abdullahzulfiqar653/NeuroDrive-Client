@@ -8,7 +8,7 @@ import {
   Arrow,
   Folder,
   Blocks,
-  Invite,
+  // Invite,
   SixDots,
   Search,
   Shared,
@@ -91,7 +91,7 @@ function Home() {
             </div>
             <div className="flex gap-4 items-center">
               {/* <div
-                // onClick={() => toggleComponent("share")}
+                onClick={() => toggleComponent("share")}
                 style={{
                   background:
                     "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
@@ -353,7 +353,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
               <Add />
             </span>
           </div>
-          <div className="flex flex-col justify-start gap-2 px-3">
+          <div className="flex flex-col justify-start gap-2 px-3 w-full h-full overflow-y-auto">
             {directory?.children && directory.children.length > 0 ? (
               directory.children.map((child) => (
                 <h1
@@ -450,3 +450,5 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
     </>
   );
 }
+
+

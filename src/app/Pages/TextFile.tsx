@@ -16,7 +16,7 @@ import PDF from "../../Components/PDF";
 import { useNavigate } from "react-router-dom";
 
 function TextFile() {
-  const navigate =useNavigate();
+  const navigate = useNavigate();
   const { isAccountOpen, setIsAccountOpen, toggleComponent, profile } =
     useAuth();
   // const queryParams = new URLSearchParams(location.search);
@@ -32,13 +32,16 @@ function TextFile() {
         className="flex w-full h-[10vh] min-h-[68px] items-center justify-between md:pl-3 px-2 md:pr-5"
       >
         <div className="flex items-center">
-         <span className="cursor-pointer mr-3" onClick={()=>navigate('/')}><BackArrow className={"w-6 h-8"}/></span> 
+          <span className="cursor-pointer mr-3" onClick={() => navigate("/")}>
+            <BackArrow className={"w-6 h-8"} />
+          </span>
           <span className="flex gap-2 md:pr-7 items-center md:border-r border-white">
             <img src="/logo.svg" alt="" className="w-7 h-6" />
             <p className="font-chakra text-[16px] md:text-[22px] text-white">
               NeuroDrive
             </p>
           </span>
+
           <span className="md:flex items-center gap-2 pl-7 hidden">
             <>
               {fileType === "word" && (
@@ -48,7 +51,9 @@ function TextFile() {
               {fileType === "pdf" && (
                 <img src="/pdf.png" alt="" className="w-[26px] h-[26px]" />
               )}
-              <p className="font-sans text-[14px] text-white w-[20vw] truncate">{fileName}</p>
+              <p className="font-sans text-[14px] text-white w-[20vw] truncate">
+                {fileName}
+              </p>
             </>
           </span>
         </div>
@@ -104,11 +109,21 @@ function TextFile() {
           </div>
         </div>
       </div>
+
       <div className="w-full h-[9vh] min-h-[50px] px-4 py-2 md:hidden flex items-center justify-between">
         <span className="flex items-center gap-2">
-          <img src="/rich.png" alt="" className="w-[26px] h-[26px]" />
-          <p className="font-sans text-[14px] text-black">NeuroDocs</p>
+          {fileType === "word" && (
+            <img src="/rich.png" alt="" className="w-[26px] h-[26px]" />
+          )}
+          {fileType === "excel" && (
+            <img src="/excel.svg" alt="" className="w-[26px] h-[26px]" />
+          )}
+          {fileType === "pdf" && (
+            <img src="/pdf.png" alt="" className="w-[26px] h-[26px]" />
+          )}
+          <p className="font-sans text-[14px] text-black">{fileName}</p>
         </span>
+
         <div className="flex items-center gap-4">
           <p className="text-black border-b-2 border-black text-[14px]  ">
             Text

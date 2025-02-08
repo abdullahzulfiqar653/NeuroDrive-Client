@@ -124,6 +124,7 @@ function FilesList() {
                       ? " text-2xl fill-yellow-300"
                       : "text-black text-2xl"
                   }
+                  color={!showStarredOnly ? "none" : "#fde047"}
                 />
                 {/* <CiStar /> */}
                 Starred
