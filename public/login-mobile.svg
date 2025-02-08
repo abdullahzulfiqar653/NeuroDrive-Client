@@ -905,74 +905,74 @@
 <stop offset="0.965" stop-color="#B325FC"/>
 </linearGradient>
 <radialGradient id="paint1_radial_850_9700" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(206.315 63.5519) rotate(90) scale(8.34006 8.42346)">
-<stop offset="0.09" stop-color="white"/>
-<stop offset="0.1" stop-color="#EBEBEB"/>
-<stop offset="0.13" stop-color="#BABABA"/>
-<stop offset="0.17" stop-color="#8E8E8E"/>
-<stop offset="0.2" stop-color="#686868"/>
-<stop offset="0.23" stop-color="#484848"/>
-<stop offset="0.27" stop-color="#2E2E2E"/>
-<stop offset="0.31" stop-color="#191919"/>
-<stop offset="0.36" stop-color="#0B0B0B"/>
-<stop offset="0.42" stop-color="#030303"/>
-<stop offset="0.52" stop-color="#010101"/>
-<stop offset="1"/>
+<stop offset="9%" stop-color="rgb(255, 255, 255)" />
+      <stop offset="10%" stop-color="rgba(255, 255, 255, 0.82)" />
+      <stop offset="13%" stop-color="rgba(234, 234, 234, 0.86)" />
+      <stop offset="17%" stop-color="rgba(255, 255, 255, 0.55)" />
+      <stop offset="20%" stop-color="rgba(240, 240, 240, 0.56)" />
+      <stop offset="23%" stop-color="rgba(255, 255, 255, 0.32)" />
+      <stop offset="27%" stop-color="rgba(255, 255, 255, 0.28)" />
+      <stop offset="31%" stop-color="rgba(255, 255, 255, 0.08)" />
+      <stop offset="36%" stop-color="rgba(255, 255, 255, 0.06)" />
+      <stop offset="42%" stop-color="rgba(255, 255, 255, 0.08)" />
+      <stop offset="52%" stop-color="rgba(255, 255, 255, 0.05)" />
+      <stop offset="100%" stop-color="rgba(255, 255, 255, 0.02)" />
 </radialGradient>
 <radialGradient id="paint2_radial_850_9700" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(200.637 125.676) rotate(90) scale(8.34006 8.42346)">
-<stop offset="0.09" stop-color="white"/>
-<stop offset="0.1" stop-color="#EBEBEB"/>
-<stop offset="0.13" stop-color="#BABABA"/>
-<stop offset="0.17" stop-color="#8E8E8E"/>
-<stop offset="0.2" stop-color="#686868"/>
-<stop offset="0.23" stop-color="#484848"/>
-<stop offset="0.27" stop-color="#2E2E2E"/>
-<stop offset="0.31" stop-color="#191919"/>
-<stop offset="0.36" stop-color="#0B0B0B"/>
-<stop offset="0.42" stop-color="#030303"/>
-<stop offset="0.52" stop-color="#010101"/>
-<stop offset="1"/>
+<stop offset="9%" stop-color="rgb(255, 255, 255)" />
+      <stop offset="10%" stop-color="rgba(255, 255, 255, 0.82)" />
+      <stop offset="13%" stop-color="rgba(234, 234, 234, 0.86)" />
+      <stop offset="17%" stop-color="rgba(255, 255, 255, 0.55)" />
+      <stop offset="20%" stop-color="rgba(240, 240, 240, 0.56)" />
+      <stop offset="23%" stop-color="rgba(255, 255, 255, 0.32)" />
+      <stop offset="27%" stop-color="rgba(255, 255, 255, 0.28)" />
+      <stop offset="31%" stop-color="rgba(255, 255, 255, 0.08)" />
+      <stop offset="36%" stop-color="rgba(255, 255, 255, 0.06)" />
+      <stop offset="42%" stop-color="rgba(255, 255, 255, 0.08)" />
+      <stop offset="52%" stop-color="rgba(255, 255, 255, 0.05)" />
+      <stop offset="100%" stop-color="rgba(255, 255, 255, 0.02)" />
 </radialGradient>
 <radialGradient id="paint3_radial_850_9700" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(235.671 152.402) rotate(90) scale(8.34006 8.42346)">
-<stop offset="0.09" stop-color="white"/>
-<stop offset="0.1" stop-color="#EBEBEB"/>
-<stop offset="0.13" stop-color="#BABABA"/>
-<stop offset="0.17" stop-color="#8E8E8E"/>
-<stop offset="0.2" stop-color="#686868"/>
-<stop offset="0.23" stop-color="#484848"/>
-<stop offset="0.27" stop-color="#2E2E2E"/>
-<stop offset="0.31" stop-color="#191919"/>
-<stop offset="0.36" stop-color="#0B0B0B"/>
-<stop offset="0.42" stop-color="#030303"/>
-<stop offset="0.52" stop-color="#010101"/>
-<stop offset="1"/>
+<stop offset="9%" stop-color="rgb(255, 255, 255)" />
+      <stop offset="10%" stop-color="rgba(255, 255, 255, 0.82)" />
+      <stop offset="13%" stop-color="rgba(234, 234, 234, 0.86)" />
+      <stop offset="17%" stop-color="rgba(255, 255, 255, 0.55)" />
+      <stop offset="20%" stop-color="rgba(240, 240, 240, 0.56)" />
+      <stop offset="23%" stop-color="rgba(255, 255, 255, 0.32)" />
+      <stop offset="27%" stop-color="rgba(255, 255, 255, 0.28)" />
+      <stop offset="31%" stop-color="rgba(255, 255, 255, 0.08)" />
+      <stop offset="36%" stop-color="rgba(255, 255, 255, 0.06)" />
+      <stop offset="42%" stop-color="rgba(255, 255, 255, 0.08)" />
+      <stop offset="52%" stop-color="rgba(255, 255, 255, 0.05)" />
+      <stop offset="100%" stop-color="rgba(255, 255, 255, 0.02)" />
 </radialGradient>
 <radialGradient id="paint4_radial_850_9700" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(256.704 195.24) rotate(90) scale(8.34006 8.42346)">
-<stop offset="0.09" stop-color="white"/>
-<stop offset="0.1" stop-color="#EBEBEB"/>
-<stop offset="0.13" stop-color="#BABABA"/>
-<stop offset="0.17" stop-color="#8E8E8E"/>
-<stop offset="0.2" stop-color="#686868"/>
-<stop offset="0.23" stop-color="#484848"/>
-<stop offset="0.27" stop-color="#2E2E2E"/>
-<stop offset="0.31" stop-color="#191919"/>
-<stop offset="0.36" stop-color="#0B0B0B"/>
-<stop offset="0.42" stop-color="#030303"/>
-<stop offset="0.52" stop-color="#010101"/>
-<stop offset="1"/>
+<stop offset="9%" stop-color="rgb(255, 255, 255)" />
+      <stop offset="10%" stop-color="rgba(255, 255, 255, 0.82)" />
+      <stop offset="13%" stop-color="rgba(234, 234, 234, 0.86)" />
+      <stop offset="17%" stop-color="rgba(255, 255, 255, 0.55)" />
+      <stop offset="20%" stop-color="rgba(240, 240, 240, 0.56)" />
+      <stop offset="23%" stop-color="rgba(255, 255, 255, 0.32)" />
+      <stop offset="27%" stop-color="rgba(255, 255, 255, 0.28)" />
+      <stop offset="31%" stop-color="rgba(255, 255, 255, 0.08)" />
+      <stop offset="36%" stop-color="rgba(255, 255, 255, 0.06)" />
+      <stop offset="42%" stop-color="rgba(255, 255, 255, 0.08)" />
+      <stop offset="52%" stop-color="rgba(255, 255, 255, 0.05)" />
+      <stop offset="100%" stop-color="rgba(255, 255, 255, 0.02)" />
 </radialGradient>
 <radialGradient id="paint5_radial_850_9700" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(267.405 28.6861) rotate(90) scale(8.34006 8.42346)">
-<stop offset="0.09" stop-color="white"/>
-<stop offset="0.1" stop-color="#EBEBEB"/>
-<stop offset="0.13" stop-color="#BABABA"/>
-<stop offset="0.17" stop-color="#8E8E8E"/>
-<stop offset="0.2" stop-color="#686868"/>
-<stop offset="0.23" stop-color="#484848"/>
-<stop offset="0.27" stop-color="#2E2E2E"/>
-<stop offset="0.31" stop-color="#191919"/>
-<stop offset="0.36" stop-color="#0B0B0B"/>
-<stop offset="0.42" stop-color="#030303"/>
-<stop offset="0.52" stop-color="#010101"/>
-<stop offset="1"/>
+<stop offset="9%" stop-color="rgb(255, 255, 255)" />
+      <stop offset="10%" stop-color="rgba(255, 255, 255, 0.82)" />
+      <stop offset="13%" stop-color="rgba(234, 234, 234, 0.86)" />
+      <stop offset="17%" stop-color="rgba(255, 255, 255, 0.55)" />
+      <stop offset="20%" stop-color="rgba(240, 240, 240, 0.56)" />
+      <stop offset="23%" stop-color="rgba(255, 255, 255, 0.32)" />
+      <stop offset="27%" stop-color="rgba(255, 255, 255, 0.28)" />
+      <stop offset="31%" stop-color="rgba(255, 255, 255, 0.08)" />
+      <stop offset="36%" stop-color="rgba(255, 255, 255, 0.06)" />
+      <stop offset="42%" stop-color="rgba(255, 255, 255, 0.08)" />
+      <stop offset="52%" stop-color="rgba(255, 255, 255, 0.05)" />
+      <stop offset="100%" stop-color="rgba(255, 255, 255, 0.02)" />
 </radialGradient>
 <linearGradient id="paint6_linear_850_9700" x1="43.1889" y1="45.9933" x2="43.1889" y2="500.317" gradientUnits="userSpaceOnUse">
 <stop stop-color="white" stop-opacity="0"/>
