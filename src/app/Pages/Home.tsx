@@ -4,7 +4,6 @@ import LinearProgress from "@mui/material/LinearProgress";
 import {
   Add,
   Line,
-  Trash,
   Cross,
   Arrow,
   Folder,
@@ -12,6 +11,7 @@ import {
   Invite,
   SixDots,
   Search,
+  Shared,
 } from "../../assets/Icons";
 import FilesList from "../../Components/FilesList";
 import { useAuth } from "../../AuthContext";
@@ -21,21 +21,13 @@ import { ThreeCircles } from "react-loader-spinner";
 import { AppDispatch, RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import { getDirectory } from "../../features/directories/folderSlice";
-
-// const folder = [
-//   // "Workspace",
-//   // "Artistic assets",
-//   // "Office work",
-//   // "Home setup",
-//   // "Content corner",
-//   // "Desk setup",
-// ];
+import { fetchData } from "../../features/ApiSlice";
 
 function Home() {
   const {
     isAccountOpen,
     setIsAccountOpen,
-    toggleComponent,
+    debouncedSetSearch,
     setProfile,
     reGetProfile,
     setUsedStorage,
@@ -92,13 +84,14 @@ function Home() {
             <div className="relative flex-1 hidden md:block">
               <Search />
               <input
+                onChange={(e) => debouncedSetSearch(e.target.value)}
                 className="font-sans min-w-[300px] max-w-[400px] h-[36px] pl-9 pr-3 rounded-[4px] outline-none bg-[#6C849D1F]  placeholder:text-[#6C849D52] text-[#6c849d] text-[12px] "
                 placeholder="Search messages"
               />
             </div>
             <div className="flex gap-4 items-center">
-              <div
-                onClick={() => toggleComponent("share")}
+              {/* <div
+                // onClick={() => toggleComponent("share")}
                 style={{
                   background:
                     "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
@@ -109,7 +102,7 @@ function Home() {
               >
                 <Invite />
                 <p className="text-[14px] text-[white]">Invite Friends</p>
-              </div>
+              </div> */}
 
               <div className="w-[47px] h-[42px] bg-[#F8FAFC] rounded-[12px] border border-[#BFBFBF57] flex items-center justify-center">
                 <SixDots />
@@ -142,6 +135,7 @@ function Home() {
                 </div>
                 {isAccountOpen && (
                   <Account
+                    address={data?.response?.data?.address}
                     profileLoading={data?.isLoading}
                     className={
                       "left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"
@@ -185,6 +179,7 @@ function Home() {
                 )}
                 {isAccountOpen && (
                   <Account
+                    address={data?.response?.data?.address}
                     profileLoading={data?.isLoading}
                     className={
                       "left-[-160px] md:left-[-230px] top-[42px] md:top-[50px]"
@@ -227,10 +222,17 @@ type LeftBarProps = {
 
 function LeftBar({ setLeftBar }: LeftBarProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const [isFolderName, setFolderName] = useState<string>("");
   const { directory } = useSelector((state: RootState) => state.folders);
-  const { toggleComponent, parentFolder, setParentFolder, used, total_size } =
-    useAuth();
+  const {
+    toggleComponent,
+    parentFolder,
+    setParentFolder,
+    used,
+    total_size,
+    setFiles,
+    setActiveFolder,
+    activeFolder,
+  } = useAuth();
 
   useEffect(() => {
     if (!parentFolder) {
@@ -253,6 +255,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
   }, [directory, getDirectory]);
 
   const handleClickFolder = (folder_id: string) => {
+    setActiveFolder("allFiles");
     dispatch(getDirectory(folder_id))
       .unwrap()
       .then((res) => {
@@ -264,6 +267,19 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
       });
   };
 
+  const handleShareFile = async () => {
+    try {
+      const response = await dispatch(
+        fetchData({ url: `directories/shared/files/`, key: "shareFileFetch" })
+      ).unwrap();
+      if (response && response.data) {
+        setFiles(response.data);
+      } else {
+        setFiles(null);
+      }
+    } catch (error) {}
+  };
+
   return (
     <>
       <div className="flex flex-col justify-center items-start pt-4 gap-3 w-full">
@@ -272,51 +288,63 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
           className="w-[150px] mb-1 md:mb-0 md:pl-1 pl-5"
         />
         {/* <Line className={"my-1 md:hidden block"} /> */}
-        <div className="flex flex-col gap-2 md:pl-1 pl-5 mt-3">
+        <div className="flex flex-col gap-2 md:px-3 px-5 mt-3 w-full">
+          {/* All Files Option */}
           <div
             onClick={() => {
+              setActiveFolder("allFiles");
               handleClickFolder("main");
-              setFolderName("FOLDERS");
             }}
-            className="cursor-pointer bg-[#3984FF] w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center shadow-md"
+            className={`cursor-pointer pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center
+          ${
+            activeFolder === "allFiles"
+              ? "bg-[#3984FF] text-white"
+              : "hover:bg-[#3984FF] hover:text-white"
+          }`}
           >
             <div className="flex items-center gap-3">
-              <Blocks />
-              <p className="text-[14px] font-sans text-white leading-[20px]">
-                All Files
-              </p>
+              <Blocks color={activeFolder === "allFiles" ? "white" : "black"} />
+              <p className="text-[14px] font-sans leading-[20px]">All Files</p>
             </div>
           </div>
-          <div className="cursor-pointer hover:bg-[#3984FF] hover:text-white w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center hover:shadow-md">
-            <div className="flex items-center gap-3">
-              <img src="/shared.svg" />
-              <p className="text-[14px] font-sans  leading-[20px]">Shared</p>
-            </div>
-          </div>
-          <div className="cursor-pointer hover:bg-[#3984FF] hover:text-white w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center hover:shadow-md">
-            <div className="flex items-center gap-3">
-              <Trash />
-              <p className="text-[14px] font-sans  leading-[20px]">
-                Deleted Files
-              </p>
-            </div>
-          </div>
-          <div className="cursor-pointer hover:bg-[#3984FF] hover:text-white w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center hover:shadow-md">
-            <div className="flex items-center gap-3">
-              <img src="/setting.svg" />
-              <p className="text-[14px] font-sans  leading-[20px]">Settings</p>
+
+          {/* Shared Option */}
+          <div
+            onClick={() => {
+              setActiveFolder("shared");
+              handleShareFile();
+              (setLeftBar ?? (() => {}))(false);
+            }}
+            className={`cursor-pointer pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center 
+          ${
+            activeFolder === "shared"
+              ? "bg-[#3984FF] text-white shadow-md"
+              : "hover:bg-[#3984FF] hover:text-white"
+          }`}
+          >
+            <div
+              onClick={() => {
+                handleClickFolder("shared");
+                (setLeftBar ?? (() => {}))(false);
+              }}
+              className="flex items-center gap-3"
+            >
+              <Shared color={activeFolder === "shared" ? "white" : "black"} />
+              <p className="text-[14px] font-sans leading-[20px]">Shared</p>
             </div>
           </div>
         </div>
         <Line className={"mt-2 min-w-[230px] w-full"} />
 
-        <div className="flex flex-col items-center gap-2 my-2 h-[30vh] overflow-auto">
+        <div className="flex flex-col gap-2 my-2 h-[35vh] w-full overflow-auto">
           <div className="flex items-center justify-between w-full px-2 pb-2">
             <h1 className="flex text-[14px] text-[#9F9F9F] gap-1 items-center">
               <span>
                 <Arrow color="#9F9F9F" />
               </span>
-              {isFolderName !== "" ? isFolderName : "FOLDERS"}
+              {directory?.name === "main"
+                ? "FOLDERS"
+                : directory?.name || "Folders"}
             </h1>
             <span
               onClick={() => toggleComponent("newFolder")}
@@ -331,13 +359,12 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
                 <h1
                   onClick={() => {
                     handleClickFolder(child.id);
-                    setFolderName(child.name);
                     (setLeftBar ?? (() => {}))(false);
                   }}
                   key={child.id}
                   className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 "
                 >
-                  <Folder />{" "}
+                  <Folder />
                   <span className="truncate font-sans ">{child.name}</span>
                 </h1>
               ))
