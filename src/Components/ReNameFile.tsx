@@ -49,7 +49,7 @@ function ReNameFile({
 
   return (
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center">
-      <div className="relative py-11 w-[59vw] px-3 md:px-4 flex flex-col items-center justify-center rounded-lg bg-[#ffffff]">
+      <div className="relative py-11 w-[75vw] md:w-[59vw] px-3 md:px-4 flex flex-col items-center justify-center rounded-lg bg-[#ffffff]">
         <span
           onClick={() => {
             settoggleReName(false);
@@ -60,10 +60,10 @@ function ReNameFile({
         </span>
 
         <div className="flex flex-col items-start w-full justify-start text-[12px] md:text-[14px] text-black">
-          <p className="font-sans text-[16px] md:text-2xl font-bold mb-3">
+          <p className="font-sans text-[16px] text-center w-full md:text-2xl font-bold mb-3">
             Enter new file name
           </p>
-          <div className="h-[36px] mb-4 w-[97%] md:h-[54px] bg-[#ECECEC] rounded-md px-3">
+          <div className="h-[36px] mb-4 w-[97%] md:h-[54px] bg-[#ECECEC] rounded-md px-3 mt-3 md:mt-5">
             <input
               value={value}
               onChange={(e) => setValue(e.target.value)}

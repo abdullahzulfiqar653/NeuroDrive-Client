@@ -58,7 +58,7 @@ function SetPassword({
 
   return (
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center">
-      <div className="relative py-11 w-[70vw] md:w-[45vw] px-3 md:px-4  flex flex-col items-center justify-center rounded-lg bg-[#ffffff]">
+      <div className="relative py-11 w-[75vw] md:w-[45vw] px-3 md:px-4  flex flex-col items-center justify-center rounded-lg bg-[#ffffff]">
         <span
           onClick={() => {
             settogglePassword(false);
@@ -79,7 +79,7 @@ function SetPassword({
             </span>
           </div>
 
-          <p className="sm:text-2xl text-lg font-bold mt-5 text-center ">
+          <p className="sm:text-2xl text-[16px] font-bold mt-5 text-center ">
             Set Password to secure File{" "}
           </p>
         </div>

@@ -62,7 +62,7 @@ const MetaData = ({
 
   return (
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center">
-      <div className="w-[70vw] md:w-[90vw] sm:w-[90vw] h-[85vh]  relative max-w-[901px] md:min-w-[493px] md:min-h-[506px] rounded-lg px-2 sm:px-4 py-2 bg-[#ffffff] items-center justify-center sm:flex sm:h-[80vh] md:h-[85vh] md:flex sm:justify-around md:justify-around md:gap-4">
+      <div className="w-[75vw] md:w-[90vw] sm:w-[90vw] h-[85vh]  relative max-w-[901px] md:min-w-[493px] md:min-h-[506px] rounded-lg px-2 sm:px-4 py-2 bg-[#ffffff] items-center justify-center sm:flex sm:h-[80vh] md:h-[85vh] md:flex sm:justify-around md:justify-around md:gap-4">
         <div className="flex flex-col gap-2 sm:gap-5 items-center justify-center">
           <div className="flex justify-start w-full">
             <p onClick={() => setMetaToggle(false)}>

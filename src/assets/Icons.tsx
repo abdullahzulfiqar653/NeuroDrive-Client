@@ -731,12 +731,12 @@ export const Rename = () => (
   </svg>
 );
 
-export const Starred = ({ className }: IconsProps) => (
+export const Starred = ({ className, color }: IconsProps) => (
   <svg
     width="16"
     height="16"
     viewBox="0 0 21 21"
-    fill="none"
+    fill={color}
     xmlns="http://www.w3.org/2000/svg"
     className={`${className} w-[12px] h-[12px] md:w-[19px] md:h-[19px]`}
   >
