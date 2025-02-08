@@ -838,7 +838,7 @@ function FileGallery({ showStarredOnly }: any) {
                           onClick={(event) =>
                             handlePopupToggle({ index, event })
                           }
-                          className="cursor-pointer w-full h-full flex items-center justify-end px-4"
+                          className="cursor-pointer h-full flex items-center justify-end px-4"
                         >
                           <ThreeDots />
                         </div>

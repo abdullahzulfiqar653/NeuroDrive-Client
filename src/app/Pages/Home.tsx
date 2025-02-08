@@ -288,7 +288,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
           className="w-[150px] mb-1 md:mb-0 md:pl-1 pl-5"
         />
         {/* <Line className={"my-1 md:hidden block"} /> */}
-        <div className="flex flex-col gap-2 md:pl-1 pl-5 mt-3 w-full">
+        <div className="flex flex-col gap-2 md:px-3 px-5 mt-3 w-full">
           {/* All Files Option */}
           <div
             onClick={() => {
@@ -313,6 +313,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             onClick={() => {
               setActiveFolder("shared");
               handleShareFile();
+              (setLeftBar ?? (() => {}))(false);
             }}
             className={`cursor-pointer pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center 
           ${
@@ -322,7 +323,10 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
           }`}
           >
             <div
-              onClick={() => handleClickFolder("shared")}
+              onClick={() => {
+                handleClickFolder("shared");
+                (setLeftBar ?? (() => {}))(false);
+              }}
               className="flex items-center gap-3"
             >
               <Shared color={activeFolder === "shared" ? "white" : "black"} />
@@ -332,7 +336,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         </div>
         <Line className={"mt-2 min-w-[230px] w-full"} />
 
-        <div className="flex flex-col gap-2 my-2 h-[30vh] w-full overflow-auto">
+        <div className="flex flex-col gap-2 my-2 h-[35vh] w-full overflow-auto">
           <div className="flex items-center justify-between w-full px-2 pb-2">
             <h1 className="flex text-[14px] text-[#9F9F9F] gap-1 items-center">
               <span>
