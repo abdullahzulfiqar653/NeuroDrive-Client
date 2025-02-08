@@ -102,7 +102,7 @@ function ShareFile({ setShare, file }: Props) {
         <p className="text-[12px] md:text-[14px] text-[#0000004D] w-full text-start mt-2 md:mt-4 ml-1">
           WHO HAS ACCESS
         </p>
-        {file?.shared_accesses.length < 0 ? (
+        {file?.shared_accesses.length > 0 ? (
           file.shared_accesses.map((items: any) => (
             <div
               key={items.id}
@@ -116,7 +116,9 @@ function ShareFile({ setShare, file }: Props) {
                 />
                 {/* Aqsa <span className="text-[#00000066]">(You)</span> */}
               </p>
-              <p className="text-[10px] md:text-[14px]">Permissions</p>
+              <p className="text-[10px] md:text-[14px]">
+                {items?.permission_type}
+              </p>
             </div>
           ))
         ) : (

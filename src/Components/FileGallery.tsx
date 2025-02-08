@@ -489,7 +489,7 @@ function FileGallery({ showStarredOnly }: any) {
                         </span>
 
                         {/* Check file extension and content type */}
-                        <div className="flex justify-center gap-1 ">
+                        <div className="flex justify-center gap-1 items-center">
                           {["xls", "xlsx"].includes(
                             file?.name.split(".").pop() || ""
                           ) ||
@@ -636,7 +636,14 @@ function FileGallery({ showStarredOnly }: any) {
                         {Array.isArray(file.shared_accesses) &&
                         file.shared_accesses.length > 0 ? (
                           <>
-                            <img src="per1.png" alt="Person" />
+                            {file.shared_accesses?.map((access, index) => (
+                              <img
+                                key={index}
+                                src={access.image}
+                                alt={`Person ${index}`}
+                                className="h-7 w-7 rounded-full object-cover"
+                              />
+                            ))}
                             {/* {file.personName} */}
                           </>
                         ) : (
@@ -682,7 +689,7 @@ function FileGallery({ showStarredOnly }: any) {
                             <Circle color={radioClick ? "#2676ff" : "none"} />
                           </span>
                           {/* Check file extension and content type */}
-                          <div className="flex justify-center gap-1 cursor-pointer">
+                          <div className="flex justify-center items-center gap-1 cursor-pointer">
                             {["xls", "xlsx"].includes(
                               file?.name.split(".").pop() || ""
                             ) ||
@@ -838,7 +845,24 @@ function FileGallery({ showStarredOnly }: any) {
                       </div>
                       <div className="h-[50%] w-[85%] flex justify-between items-center">
                         <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
-                          <NoPerson className={"w-[20px] h-[20px]"} /> _
+                          {Array.isArray(file.shared_accesses) &&
+                          file.shared_accesses.length > 0 ? (
+                            <>
+                              {file.shared_accesses?.map((access, index) => (
+                                <img
+                                  key={index}
+                                  src={access.image}
+                                  alt={`Person ${index}`}
+                                  className="h-5 w-5 rounded-full object-cover"
+                                />
+                              ))}
+                              {/* {file.personName} */}
+                            </>
+                          ) : (
+                            <>
+                              <NoPerson />
+                            </>
+                          )}
                         </p>
                         <p className=" w-[50%] text-[10px] font-sans h-full flex items-center justify-end px-4">
                           File size: {(file.size / 1024 ** 2).toFixed(2)} GB
