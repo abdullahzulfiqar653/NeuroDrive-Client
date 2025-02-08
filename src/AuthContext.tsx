@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { Folder } from "./features/directories/folderSlice";
+import { FilesResponse, Folder } from "./features/directories/folderSlice";
 
 type OpenComponentsState = {
   [key: string]: boolean;
@@ -18,6 +18,8 @@ interface AuthContextType {
   used: number;
   isGridMode: boolean;
   usedStorage: number;
+  activeFolder: string;
+  files: FilesResponse | null;
   parentFolder: Folder | null;
   isAccountOpen: boolean;
   isAuthenticated: boolean;
@@ -28,7 +30,9 @@ interface AuthContextType {
   logout: () => void;
   setProfile: any;
   setIsGridMode: (isGridMode: boolean) => void;
+  setActiveFolder: (activeFolder: string) => void;
   setParentFolder: (component: Folder) => void;
+  setFiles: (component: FilesResponse | null) => void;
   setTotal_size: React.Dispatch<React.SetStateAction<number>>;
   setUsed: React.Dispatch<React.SetStateAction<number>>;
   setUsedStorage: React.Dispatch<React.SetStateAction<number>>;
@@ -65,6 +69,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [isGridMode, setIsGridMode] = useState<boolean>(false);
   const [parentFolder, setParentFolder] = useState<Folder | null>(null);
+  const [files, setFiles] = useState<FilesResponse | null>(null);
+  const [activeFolder, setActiveFolder] = useState("allFiles");
   const [isOpenComponent, setOpenComponent] = useState<OpenComponentsState>({
     share: false,
     upload: false,
@@ -124,10 +130,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         login,
         signup,
         logout,
+        files,
         profile,
+        setFiles,
         setProfile,
         total_size,
         setTotal_size,
+        activeFolder,
+        setActiveFolder,
         isGridMode,
         usedStorage,
         setUsedStorage,

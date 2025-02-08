@@ -7,8 +7,8 @@ import { getDirectory } from "../features/directories/folderSlice";
 import { toast } from "react-toastify";
 
 interface Props {
-  file: any;
-  setShare: React.Dispatch<React.SetStateAction<boolean>>;
+  file?: any;
+  setShare?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function ShareFile({ setShare, file }: Props) {
@@ -34,7 +34,7 @@ function ShareFile({ setShare, file }: Props) {
       // setActiveIndex(null);
       toast.success("File shared successfully");
       dispatch(getDirectory(parentFolderId));
-      setShare(false);
+      setShare?.(false);
     } catch (error) {
       toast.warn("Unable to share file");
       console.log("error", error);
@@ -45,7 +45,7 @@ function ShareFile({ setShare, file }: Props) {
     <div className="fixed inset-0 bg-[#000000BA] z-50 flex items-center justify-center">
       <div className="relative w-[95vw] max-w-[351px] md:w-[40vw] md:min-w-[493px] h-[60vh] md:h-[65vh]   md:min-h-[514px] px-3 md:px-6 flex flex-col items-center rounded-xl bg-[#F3F3F3]">
         <span
-          onClick={() => setShare(false)}
+          onClick={() => setShare?.(false)}
           className="absolute right-[17px] top-[17px]  cursor-pointer"
         >
           <Cross
@@ -75,7 +75,7 @@ function ShareFile({ setShare, file }: Props) {
               onChange={(e) => setAddress(e.target.value)}
               type="text"
               placeholder="Enter IP addrese"
-              className="text-[10px] md:text-[14px] w-full w-full text-black outline-none placeholder:text-[#0000004D] bg-[#ffffff00] font-sans"
+              className="text-[10px] md:text-[14px] w-full text-black outline-none placeholder:text-[#0000004D] bg-[#ffffff00] font-sans"
             />
           </div>
           <button

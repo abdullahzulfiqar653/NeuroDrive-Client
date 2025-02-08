@@ -5,7 +5,6 @@ import {
   Encrypt,
   NoPerson,
   Rename,
-  Starred,
   Trash,
   Lock,
 } from "../assets/Icons";
@@ -44,7 +43,6 @@ const CustomPopup = ({
       setActiveIndex(null);
     } else {
       setMetaToggle(true);
-      // setActiveIndex(null);
     }
   };
   return (

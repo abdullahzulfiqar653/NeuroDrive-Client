@@ -3,14 +3,14 @@ import apiClient, { getTokenIncludedConfig } from '../../services/apiClient';
 import { AxiosError } from 'axios';
 
 export interface FolderState {
+    files: FilesResponse | null;
     directory: Folder | null; 
-    directories: DirectoriesResponse | null; 
     isLoading: boolean;
     error: string | undefined | null;
   }
 
 const initialState: FolderState = {
-    directories: null,
+    files: null,
     directory: {
         id: '',
         name: '',
@@ -21,6 +21,32 @@ const initialState: FolderState = {
       },
     isLoading: false,
     error: "",
+}
+
+interface Files {
+  id: string;
+  url: string;
+  name: string;
+  file: string;
+  size: number;
+  metadata?: Record<string, any>;
+  password?: string;
+  directory?: string;
+  is_starred?: boolean;
+  content_type: string;
+  user_address?: string;
+  shared_accesses?: any[];
+  is_remove_metadata?: boolean;
+  is_remove_password?: boolean;
+  is_giving_permission?: boolean;
+  is_password_protected: boolean;
+}
+
+export interface FilesResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Files[];
 }
 
 export interface Folder {
@@ -40,10 +66,9 @@ export interface DirectoriesResponse {
     results: Folder[];
   }
 
-export const getFolders = createAsyncThunk('folders/getFolders', async (_, { rejectWithValue }) => {
+export const getFiles = createAsyncThunk('directories/getFiles', async (_, { rejectWithValue }) => {
   try {
-    const response = await apiClient.get('directories/', getTokenIncludedConfig());
-    localStorage.setItem('parent_folder_id', response.data.results.id)
+    const response = await apiClient.get(`directories/${localStorage.getItem("parent_folder_id")}/files/?page_size=${30}`, getTokenIncludedConfig());
     return response.data; 
   } catch (error) {
     if(error instanceof AxiosError)
@@ -85,15 +110,15 @@ const folderSlice = createSlice({
   reducers: {}, 
   extraReducers: (builder) => {
 
-    builder.addCase(getFolders.pending, (state) => {
+    builder.addCase(getFiles.pending, (state) => {
       state.isLoading = true;
       state.error = null;
     });
-    builder.addCase(getFolders.fulfilled, (state, action) => {
+    builder.addCase(getFiles.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.directories = action.payload;
+      state.files = action.payload;
     });
-    builder.addCase(getFolders.rejected, (state, action) => {
+    builder.addCase(getFiles.rejected, (state, action) => {
       state.isLoading = false;
       state.error =  (typeof action.payload === 'string' || action.payload === null || action.payload === undefined) ? action.payload : 'Unkown Error';
     });

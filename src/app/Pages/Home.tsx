@@ -4,7 +4,6 @@ import LinearProgress from "@mui/material/LinearProgress";
 import {
   Add,
   Line,
-  Trash,
   Cross,
   Arrow,
   Folder,
@@ -22,15 +21,7 @@ import { ThreeCircles } from "react-loader-spinner";
 import { AppDispatch, RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import { getDirectory } from "../../features/directories/folderSlice";
-
-// const folder = [
-//   // "Workspace",
-//   // "Artistic assets",
-//   // "Office work",
-//   // "Home setup",
-//   // "Content corner",
-//   // "Desk setup",
-// ];
+import { fetchData } from "../../features/ApiSlice";
 
 function Home() {
   const {
@@ -56,7 +47,6 @@ function Home() {
   useEffect(() => {
     profileFetch("/user/profile/");
   }, [reGetProfile]);
-  console.log(data);
   const size = data?.response?.data?.features_data;
   setUsed(size?.total_size);
   setTotal_size(size?.size_allowed);
@@ -230,11 +220,17 @@ type LeftBarProps = {
 
 function LeftBar({ setLeftBar }: LeftBarProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const [activeFolder, setActiveFolder] = useState("allFiles");
-  const [isFolderName, setFolderName] = useState<string>("");
   const { directory } = useSelector((state: RootState) => state.folders);
-  const { toggleComponent, parentFolder, setParentFolder, used, total_size } =
-    useAuth();
+  const {
+    toggleComponent,
+    parentFolder,
+    setParentFolder,
+    used,
+    total_size,
+    setFiles,
+    setActiveFolder,
+    activeFolder,
+  } = useAuth();
 
   useEffect(() => {
     if (!parentFolder) {
@@ -257,6 +253,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
   }, [directory, getDirectory]);
 
   const handleClickFolder = (folder_id: string) => {
+    setActiveFolder("allFiles");
     dispatch(getDirectory(folder_id))
       .unwrap()
       .then((res) => {
@@ -266,6 +263,19 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
       .catch((error) => {
         console.error("Error fetching folder details:", error);
       });
+  };
+
+  const handleShareFile = async () => {
+    try {
+      const response = await dispatch(
+        fetchData({ url: `directories/shared/files/`, key: "shareFileFetch" })
+      ).unwrap();
+      if (response && response.data) {
+        setFiles(response.data);
+      } else {
+        setFiles(null);
+      }
+    } catch (error) {}
   };
 
   return (
@@ -281,6 +291,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
           <div
             onClick={() => {
               setActiveFolder("allFiles");
+              handleClickFolder("main");
             }}
             className={`cursor-pointer w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center
           ${
@@ -297,7 +308,10 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
 
           {/* Shared Option */}
           <div
-            onClick={() => setActiveFolder("shared")}
+            onClick={() => {
+              setActiveFolder("shared");
+              handleShareFile();
+            }}
             className={`cursor-pointer w-[224px] pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center 
           ${
             activeFolder === "shared"
@@ -322,7 +336,9 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
               <span>
                 <Arrow color="#9F9F9F" />
               </span>
-              {isFolderName !== "" ? isFolderName : "FOLDERS"}
+              {directory?.name === "main"
+                ? "FOLDERS"
+                : directory?.name || "Folders"}
             </h1>
             <span
               onClick={() => toggleComponent("newFolder")}
@@ -337,13 +353,12 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
                 <h1
                   onClick={() => {
                     handleClickFolder(child.id);
-                    setFolderName(child.name);
                     (setLeftBar ?? (() => {}))(false);
                   }}
                   key={child.id}
                   className="flex items-center justify-start  cursor-pointer hover:shadow-lg rounded-xl py-1  gap-3 "
                 >
-                  <Folder />{" "}
+                  <Folder />
                   <span className="truncate font-sans ">{child.name}</span>
                 </h1>
               ))

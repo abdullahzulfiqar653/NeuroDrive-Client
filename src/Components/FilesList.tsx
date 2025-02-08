@@ -1,12 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Add, Box, List, Xcel, Recent, Filter, Starred } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
 import FileGallery from "./FileGallery";
+import { AppDispatch } from "../app/store";
+import { useDispatch } from "react-redux";
+import { getFiles } from "../features/directories/folderSlice";
 
 function FilesList() {
   const [showStarredOnly, setShowStarredOnly] = useState<boolean>(false);
-  const { isGridMode, setIsGridMode, toggleComponent, parentFolder } =
-    useAuth();
+  const {
+    isGridMode,
+    setIsGridMode,
+    toggleComponent,
+    parentFolder,
+    setFiles,
+    activeFolder,
+    files,
+  } = useAuth();
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (activeFolder === "allFiles") {
+      dispatch(getFiles())
+        .unwrap()
+        .then((res) => {
+          setFiles(res);
+        });
+    }
+  }, [parentFolder]);
+
   const newDocuments = [
     {
       id: "newExcel",
@@ -81,7 +103,7 @@ function FilesList() {
           ))}
         </div>
       </div>
-      {parentFolder && parentFolder?.files.length > 0 ? (
+      {files && files.count > 0 ? (
         <div className="flex flex-col items-center gap-4 mt-8 w-[96%]">
           <p className="text-[16px] md:text-[22px] text-start w-[96%]">
             All Files
