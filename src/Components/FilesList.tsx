@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Add, Box, List, Xcel, Recent, Filter, Starred } from "../assets/Icons";
+import { Add, Box, List, Xcel, Starred } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
 import FileGallery from "./FileGallery";
 import { AppDispatch } from "../app/store";

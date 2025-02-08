@@ -1,7 +1,7 @@
-import { useDispatch, useSelector } from "react-redux";
-import { Arrow, Cross } from "../assets/Icons";
+import { useDispatch } from "react-redux";
+import { Cross } from "../assets/Icons";
 import { postData } from "../features/ApiSlice";
-import { AppDispatch, RootState } from "../app/store";
+import { AppDispatch } from "../app/store";
 import { useState } from "react";
 import { getDirectory } from "../features/directories/folderSlice";
 import { toast } from "react-toastify";
