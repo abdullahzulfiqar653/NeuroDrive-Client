@@ -27,6 +27,7 @@ function Home() {
   const {
     isAccountOpen,
     setIsAccountOpen,
+    debouncedSetSearch,
     setProfile,
     reGetProfile,
     setUsedStorage,
@@ -83,6 +84,7 @@ function Home() {
             <div className="relative flex-1 hidden md:block">
               <Search />
               <input
+                onChange={(e) => debouncedSetSearch(e.target.value)}
                 className="font-sans min-w-[300px] max-w-[400px] h-[36px] pl-9 pr-3 rounded-[4px] outline-none bg-[#6C849D1F]  placeholder:text-[#6C849D52] text-[#6c849d] text-[12px] "
                 placeholder="Search messages"
               />

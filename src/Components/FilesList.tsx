@@ -16,18 +16,19 @@ function FilesList() {
     setFiles,
     activeFolder,
     files,
+    search,
   } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (activeFolder === "allFiles") {
-      dispatch(getFiles())
+      dispatch(getFiles({ search: search }))
         .unwrap()
         .then((res) => {
           setFiles(res);
         });
     }
-  }, [parentFolder]);
+  }, [parentFolder, search]);
 
   const newDocuments = [
     {

@@ -66,15 +66,45 @@ export interface DirectoriesResponse {
     results: Folder[];
   }
 
-export const getFiles = createAsyncThunk('directories/getFiles', async (_, { rejectWithValue }) => {
-  try {
-    const response = await apiClient.get(`directories/${localStorage.getItem("parent_folder_id")}/files/`, getTokenIncludedConfig());
-    return response.data; 
-  } catch (error) {
-    if(error instanceof AxiosError)
-    return rejectWithValue(error.response?.data);
+  interface GetFilesParams {
+    page?: number;
+    size?: number;
+    search?: string;
   }
-});
+
+// export const getFiles = createAsyncThunk('directories/getFiles', async (_, { rejectWithValue }) => {
+//   try {
+//     const response = await apiClient.get(`directories/${localStorage.getItem("parent_folder_id")}/files/`, getTokenIncludedConfig());
+//     return response.data; 
+//   } catch (error) {
+//     if(error instanceof AxiosError)
+//     return rejectWithValue(error.response?.data);
+//   }
+// });
+export const getFiles = createAsyncThunk(
+  'directories/getFiles',
+  async (params: GetFilesParams = {},  { rejectWithValue }) => {
+    try {
+      const parentFolderId = localStorage.getItem("parent_folder_id");
+      
+      const queryParams: Record<string, any> = {};
+      if (params?.page !== undefined) queryParams.page = params.page;
+      if (params?.size !== undefined) queryParams.size = params.size;
+      if (params?.search) queryParams.search = params.search;
+
+      const response = await apiClient.get(
+        `directories/${parentFolderId}/files/`,
+        {
+          params, // Send only if they exist
+          ...getTokenIncludedConfig(),
+        }
+      );
+      return response.data; 
+    } catch (error) {
+      if (error instanceof AxiosError) return rejectWithValue(error.response?.data);
+    }
+  }
+);
 
 
 export const createFolders = createAsyncThunk(
