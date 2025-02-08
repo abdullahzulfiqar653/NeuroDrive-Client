@@ -68,7 +68,7 @@ export interface DirectoriesResponse {
 
 export const getFiles = createAsyncThunk('directories/getFiles', async (_, { rejectWithValue }) => {
   try {
-    const response = await apiClient.get(`directories/${localStorage.getItem("parent_folder_id")}/files/?page_size=${30}`, getTokenIncludedConfig());
+    const response = await apiClient.get(`directories/${localStorage.getItem("parent_folder_id")}/files/`, getTokenIncludedConfig());
     return response.data; 
   } catch (error) {
     if(error instanceof AxiosError)
