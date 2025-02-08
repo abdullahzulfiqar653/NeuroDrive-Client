@@ -15,8 +15,8 @@ function ShareFile({ setShare, file }: Props) {
   const [address, setAddress] = useState("");
   const dispatch = useDispatch<AppDispatch>();
   const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
-  const data = useSelector((state: RootState) => state.api.calls?.shareFile);
-  console.log(data);
+  // const data = useSelector((state: RootState) => state.api.calls?.shareFile);
+
   const handleShare = async () => {
     const paylod = {
       user_address: address,
@@ -40,7 +40,7 @@ function ShareFile({ setShare, file }: Props) {
       console.log("error", error);
     }
   };
-  console.log(file);
+
   return (
     <div className="fixed inset-0 bg-[#000000BA] z-50 flex items-center justify-center">
       <div className="relative w-[95vw] max-w-[351px] md:w-[40vw] md:min-w-[493px] h-[60vh] md:h-[65vh]   md:min-h-[514px] px-3 md:px-6 flex flex-col items-center rounded-xl bg-[#F3F3F3]">

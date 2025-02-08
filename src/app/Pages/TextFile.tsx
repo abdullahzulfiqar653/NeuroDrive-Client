@@ -14,9 +14,12 @@ import ExcelSheet from "../../Components/ExcelSheet";
 import { useFileContext } from "../../FileContext";
 import PDF from "../../Components/PDF";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../store";
+import { useSelector } from "react-redux";
 
 function TextFile() {
   const navigate = useNavigate();
+  const data = useSelector((state: RootState) => state.api.calls?.getProfile);
   const { isAccountOpen, setIsAccountOpen, toggleComponent, profile } =
     useAuth();
   // const queryParams = new URLSearchParams(location.search);
@@ -100,6 +103,7 @@ function TextFile() {
             </div>
             {isAccountOpen && (
               <Account
+               address={data?.response?.data?.address}
                 className={
                   "left-[-220px] md:left-[-230px] top-[42px] md:top-[50px]"
                 }
@@ -128,7 +132,7 @@ function TextFile() {
           <p className="text-black border-b-2 border-black text-[14px]  ">
             Text
           </p>
-          <button
+          {/* <button
             onClick={() => toggleComponent("share")}
             style={{
               background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
@@ -138,7 +142,7 @@ function TextFile() {
             className="w-[45px] h-[42px] rounded-[12px] border flex items-center justify-center"
           >
             <Invite className={"w-7 h-6"} />
-          </button>
+          </button> */}
         </div>
       </div>
       {fileType === "excel" && (

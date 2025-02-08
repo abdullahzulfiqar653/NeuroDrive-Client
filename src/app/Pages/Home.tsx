@@ -294,6 +294,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             onClick={() => {
               setActiveFolder("allFiles");
               handleClickFolder("main");
+              (setLeftBar ?? (() => {}))(false);
             }}
             className={`cursor-pointer pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center
           ${
