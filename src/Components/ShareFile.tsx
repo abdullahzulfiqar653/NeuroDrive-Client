@@ -50,9 +50,7 @@ function ShareFile({ setShare, file }: Props) {
       setShare?.(false);
     } catch (error: any) {
       toast.warn(message);
-    } finally {
-      toast.error("Something wents wrong");
-    }
+    } 
   };
 
   return (

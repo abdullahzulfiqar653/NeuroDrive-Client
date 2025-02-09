@@ -135,7 +135,7 @@ function FilesList() {
                 <span
                   className="cursor-pointer"
                   onClick={() => {
-                    setIsGridMode(false), console.log("bye");
+                    setIsGridMode(false);
                   }}
                 >
                   <Box />{" "}
@@ -144,7 +144,7 @@ function FilesList() {
                 <span
                   className="cursor-pointer z-10 flex"
                   onClick={() => {
-                    setIsGridMode(true), console.log("heelo");
+                    setIsGridMode(true);
                   }}
                 >
                   <List />
