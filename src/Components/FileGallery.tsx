@@ -9,6 +9,7 @@ import {
   ThreeDots,
   Gallery,
 } from "../assets/Icons";
+import { CiUser } from "react-icons/ci";
 import { FileViewer } from "../Hooks/FileViewer";
 import { useAuth } from "../AuthContext";
 import useApi from "../Hooks/usiApi";
@@ -632,26 +633,31 @@ function FileGallery({ showStarredOnly }: any) {
                           </p>
                         </div>
                       </p>
-                      <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
+                      <p className="border w-[30%] h-full flex items-center justify-start px-4">
                         {Array.isArray(file.shared_accesses) &&
                         file.shared_accesses.length > 0 ? (
-                          <>
-                            {file.shared_accesses?.map((access, index) => (
-                              <img
-                                key={index}
-                                src={access.image}
-                                alt={`Person ${index}`}
-                                className="h-7 w-7 rounded-full object-cover"
-                              />
-                            ))}
-                            {/* {file.personName} */}
-                          </>
+                          <div className="flex items-center">
+                            {file.shared_accesses.map((access, index) =>
+                              access.image ? (
+                                <img
+                                  key={index}
+                                  src={access.image}
+                                  alt={`Person ${index}`}
+                                  className="h-8 w-8 rounded-full object-cover border-2 border-white shadow-md -ml-4 first:ml-0"
+                                />
+                              ) : (
+                                <CiUser
+                                  key={index}
+                                  className="w-8 h-8 border-2 border-gray-500 rounded-full bg-white shadow-md -ml-4 first:ml-0"
+                                />
+                              )
+                            )}
+                          </div>
                         ) : (
-                          <>
-                            <NoPerson />
-                          </>
+                          <NoPerson />
                         )}
                       </p>
+
                       <p className="border w-[30%] h-full flex items-center justify-start px-4">
                         {formatFileSize(file?.size)}
                       </p>

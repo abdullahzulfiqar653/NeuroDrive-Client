@@ -100,6 +100,17 @@ function Account({ className, profileLoading, address }: AccountProps) {
             </label>
           </div>
         </div>
+        <div className="px-4 w-[226px] md:w-[293px] rounded-lg">
+          <div
+            onClick={handleCopy}
+            className="flex items-center gap-3 justify-center text-[10px]"
+          >
+            <p>{address}</p>
+            <p>
+              <IoMdCopy className="text-sm cursor-pointer" />
+            </p>
+          </div>
+        </div>
         <div className="w-[226px] md:w-[293px] h-[40px] md:h-[52px] bg-[#F8FBFD] rounded-[99px] pl-2 md:pl-3 mb-3 flex items-center justify-between">
           <p
             // onClick={() => {
@@ -130,18 +141,7 @@ function Account({ className, profileLoading, address }: AccountProps) {
           </p>
         </div>
       </div>
-      <div className="bg-[#F8FBFD] px-4 w-[226px] md:w-[293px] rounded-lg">
-        <h1 className="text-xs ">Address:</h1>
-        <div
-          onClick={handleCopy}
-          className="flex items-center justify-between text-[10px]"
-        >
-          <p>{address}</p>
-          <p>
-            <IoMdCopy className="text-sm cursor-pointer" />
-          </p>
-        </div>
-      </div>
+
       {/* {mails && (
         <div className="flex flex-col justify-start relative  gap-2 mt-1 md:mt-0">
           <p className="text-[10px] md:text-[12px] font-[500] top-[287px] md:top-[377px]">
