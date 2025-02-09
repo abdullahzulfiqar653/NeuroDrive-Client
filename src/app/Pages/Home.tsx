@@ -65,6 +65,10 @@ function Home() {
     };
   }, []);
 
+  function setActiveFolder(arg0: string) {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <>
       <div className="flex w-[100vw] relative bg-[#f6f8fc] h-screen overflow-x-hidden">
@@ -152,7 +156,16 @@ function Home() {
                 <img src="/bar.svg" />
               </span>
             </div>
-            <img src="/logo.svg" alt="" className="w-8 h-8" />
+            <img
+              onClick={() => {
+                setActiveFolder("allFiles");
+                // handleClickFolder("main");
+                // (setLeftBar ?? (() => {}))(false);
+              }}
+              src="/logo.svg"
+              alt=""
+              className="w-8 h-8"
+            />
             <div className="flex items-center relative gap-3">
               <span className="left-[-50px] absolute">
                 <Search className={"w-6 h-6"} />
@@ -222,7 +235,6 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
   const [folderStack, setFolderStack] = useState<string[]>(
     JSON.parse(localStorage.getItem("folder_stack") || "[]")
   );
-  const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
   const { directory } = useSelector((state: RootState) => state.folders);
   const {
     toggleComponent,
@@ -305,8 +317,13 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
     <>
       <div className="flex flex-col justify-center items-start pt-4 gap-3 w-full">
         <img
+          onClick={() => {
+            setActiveFolder("allFiles");
+            handleClickFolder("main");
+            (setLeftBar ?? (() => {}))(false);
+          }}
           src="/logoName.svg"
-          className="w-[150px] mb-1 md:mb-0 md:pl-1 pl-5"
+          className="w-[150px] mb-1 md:mb-0 md:pl-1 pl-5 cursor-pointer"
         />
         {/* <Line className={"my-1 md:hidden block"} /> */}
         <div className="flex flex-col gap-2 md:px-3 px-5 mt-3 w-full">

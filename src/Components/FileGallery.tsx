@@ -23,7 +23,7 @@ import CustomPopup from "./CustomPopup";
 import ProtectedPass from "./ProtectedPass";
 
 function FileGallery({ showStarredOnly }: any) {
-  const { isGridMode, parentFolder, files } = useAuth();
+  const { isGridMode, files } = useAuth();
   const [isSelected, setIsSelected] = useState<number | null>(null);
   const [metaToggle, setMetaToggle] = useState<boolean>(false);
   const [radioClick, setRadioClick] = useState(false);
@@ -852,21 +852,25 @@ function FileGallery({ showStarredOnly }: any) {
                         <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
                           {Array.isArray(file.shared_accesses) &&
                           file.shared_accesses.length > 0 ? (
-                            <>
-                              {file.shared_accesses?.map((access, index) => (
-                                <img
-                                  key={index}
-                                  src={access.image}
-                                  alt={`Person ${index}`}
-                                  className="h-5 w-5 rounded-full object-cover"
-                                />
-                              ))}
-                              {/* {file.personName} */}
-                            </>
+                            <div className="flex items-center">
+                              {file.shared_accesses.map((access, index) =>
+                                access.image ? (
+                                  <img
+                                    key={index}
+                                    src={access.image}
+                                    alt={`Person ${index}`}
+                                    className="h-5 w-5 rounded-full object-cover border-2 border-white shadow-md -ml-2 first:ml-0"
+                                  />
+                                ) : (
+                                  <CiUser
+                                    key={index}
+                                    className="w-5 h-5 border-2 border-gray-500 rounded-full bg-white shadow-md -ml-2 first:ml-0"
+                                  />
+                                )
+                              )}
+                            </div>
                           ) : (
-                            <>
-                              <NoPerson />
-                            </>
+                            <NoPerson />
                           )}
                         </p>
                         <p className=" w-[50%] text-[10px] font-sans h-full flex items-center justify-end px-4">
