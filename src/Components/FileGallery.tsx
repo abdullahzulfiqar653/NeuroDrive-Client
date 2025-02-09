@@ -443,26 +443,55 @@ function FileGallery({ showStarredOnly }: any) {
         ) : (
           <div className="container md:rounded-xl md:border w-full h-full my-4">
             <div className="h-full rounded-xl bg-[#F1F5FA] w-[full] flex flex-col ">
-              <div className="overflow-hidden rounded-xl hidden md:flex bg-[#F1F5FA] w-[full] text-[14px] h-[57px]  font-sans  justify-between items-center">
-                <p className="border w-[30%] gap-2 h-full flex items-center justify-start px-4">
-                  <span
-                    onClick={() => setRadioClick((prev) => !prev)}
-                    className="w-auto text-start mr-4 cursor-pointer"
-                  >
-                    <Circle color={radioClick ? "#2676ff" : "none"} />
-                  </span>{" "}
-                  Name
-                </p>
-                <p className="border w-[30%] h-full flex items-center justify-start px-4">
-                  Shared by
-                </p>
-                <p className="border w-[30%] h-full flex items-center justify-start px-4">
-                  File Size
-                </p>
-                <p className="border w-[10%] h-full flex items-center justify-start px-4">
-                  More
-                </p>
-              </div>
+              {showStarredOnly ? (
+                files && files.results.some((file) => file.is_starred) ? (
+                  <div className="overflow-hidden rounded-xl hidden md:flex bg-[#F1F5FA] w-full text-[14px] h-[57px] font-sans justify-between items-center">
+                    <p className="border w-[30%] gap-2 h-full flex items-center justify-start px-4">
+                      <span
+                        onClick={() => setRadioClick((prev) => !prev)}
+                        className="w-auto text-start mr-4 cursor-pointer"
+                      >
+                        <Circle color={radioClick ? "#2676ff" : "none"} />
+                      </span>{" "}
+                      Name
+                    </p>
+                    <p className="border w-[30%] h-full flex items-center justify-start px-4">
+                      Shared by
+                    </p>
+                    <p className="border w-[30%] h-full flex items-center justify-start px-4">
+                      File Size
+                    </p>
+                    <p className="border w-[10%] h-full flex items-center justify-start px-4">
+                      More
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-center mt-4">
+                    No starred files found.
+                  </p>
+                )
+              ) : (
+                <div className="overflow-hidden rounded-xl hidden md:flex bg-[#F1F5FA] w-full text-[14px] h-[57px] font-sans justify-between items-center">
+                  <p className="border w-[30%] gap-2 h-full flex items-center justify-start px-4">
+                    <span
+                      onClick={() => setRadioClick((prev) => !prev)}
+                      className="w-auto text-start mr-4 cursor-pointer"
+                    >
+                      <Circle color={radioClick ? "#2676ff" : "none"} />
+                    </span>{" "}
+                    Name
+                  </p>
+                  <p className="border w-[30%] h-full flex items-center justify-start px-4">
+                    Shared by
+                  </p>
+                  <p className="border w-[30%] h-full flex items-center justify-start px-4">
+                    File Size
+                  </p>
+                  <p className="border w-[10%] h-full flex items-center justify-start px-4">
+                    More
+                  </p>
+                </div>
+              )}
 
               {files?.results
                 .filter((item) => (showStarredOnly ? item?.is_starred : true))
