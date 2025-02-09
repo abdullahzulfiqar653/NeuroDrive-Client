@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Add, Box, List, Xcel, Starred } from "../assets/Icons";
 import { useAuth } from "../AuthContext";
 import FileGallery from "./FileGallery";
@@ -135,7 +135,7 @@ function FilesList() {
                 <span
                   className="cursor-pointer"
                   onClick={() => {
-                    setIsGridMode(false);
+                    setIsGridMode(false), console.log("bye");
                   }}
                 >
                   <Box />{" "}
@@ -144,7 +144,7 @@ function FilesList() {
                 <span
                   className="cursor-pointer z-10 flex"
                   onClick={() => {
-                    setIsGridMode(true);
+                    setIsGridMode(true), console.log("heelo");
                   }}
                 >
                   <List />

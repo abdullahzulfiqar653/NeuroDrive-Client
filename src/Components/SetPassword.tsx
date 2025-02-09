@@ -68,15 +68,6 @@ function SetPassword({
           <Cross className="w-[11px] h-[11px] md:w-3 md:h-3" color="#000000" />
         </span>
 
-<<<<<<< HEAD
-        <div className="flex flex-col items-center justify-center mb-10">
-          {" "}
-          <p className="relative">
-            <BlurLock />
-            <p className="absolute text-4xl top-[10px] left-3">🔒</p>
-          </p>
-          <p className="sm:text-2xl text-sm font-bold">
-=======
         <div className="flex flex-col items-center justify-center gap-10 mb-10">
           <div className="relative flex items-center justify-center mt-4">
             {" "}
@@ -89,7 +80,6 @@ function SetPassword({
           </div>
 
           <p className="sm:text-2xl text-[16px] font-bold mt-5 text-center ">
->>>>>>> 130e5bfdb3b21829b02d9d812e60a328768a5753
             Set Password to secure File{" "}
           </p>
         </div>
