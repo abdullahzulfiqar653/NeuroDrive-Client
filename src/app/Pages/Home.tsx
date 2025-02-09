@@ -1,6 +1,6 @@
 import Account from "../../Components/Account";
 import { useEffect, useRef, useState } from "react";
-import LinearProgress from "@mui/material/LinearProgress";
+import { GaugeComponent } from "react-gauge-component";
 import {
   Add,
   Line,
@@ -22,6 +22,7 @@ import { AppDispatch, RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import { getDirectory } from "../../features/directories/folderSlice";
 import { fetchData } from "../../features/ApiSlice";
+import { LinearProgress } from "@mui/material";
 
 function Home() {
   const {
@@ -31,11 +32,8 @@ function Home() {
     setProfile,
     reGetProfile,
     setUsedStorage,
-    setTotal_size,
-    setUsed,
   } = useAuth();
   const [isLeftBar, setLeftBar] = useState(false);
-
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   const { fetch: profileFetch, reset: profileReset } = useApi("getProfile");
@@ -48,9 +46,8 @@ function Home() {
   useEffect(() => {
     profileFetch("/user/profile/");
   }, [reGetProfile]);
+
   const size = data?.response?.data?.features_data;
-  setUsed(size?.total_size);
-  setTotal_size(size?.size_allowed);
 
   const average = size?.total_size / size?.size_allowed;
 
@@ -91,7 +88,7 @@ function Home() {
             </div>
             <div className="flex gap-4 items-center">
               {/* <div
-                // onClick={() => toggleComponent("share")}
+                onClick={() => toggleComponent("share")}
                 style={{
                   background:
                     "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
@@ -294,6 +291,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             onClick={() => {
               setActiveFolder("allFiles");
               handleClickFolder("main");
+              (setLeftBar ?? (() => {}))(false);
             }}
             className={`cursor-pointer pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center
           ${
@@ -353,7 +351,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
               <Add />
             </span>
           </div>
-          <div className="flex flex-col justify-start gap-2 px-3">
+          <div className="flex flex-col justify-start gap-2 px-3 w-full h-full overflow-y-auto">
             {directory?.children && directory.children.length > 0 ? (
               directory.children.map((child) => (
                 <h1

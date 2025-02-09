@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Cross, BlurLock } from "../assets/Icons";
+// import { Cross, BlurLock } from "../assets/Icons";
+import { Cross } from "../assets/Icons";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { toast } from "react-toastify";
@@ -57,7 +58,7 @@ function SetPassword({
 
   return (
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.73)] z-50 flex items-center justify-center">
-      <div className="relative py-11 w-[70vw] md:w-[45vw] px-3 md:px-4 flex flex-col items-center justify-center rounded-lg bg-[#ffffff]">
+      <div className="relative py-11 w-[75vw] md:w-[45vw] px-3 md:px-4  flex flex-col items-center justify-center rounded-lg bg-[#ffffff]">
         <span
           onClick={() => {
             settogglePassword(false);
@@ -67,6 +68,7 @@ function SetPassword({
           <Cross className="w-[11px] h-[11px] md:w-3 md:h-3" color="#000000" />
         </span>
 
+<<<<<<< HEAD
         <div className="flex flex-col items-center justify-center mb-10">
           {" "}
           <p className="relative">
@@ -74,13 +76,27 @@ function SetPassword({
             <p className="absolute text-4xl top-[10px] left-3">🔒</p>
           </p>
           <p className="sm:text-2xl text-sm font-bold">
+=======
+        <div className="flex flex-col items-center justify-center gap-10 mb-10">
+          <div className="relative flex items-center justify-center mt-4">
+            {" "}
+            <div className="w-[80px] h-[80px] bg-blue-300 rounded-full absolute"></div>
+            <div className="w-[60px] h-[60px] bg-blue-400 rounded-full absolute"></div>
+            <div className="w-[40px] h-[40px] bg-blue-500 rounded-full absolute"></div>
+            <span className="text-[24px] absolute shadow-[0px_4px_10px_rgba(0,0,0,0.3)]">
+              🔒
+            </span>
+          </div>
+
+          <p className="sm:text-2xl text-[16px] font-bold mt-5 text-center ">
+>>>>>>> 130e5bfdb3b21829b02d9d812e60a328768a5753
             Set Password to secure File{" "}
           </p>
         </div>
 
         <div className="flex flex-col items-start w-full justify-center text-[12px] md:text-[14px] text-black">
-          <p className="font-sans sm:text-xl  flex items-center justify-center mb-1">
-            🔒 <p className="opacity-50">Enter Password</p>
+          <p className="font-sans sm:text-xl flex items-center justify-center mb-1">
+            🔒 <p className="opacity-50 m-2">Enter Password</p>
           </p>
           <div className="h-[36px] flex items-center justify-center mb-4 w-full md:h-[54px] bg-[#ECECEC] rounded-md px-3">
             <input
@@ -111,8 +127,8 @@ function SetPassword({
           )}
         </div>
         <div className="flex flex-col items-start w-full justify-center text-[12px] md:text-[14px] text-black">
-          <p className="font-sans sm:text-xl flex items-center justify-center mb-1">
-            🔒 <p className="opacity-50">Confirm Password</p>
+          <p className="font-sans sm:text-xl flex  items-center justify-center mb-1">
+            🔒 <p className="opacity-50 m-2">Confirm Password</p>
           </p>
           <div className="h-[36px] flex items-center justify-center mb-4 w-full md:h-[54px] bg-[#ECECEC] rounded-md px-3">
             <input
