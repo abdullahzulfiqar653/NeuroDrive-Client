@@ -7,10 +7,6 @@ import {
   Arrow,
   Folder,
   Blocks,
-<<<<<<< HEAD
-  Invite,
-=======
->>>>>>> 534f5e3dab60645febc21b12d6b0535716ac2d41
   SixDots,
   Search,
   Shared,
