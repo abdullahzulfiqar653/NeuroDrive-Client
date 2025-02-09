@@ -9,6 +9,7 @@ import {
   ThreeDots,
   Gallery,
 } from "../assets/Icons";
+import { CiUser } from "react-icons/ci";
 import { FileViewer } from "../Hooks/FileViewer";
 import { useAuth } from "../AuthContext";
 import useApi from "../Hooks/usiApi";
@@ -22,7 +23,7 @@ import CustomPopup from "./CustomPopup";
 import ProtectedPass from "./ProtectedPass";
 
 function FileGallery({ showStarredOnly }: any) {
-  const { isGridMode, parentFolder, files } = useAuth();
+  const { isGridMode, files } = useAuth();
   const [isSelected, setIsSelected] = useState<number | null>(null);
   const [metaToggle, setMetaToggle] = useState<boolean>(false);
   const [radioClick, setRadioClick] = useState(false);
@@ -43,7 +44,6 @@ function FileGallery({ showStarredOnly }: any) {
     isActive: false,
     workType: "",
   });
-  console.log(parentFolder);
   const handlePopupToggle = ({ index, event }: any) => {
     event.stopPropagation();
     setActiveIndex((prev) => (prev === index ? null : index));
@@ -632,26 +632,31 @@ function FileGallery({ showStarredOnly }: any) {
                           </p>
                         </div>
                       </p>
-                      <p className="border w-[30%] h-full flex gap-2 items-center justify-start px-4">
+                      <p className="border w-[30%] h-full flex items-center justify-start px-4">
                         {Array.isArray(file.shared_accesses) &&
                         file.shared_accesses.length > 0 ? (
-                          <>
-                            {file.shared_accesses?.map((access, index) => (
-                              <img
-                                key={index}
-                                src={access.image}
-                                alt={`Person ${index}`}
-                                className="h-7 w-7 rounded-full object-cover"
-                              />
-                            ))}
-                            {/* {file.personName} */}
-                          </>
+                          <div className="flex items-center">
+                            {file.shared_accesses.map((access, index) =>
+                              access.image ? (
+                                <img
+                                  key={index}
+                                  src={access.image}
+                                  alt={`Person ${index}`}
+                                  className="h-8 w-8 rounded-full object-cover border-2 border-white shadow-md -ml-4 first:ml-0"
+                                />
+                              ) : (
+                                <CiUser
+                                  key={index}
+                                  className="w-8 h-8 border-2 border-gray-500 rounded-full bg-white shadow-md -ml-4 first:ml-0"
+                                />
+                              )
+                            )}
+                          </div>
                         ) : (
-                          <>
-                            <NoPerson />
-                          </>
+                          <NoPerson />
                         )}
                       </p>
+
                       <p className="border w-[30%] h-full flex items-center justify-start px-4">
                         {formatFileSize(file?.size)}
                       </p>
@@ -847,21 +852,25 @@ function FileGallery({ showStarredOnly }: any) {
                         <p className="border-b w-[50%] h-full flex gap-2 items-center justify-start px-4">
                           {Array.isArray(file.shared_accesses) &&
                           file.shared_accesses.length > 0 ? (
-                            <>
-                              {file.shared_accesses?.map((access, index) => (
-                                <img
-                                  key={index}
-                                  src={access.image}
-                                  alt={`Person ${index}`}
-                                  className="h-5 w-5 rounded-full object-cover"
-                                />
-                              ))}
-                              {/* {file.personName} */}
-                            </>
+                            <div className="flex items-center">
+                              {file.shared_accesses.map((access, index) =>
+                                access.image ? (
+                                  <img
+                                    key={index}
+                                    src={access.image}
+                                    alt={`Person ${index}`}
+                                    className="h-5 w-5 rounded-full object-cover border-2 border-white shadow-md -ml-2 first:ml-0"
+                                  />
+                                ) : (
+                                  <CiUser
+                                    key={index}
+                                    className="w-5 h-5 border-2 border-gray-500 rounded-full bg-white shadow-md -ml-2 first:ml-0"
+                                  />
+                                )
+                              )}
+                            </div>
                           ) : (
-                            <>
-                              <NoPerson />
-                            </>
+                            <NoPerson />
                           )}
                         </p>
                         <p className=" w-[50%] text-[10px] font-sans h-full flex items-center justify-end px-4">

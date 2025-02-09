@@ -3,7 +3,7 @@ import apiClient, { getTokenIncludedConfig } from '../services/apiClient';
 
 interface ApiCallState {
   isLoading: boolean;
-  error: string | null;
+  error: any;
   response: any;
 }
 

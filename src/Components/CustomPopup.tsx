@@ -60,7 +60,8 @@ const CustomPopup = ({
           onClick={handleUnStarClick}
           className="flex gap-3 md:gap-2 lg:gap-2 items-center whitespace-nowrap cursor-pointer hover:shadow-md"
         >
-          <Starred className="w-4 h-4 fill-yellow-300" color="#fde047"/> Unstarred
+          <Starred className="w-4 h-4 fill-yellow-300" color="#fde047" />{" "}
+          Unstarred
         </div>
       ) : (
         <div

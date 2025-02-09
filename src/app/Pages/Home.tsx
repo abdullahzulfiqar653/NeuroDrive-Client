@@ -1,6 +1,5 @@
 import Account from "../../Components/Account";
 import { useEffect, useRef, useState } from "react";
-import LinearProgress from "@mui/material/LinearProgress";
 import {
   Add,
   Line,
@@ -8,7 +7,7 @@ import {
   Arrow,
   Folder,
   Blocks,
-  // Invite,
+  Invite,
   SixDots,
   Search,
   Shared,
@@ -16,12 +15,14 @@ import {
 import FilesList from "../../Components/FilesList";
 import { useAuth } from "../../AuthContext";
 import { CiUser } from "react-icons/ci";
+import { TbArrowBackUp } from "react-icons/tb";
 import useApi from "../../Hooks/usiApi";
 import { ThreeCircles } from "react-loader-spinner";
 import { AppDispatch, RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import { getDirectory } from "../../features/directories/folderSlice";
 import { fetchData } from "../../features/ApiSlice";
+import { LinearProgress } from "@mui/material";
 
 function Home() {
   const {
@@ -30,12 +31,10 @@ function Home() {
     debouncedSetSearch,
     setProfile,
     reGetProfile,
+    setActiveFolder,
     setUsedStorage,
-    setTotal_size,
-    setUsed,
   } = useAuth();
   const [isLeftBar, setLeftBar] = useState(false);
-
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   const { fetch: profileFetch, reset: profileReset } = useApi("getProfile");
@@ -48,9 +47,8 @@ function Home() {
   useEffect(() => {
     profileFetch("/user/profile/");
   }, [reGetProfile]);
+
   const size = data?.response?.data?.features_data;
-  setUsed(size?.total_size);
-  setTotal_size(size?.size_allowed);
 
   const average = size?.total_size / size?.size_allowed;
 
@@ -155,7 +153,16 @@ function Home() {
                 <img src="/bar.svg" />
               </span>
             </div>
-            <img src="/logo.svg" alt="" className="w-8 h-8" />
+            <img
+              onClick={() => {
+                setActiveFolder("allFiles");
+                // handleClickFolder("main");
+                // (setLeftBar ?? (() => {}))(false);
+              }}
+              src="/logo.svg"
+              alt=""
+              className="w-8 h-8"
+            />
             <div className="flex items-center relative gap-3">
               <span className="left-[-50px] absolute">
                 <Search className={"w-6 h-6"} />
@@ -222,6 +229,9 @@ type LeftBarProps = {
 
 function LeftBar({ setLeftBar }: LeftBarProps) {
   const dispatch = useDispatch<AppDispatch>();
+  const [folderStack, setFolderStack] = useState<string[]>(
+    JSON.parse(localStorage.getItem("folder_stack") || "[]")
+  );
   const { directory } = useSelector((state: RootState) => state.folders);
   const {
     toggleComponent,
@@ -235,17 +245,14 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
   } = useAuth();
 
   useEffect(() => {
-    if (!parentFolder) {
-      dispatch(getDirectory("main"))
-        .unwrap()
-        .then((res) => {
-          setParentFolder(res);
-          localStorage.setItem("parent_folder_id", res.id);
-        })
-        .catch((error) => {
-          console.error("Error fetching folder details:", error);
-        });
-    }
+    const lastFolderId = localStorage.getItem("parent_folder_id") || "main";
+
+    dispatch(getDirectory(lastFolderId))
+      .unwrap()
+      .then((res) => {
+        setParentFolder(res);
+      })
+      .catch((error) => console.error("Error fetching folder details:", error));
   }, []);
 
   useEffect(() => {
@@ -255,16 +262,39 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
   }, [directory, getDirectory]);
 
   const handleClickFolder = (folder_id: string) => {
+    const newStack = [...folderStack, parentFolder?.id].filter(
+      Boolean
+    ) as string[];
+    setFolderStack(newStack);
+    localStorage.setItem("folder_stack", JSON.stringify(newStack));
+
     setActiveFolder("allFiles");
+
     dispatch(getDirectory(folder_id))
       .unwrap()
       .then((res) => {
         setParentFolder(res);
         localStorage.setItem("parent_folder_id", res.id);
       })
-      .catch((error) => {
-        console.error("Error fetching folder details:", error);
-      });
+      .catch((error) => console.error("Error fetching folder details:", error));
+  };
+
+  const goBack = () => {
+    if (folderStack.length === 0) return;
+
+    const lastFolderId = folderStack[folderStack.length - 1];
+    const updatedStack = folderStack.slice(0, -1); // Remove last folder
+
+    setFolderStack(updatedStack);
+    localStorage.setItem("folder_stack", JSON.stringify(updatedStack)); // Update storage
+
+    dispatch(getDirectory(lastFolderId))
+      .unwrap()
+      .then((res) => {
+        setParentFolder(res);
+        localStorage.setItem("parent_folder_id", res.id);
+      })
+      .catch((error) => console.error("Error fetching folder details:", error));
   };
 
   const handleShareFile = async () => {
@@ -284,8 +314,15 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
     <>
       <div className="flex flex-col justify-center items-start pt-4 gap-3 w-full">
         <img
+          onClick={() => {
+            setActiveFolder("allFiles");
+            handleClickFolder("main");
+            setFolderStack([]);
+            localStorage.removeItem("folder_stack");
+            (setLeftBar ?? (() => {}))(false);
+          }}
           src="/logoName.svg"
-          className="w-[150px] mb-1 md:mb-0 md:pl-1 pl-5"
+          className="w-[150px] mb-1 md:mb-0 md:pl-1 pl-5 cursor-pointer"
         />
         {/* <Line className={"my-1 md:hidden block"} /> */}
         <div className="flex flex-col gap-2 md:px-3 px-5 mt-3 w-full">
@@ -294,6 +331,8 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             onClick={() => {
               setActiveFolder("allFiles");
               handleClickFolder("main");
+              setFolderStack([]);
+              localStorage.removeItem("folder_stack");
               (setLeftBar ?? (() => {}))(false);
             }}
             className={`cursor-pointer pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center
@@ -340,9 +379,16 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         <div className="flex flex-col gap-2 my-2 h-[35vh] w-full overflow-auto">
           <div className="flex items-center justify-between w-full px-2 pb-2">
             <h1 className="flex text-[14px] text-[#9F9F9F] gap-1 items-center">
-              <span>
+              {folderStack.length === 0 ? (
                 <Arrow color="#9F9F9F" />
-              </span>
+              ) : (
+                <span
+                  onClick={goBack}
+                  className="border-2 p-[2px] rounded-full border-gray-400 cursor-pointer"
+                >
+                  <TbArrowBackUp />
+                </span>
+              )}
               {directory?.name === "main"
                 ? "FOLDERS"
                 : directory?.name || "Folders"}
@@ -451,5 +497,3 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
     </>
   );
 }
-
-

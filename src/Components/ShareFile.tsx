@@ -1,7 +1,8 @@
-import { useDispatch } from "react-redux";
-import { Cross } from "../assets/Icons";
+import { useDispatch, useSelector } from "react-redux";
+import { Arrow, Cross } from "../assets/Icons";
+import { CiUser } from "react-icons/ci";
 import { postData } from "../features/ApiSlice";
-import { AppDispatch } from "../app/store";
+import { AppDispatch, RootState } from "../app/store";
 import { useState } from "react";
 import { getDirectory } from "../features/directories/folderSlice";
 import { toast } from "react-toastify";
@@ -15,7 +16,19 @@ function ShareFile({ setShare, file }: Props) {
   const [address, setAddress] = useState("");
   const dispatch = useDispatch<AppDispatch>();
   const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
-  // const data = useSelector((state: RootState) => state.api.calls?.shareFile);
+  const data = useSelector((state: RootState) => state.api.calls?.shareFile);
+  const message = data?.error?.user_address.detail;
+
+  const [shake, setShake] = useState(false);
+
+  const handleClick = () => {
+    if (address === "") {
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+      return;
+    }
+    handleShare();
+  };
 
   const handleShare = async () => {
     const paylod = {
@@ -35,9 +48,10 @@ function ShareFile({ setShare, file }: Props) {
       toast.success("File shared successfully");
       dispatch(getDirectory(parentFolderId));
       setShare?.(false);
-    } catch (error) {
-      toast.warn("Unable to share file");
-      console.log("error", error);
+    } catch (error: any) {
+      toast.warn(message);
+    } finally {
+      toast.error("Something wents wrong");
     }
   };
 
@@ -70,22 +84,29 @@ function ShareFile({ setShare, file }: Props) {
           />
         </div> */}
         <div className="flex w-full my-1 md:my-2 gap-2 items-center justify-between">
-          <div className="w-full h-[37px]  md:h-[54px] rounded-[4px] md:rounded-md border flex items-center  px-4 border-[#0000004D]">
+          {/* Input Field */}
+          <div
+            className={`w-full h-[37px] md:h-[54px] rounded-[4px] md:rounded-md border flex items-center px-4 border-[#0000004D] 
+          ${shake ? "animate-shake border-red-500" : ""}
+        `}
+          >
             <input
               onChange={(e) => setAddress(e.target.value)}
               type="text"
-              placeholder="Enter IP addrese"
+              placeholder="Enter address"
               className="text-[10px] md:text-[14px] w-full text-black outline-none placeholder:text-[#0000004D] bg-[#ffffff00] font-sans"
             />
           </div>
+
+          {/* Invite Button */}
           <button
-            onClick={handleShare}
+            onClick={handleClick}
             style={{
               background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
               borderImageSource:
                 "linear-gradient(0deg, #5896FF 0%, rgba(53, 90, 153, 0) 100%)",
             }}
-            className="w-[57px] h-[37px] md:min-w-[91px] md:h-[53px] hover:shadow-lg rounded-xl border text-white font-sans text-[10px] md:text-[14px]"
+            className="w-[57px] h-[37px] md:min-w-[91px] md:h-[53px] rounded-xl border text-white font-sans text-[10px] md:text-[14px] hover:shadow-lg"
           >
             Invite
           </button>
@@ -108,12 +129,16 @@ function ShareFile({ setShare, file }: Props) {
               key={items.id}
               className="flex w-full mt-2 items-center p-1 px-2 justify-between font-sans text-black"
             >
-              <p className="text-[12px] md:text-[14px] flex items-center gap-1">
-                <img
-                  src={items.image}
-                  alt=""
-                  className="rounded-full h-9 w-9"
-                />
+              <p className="text-[12px] md:text-[14px] flex items-center gap-2">
+                {items.image ? (
+                  <img
+                    src={items.image}
+                    alt="User"
+                    className="rounded-full h-9 w-9 object-cover border-2 border-white shadow-md"
+                  />
+                ) : (
+                  <CiUser className="w-9 h-9 border-2 border-gray-500 rounded-full bg-white shadow-md p-1" />
+                )}
                 {/* Aqsa <span className="text-[#00000066]">(You)</span> */}
               </p>
               <p className="text-[10px] md:text-[14px]">
@@ -122,7 +147,7 @@ function ShareFile({ setShare, file }: Props) {
             </div>
           ))
         ) : (
-          <p className="absolute top-72">No one have file access</p> // Display "ad" if `shared_accesses` is empty
+          <p className="absolute top-72">No one has file access</p>
         )}
 
         {/* <div className="flex w-full mt-1 items-center p-1 px-2 justify-between font-sans text-black">
