@@ -17,16 +17,17 @@ function ShareFile({ setShare, file }: Props) {
   const dispatch = useDispatch<AppDispatch>();
   const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
   const data = useSelector((state: RootState) => state.api.calls?.shareFile);
-  console.log(data);
+  const message = data?.error?.user_address.detail;
+
   const [shake, setShake] = useState(false);
 
   const handleClick = () => {
     if (address === "") {
       setShake(true);
-      setTimeout(() => setShake(false), 500); // Remove shake effect after 500ms
-      return; // Stop the function from running
+      setTimeout(() => setShake(false), 500);
+      return;
     }
-    handleShare(); // Run function only if address is not empty
+    handleShare();
   };
 
   const handleShare = async () => {
@@ -47,12 +48,13 @@ function ShareFile({ setShare, file }: Props) {
       toast.success("File shared successfully");
       dispatch(getDirectory(parentFolderId));
       setShare?.(false);
-    } catch (error) {
-      toast.warn("Unable to share file");
-      console.log("error", error);
+    } catch (error: any) {
+      toast.warn(message);
+    } finally {
+      toast.error("Something wents wrong");
     }
   };
-  console.log(file);
+
   return (
     <div className="fixed inset-0 bg-[#000000BA] z-50 flex items-center justify-center">
       <div className="relative w-[95vw] max-w-[351px] md:w-[40vw] md:min-w-[493px] h-[60vh] md:h-[65vh]   md:min-h-[514px] px-3 md:px-6 flex flex-col items-center rounded-xl bg-[#F3F3F3]">

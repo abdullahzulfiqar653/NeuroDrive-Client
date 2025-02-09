@@ -44,7 +44,6 @@ function FileGallery({ showStarredOnly }: any) {
     isActive: false,
     workType: "",
   });
-  console.log(parentFolder);
   const handlePopupToggle = ({ index, event }: any) => {
     event.stopPropagation();
     setActiveIndex((prev) => (prev === index ? null : index));
