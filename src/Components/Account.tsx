@@ -55,7 +55,7 @@ function Account({ className, profileLoading, address }: AccountProps) {
         toast.error("Failed to uploaded profile");
       }
     } catch (error) {}
-    console.log("Prfile upload error");
+    console.log("Profile upload error");
   };
 
   return (

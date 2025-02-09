@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Arrow, Cross } from "../assets/Icons";
+import { Cross } from "../assets/Icons";
 import { CiUser } from "react-icons/ci";
 import { postData } from "../features/ApiSlice";
 import { AppDispatch, RootState } from "../app/store";
@@ -50,8 +50,6 @@ function ShareFile({ setShare, file }: Props) {
       setShare?.(false);
     } catch (error: any) {
       toast.warn(message);
-    } finally {
-      toast.error("Something wents wrong");
     }
   };
 

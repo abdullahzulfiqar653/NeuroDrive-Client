@@ -30,7 +30,6 @@ const PDF = ({ fileUrl, fileName }: any) => {
   });
 
   const handleToolbarClick = async (args: any) => {
-    console.log("Toolbar item clicked:", args);
     if (args && args.item && args.item.id === "container_download") {
       if (viewerRef.current) {
         try {
