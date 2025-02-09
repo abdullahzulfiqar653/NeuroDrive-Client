@@ -31,6 +31,7 @@ function Home() {
     debouncedSetSearch,
     setProfile,
     reGetProfile,
+    setActiveFolder,
     setUsedStorage,
   } = useAuth();
   const [isLeftBar, setLeftBar] = useState(false);
@@ -64,10 +65,6 @@ function Home() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  function setActiveFolder(arg0: string) {
-    throw new Error("Function not implemented.");
-  }
 
   return (
     <>
@@ -320,6 +317,8 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
           onClick={() => {
             setActiveFolder("allFiles");
             handleClickFolder("main");
+            setFolderStack([]);
+            localStorage.removeItem("folder_stack");
             (setLeftBar ?? (() => {}))(false);
           }}
           src="/logoName.svg"
@@ -332,6 +331,8 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             onClick={() => {
               setActiveFolder("allFiles");
               handleClickFolder("main");
+              setFolderStack([]);
+              localStorage.removeItem("folder_stack");
               (setLeftBar ?? (() => {}))(false);
             }}
             className={`cursor-pointer pl-2 pr-1 h-[36px] rounded-[12px] flex justify-between items-center
