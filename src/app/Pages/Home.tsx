@@ -7,7 +7,6 @@ import {
   Arrow,
   Folder,
   Blocks,
-  Invite,
   SixDots,
   Search,
   Shared,
