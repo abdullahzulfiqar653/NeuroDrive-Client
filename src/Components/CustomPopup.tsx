@@ -130,17 +130,20 @@ const CustomPopup = ({
         <Quantumography
           setToggleQuantumography={setToggleQuantumography}
           fileId={id}
+          fileName={name}
         />
       )}
 
-      <div
-        onClick={() => {
-          settogglePassword(true);
-        }}
-        className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer px-1 hover:shadow-md"
-      >
-        <Lock /> Set Password
-      </div>
+      {!isProtected && (
+        <div
+          onClick={() => {
+            settogglePassword(true);
+          }}
+          className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer px-1 hover:shadow-md"
+        >
+          <Lock /> Set Password
+        </div>
+      )}
       {togglePassword && (
         <SetPassword
           fileId={file?.id}
