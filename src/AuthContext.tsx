@@ -127,6 +127,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     window.location.reload();
     localStorage.removeItem("access_token");
+    localStorage.removeItem("parent_folder_id");
   };
 
   const debouncedSetSearch = useCallback(

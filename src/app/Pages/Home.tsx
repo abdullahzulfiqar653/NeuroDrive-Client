@@ -125,7 +125,7 @@ function Home() {
 
                   <span className="flex items-center justify-center gap-1">
                     <p className="text-[#40566D] text-[12px] font-[600] font-sans text-right leading-[18px]">
-                      Kevin
+                    {data?.response?.data?.address?.match(/^[a-zA-Z-]+/)[0]}
                     </p>
                     <Arrow color="#1E1E1E" />
                   </span>
@@ -250,6 +250,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
       .unwrap()
       .then((res) => {
         setParentFolder(res);
+        localStorage.setItem("parent_folder_id", res.id);
       })
       .catch((error) => console.error("Error fetching folder details:", error));
   }, []);
