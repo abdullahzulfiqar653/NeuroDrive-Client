@@ -82,7 +82,7 @@ const CustomPopup = ({
       </div>
       {toggleReName && (
         <ReNameFile
-          fileId={file?.id}
+          fileId={id}
           settoggleReName={settoggleReName}
           setActiveIndex={setActiveIndex}
         />
@@ -131,6 +131,7 @@ const CustomPopup = ({
           setToggleQuantumography={setToggleQuantumography}
           fileId={id}
           fileName={name}
+          fileSize={file.size}
         />
       )}
 

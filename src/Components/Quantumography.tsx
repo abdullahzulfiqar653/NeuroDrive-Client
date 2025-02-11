@@ -8,7 +8,12 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../app/store";
 import { getDirectory } from "../features/directories/folderSlice";
 
-const Quantumography = ({ setToggleQuantumography, fileId ,fileName}: any) => {
+const Quantumography = ({
+  setToggleQuantumography,
+  fileId,
+  fileName,
+  fileSize,
+}: any) => {
   const [step, setStep] = useState(1);
   const [coverUrl, setCoverUrl] = useState("");
   const [secertUrl, setSecertUrl] = useState("");
@@ -20,7 +25,18 @@ const Quantumography = ({ setToggleQuantumography, fileId ,fileName}: any) => {
   const [File, setFile] = useState<File | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
-  const MAX_FILE_SIZE = 500 * 1024;
+
+  const MAX_FILE_SIZE = Math.ceil(fileSize / 2.1);
+
+  const formatFileSize = (sizeInBytes: number) => {
+    if (sizeInBytes < 1024 ** 2) {
+      return `${(sizeInBytes / 1024).toFixed(2)} KB`;
+    } else if (sizeInBytes < 1024 ** 3) {
+      return `${(sizeInBytes / 1024 ** 2).toFixed(2)} MB`;
+    } else {
+      return `${(sizeInBytes / 1024 ** 3).toFixed(2)} GB`;
+    }
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -31,7 +47,9 @@ const Quantumography = ({ setToggleQuantumography, fileId ,fileName}: any) => {
         return;
       }
       if (file.size > MAX_FILE_SIZE) {
-        toast.warn("File size must be less than 500KB!");
+        toast.warn(
+          `File size must be less than ${formatFileSize(MAX_FILE_SIZE)}!`
+        );
         return;
       }
       setFile(file);
@@ -51,7 +69,9 @@ const Quantumography = ({ setToggleQuantumography, fileId ,fileName}: any) => {
         return;
       }
       if (file.size > MAX_FILE_SIZE) {
-        toast.warn("File size must be less than 500KB!");
+        toast.warn(
+          `File size must be less than ${formatFileSize(MAX_FILE_SIZE)}!`
+        );
         setFile(null);
         return;
       }
@@ -88,20 +108,20 @@ const Quantumography = ({ setToggleQuantumography, fileId ,fileName}: any) => {
           const result = await dispatch(
             fetchData({ url: `files/${fileId}/`, key: "fileFetch" })
           ).unwrap();
-        
+
           if (result && result.data) {
             const { url, name } = result.data;
-        
+
             // Step 2: Download the file using the URL
             const fileResponse = await axios.get(url, {
               responseType: "blob",
             });
-        
+
             // Step 3: Convert response to Blob
             const blob = new Blob([fileResponse.data], {
               type: fileResponse.headers["content-type"],
             });
-        
+
             // Step 4: Create FormData and append the file
             const formData = new FormData();
             const filename = name || `file_${Date.now()}${fileName}`;
@@ -325,6 +345,10 @@ const Quantumography = ({ setToggleQuantumography, fileId ,fileName}: any) => {
                   {step === 1 && " JPG or JPEG."}{" "}
                 </p>
 
+                <p className="text-red-500 mt-1 text-[12px]">
+                  Maximum allowed file size is {formatFileSize(MAX_FILE_SIZE)}.
+                </p>
+                
                 <input
                   id="dropzone-file"
                   type="file"
