@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BlurLock, Cross } from "../assets/Icons";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../app/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../app/store";
 import { toast } from "react-toastify";
 import { ThreeDots } from "react-loader-spinner";
 import { postData } from "../features/ApiSlice";
@@ -37,9 +37,6 @@ function ProtectedPass({
 
   const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
   const fileId = localStorage.getItem("fileId") ?? "";
-  // const data = useSelector(
-  //   (state: RootState) => state.api.calls?.protectedFile
-  // );
 
   const handleSubmit = async () => {
     setIsLoading(true);
