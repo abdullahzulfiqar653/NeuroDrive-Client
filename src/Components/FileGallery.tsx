@@ -13,8 +13,8 @@ import { CiUser } from "react-icons/ci";
 import { FileViewer } from "../Hooks/FileViewer";
 import { useAuth } from "../AuthContext";
 import useApi from "../Hooks/usiApi";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../app/store";
 import { GoLock } from "react-icons/go";
 import { toast } from "react-toastify";
 import { fetchData, postData } from "../features/ApiSlice";
@@ -50,6 +50,10 @@ function FileGallery({ showStarredOnly }: any) {
   };
 
   const popupRef = useRef<HTMLDivElement | null>(null);
+  const data = useSelector((state: RootState) => state.api.calls?.fileFetch);
+  const fetchMessage = data?.error?.user_address.detail;
+  // const data = useSelector((state: RootState) => state.api.calls?.starFile);
+  // const fetchMessage = data?.error?.user_address.detail;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -97,8 +101,18 @@ function FileGallery({ showStarredOnly }: any) {
       ).unwrap();
       if (result && result.data) {
         const { content_type, url, name } = result.data;
-        console.log(content_type)
-        const allowedDocumentExtensions = ["xlsx", "xls", "docx", "doc", "pdf", "vnd.openxmlformats-officedocument.spreadsheetml.sheet", "vnd.ms-excel", "msword", "vnd.openxmlformats-officedocument.wordprocessingml.document"];
+        console.log(content_type);
+        const allowedDocumentExtensions = [
+          "xlsx",
+          "xls",
+          "docx",
+          "doc",
+          "pdf",
+          "vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "vnd.ms-excel",
+          "msword",
+          "vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ];
         const fileExtension = content_type?.split("/")?.pop()?.toLowerCase();
         if (!fileExtension) {
           alert("Invalid file type. Unable to process.");
@@ -122,7 +136,7 @@ function FileGallery({ showStarredOnly }: any) {
         }
       }
     } catch (error) {
-      toast.error("Failed to open the file. Please try again.");
+      toast.error(fetchMessage);
     } finally {
       reset();
     }
@@ -142,8 +156,8 @@ function FileGallery({ showStarredOnly }: any) {
       toast.success("File is getting starred");
       dispatch(getDirectory(parentFolderId));
       setActiveIndex(null);
-    } catch (error) {
-      toast.warning("Error is getting starred");
+    } catch (error: any) {
+      toast.error(error.detail);
     }
   };
   const handleUnStarClick = (name: string, id: string) => {
@@ -160,8 +174,8 @@ function FileGallery({ showStarredOnly }: any) {
       toast.success("File is getting unstarred");
       dispatch(getDirectory(parentFolderId));
       setActiveIndex(null);
-    } catch (error) {
-      toast.warning("Error is getting unstarred");
+    } catch (error: any) {
+      toast.error(error.detail);
     }
   };
 
@@ -180,8 +194,8 @@ function FileGallery({ showStarredOnly }: any) {
         dispatch(getDirectory(parentFolderId));
         setActiveIndex(null);
       }
-    } catch (error) {
-      toast.error("Failed to delete file");
+    } catch (error: any) {
+      toast.error(error.detail);
     }
   };
 
@@ -213,7 +227,7 @@ function FileGallery({ showStarredOnly }: any) {
         setActiveIndex(null);
       }
     } catch (error) {
-      toast.error("Failed to open the file. Please try again.");
+      toast.error(fetchMessage);
     } finally {
       reset();
     }

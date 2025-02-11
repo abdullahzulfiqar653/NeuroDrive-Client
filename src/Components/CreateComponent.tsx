@@ -93,8 +93,8 @@ function CreateComponent() {
           toggleComponent("newFolder", false);
           setLoading(false);
         })
-        .catch((error) => {
-          console.error("Folder Creation failed:", error);
+        .catch((error: any) => {
+          toast.error(error.detail);
         });
     }
     setCreateFile(true);
@@ -116,8 +116,16 @@ function CreateComponent() {
             className="w-[49px] h-[40px] md:w-[83px] md:h-[77px]"
           />
         )}
-        {isOpenComponent.newDocs && <img src="/rich.png" alt="Word Icon" className="w-[45px] h-[45px] md:w-[83px] md:h-[83px]"/>}
-        {isOpenComponent.newExcel && <Xcel className="w-[45px] h-[45px] md:w-[83px] md:h-[83px]"/>}
+        {isOpenComponent.newDocs && (
+          <img
+            src="/rich.png"
+            alt="Word Icon"
+            className="w-[45px] h-[45px] md:w-[83px] md:h-[83px]"
+          />
+        )}
+        {isOpenComponent.newExcel && (
+          <Xcel className="w-[45px] h-[45px] md:w-[83px] md:h-[83px]" />
+        )}
         <p className="text-[22px] text-[#202343]">
           Create New {isOpenComponent.newFolder && "Folder"}
           {isOpenComponent.newDocs && "Neurodoc"}
