@@ -97,7 +97,8 @@ function FileGallery({ showStarredOnly }: any) {
       ).unwrap();
       if (result && result.data) {
         const { content_type, url, name } = result.data;
-        const allowedDocumentExtensions = ["xlsx", "xls", "docx", "doc", "pdf"];
+        console.log(content_type)
+        const allowedDocumentExtensions = ["xlsx", "xls", "docx", "doc", "pdf", "vnd.openxmlformats-officedocument.spreadsheetml.sheet", "vnd.ms-excel", "msword", "vnd.openxmlformats-officedocument.wordprocessingml.document"];
         const fileExtension = content_type?.split("/")?.pop()?.toLowerCase();
         if (!fileExtension) {
           alert("Invalid file type. Unable to process.");
