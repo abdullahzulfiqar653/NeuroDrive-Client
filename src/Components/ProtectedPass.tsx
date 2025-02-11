@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BlurLock, Cross } from "../assets/Icons";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../app/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../app/store";
 import { toast } from "react-toastify";
 import { ThreeDots } from "react-loader-spinner";
 import { postData } from "../features/ApiSlice";
@@ -31,15 +31,15 @@ function ProtectedPass({
 }: ReNameFileProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [value, setValue] = useState("");
+  const [error, setError] = useState("");
   const [view, setView] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
   const fileId = localStorage.getItem("fileId") ?? "";
-  const data = useSelector(
-    (state: RootState) => state.api.calls?.protectedFile
-  );
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     try {
       const paylod = {
         password: value,
@@ -103,9 +103,23 @@ function ProtectedPass({
       setActiveIndex(null);
       dispatch(getDirectory(parentFolderId));
       //   toast.success("Password matched");
-    } catch (error) {
-      toast.warn("Wrong Password");
-      console.log("error", error);
+    } catch (er:any) {
+      setError(er.password);
+    }
+    finally{
+      setIsLoading(false);
+    }
+  };
+
+  const handleChange = (e:any) => {
+    const value = e.target.value;
+    setValue(value);
+
+    // Check if the password length is less than 8 characters
+    if (value.length < 8) {
+      setError("Password must be at least 8 characters long");
+    } else {
+      setError(""); 
     }
   };
 
@@ -147,12 +161,12 @@ function ProtectedPass({
             <p className="font-sans sm:text-xl  flex items-center justify-center mb-1">
               🔒 <p className="opacity-50">Enter Password</p>
             </p>
-            <div className="h-[36px] flex items-center justify-center mb-4 w-full md:h-[54px] bg-[#ECECEC] rounded-md px-3">
+            <div className="h-[36px] flex items-center justify-center mb-1 w-full md:h-[54px] bg-[#ECECEC] rounded-md px-3">
               <input
                 value={value}
                 required
                 minLength={8}
-                onChange={(e) => setValue(e.target.value)}
+                onChange={handleChange}
                 type={view ? "text" : "password"}
                 placeholder="Password"
                 className="w-full h-full outline-none text-[12px] font-sans font-[500] md:font-[600] md:text-[16px] bg-[#ffffff00] placeholder:text-sm placeholder:text-gray-400"
@@ -169,17 +183,13 @@ function ProtectedPass({
                 />
               )}
             </div>
-            {value.length > 0 && value.length < 8 && (
-              <p className="text-red-500 text-sm">
-                Password must be at least 8 characters
-              </p>
-            )}
+            {error && <p className="text-red-500 text-sm">{error}</p>}
           </div>
         </div>
 
         <button
           onClick={handleSubmit}
-          disabled={value.length < 8}
+          disabled={!!error}
           style={{
             background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
             borderImageSource:
@@ -188,7 +198,7 @@ function ProtectedPass({
           className="w-[132px] h-[34px] disabled:opacity-75 disabled:cursor-not-allowed md:w-[163px] md:h-[42px] rounded-xl text-white font-sans text-[13px] mt-3 md:mt-5 flex justify-center items-center"
         >
           Confirm
-          {data?.isLoading && (
+          {isLoading && (
             <span className="ml-2">
               <ThreeDots height="25" width="25" color="white" />
             </span>

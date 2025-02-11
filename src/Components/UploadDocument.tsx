@@ -171,14 +171,14 @@ function UploadDocument() {
 
             <input
               type="file"
-              accept=".pdf, .doc, .docx, .xls, .xlsx, .png, .jpg, .jpeg"
+              accept="/*"
               style={{ display: "none" }}
               ref={fileInputRef}
               onChange={handleFileChange}
             />
 
             <p className="text-[#B3B3B3] text-[9px] md:text-[11px] font-sans text-center">
-              Supported: JPG,JPEG, PNG, PDF, XLS , doc. File size should be
+              Supported: You can upload any type of file. The file size should be
               maximum 25mb and it shouldn’t be password protected
             </p>
           </div>

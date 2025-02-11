@@ -97,26 +97,28 @@ function FileGallery({ showStarredOnly }: any) {
       ).unwrap();
       if (result && result.data) {
         const { content_type, url, name } = result.data;
-        const allowedExtensions = ["png", "jpg", "jpeg"];
+        console.log(content_type)
+        const allowedDocumentExtensions = ["xlsx", "xls", "docx", "doc", "pdf", "vnd.openxmlformats-officedocument.spreadsheetml.sheet", "vnd.ms-excel", "msword", "vnd.openxmlformats-officedocument.wordprocessingml.document"];
         const fileExtension = content_type?.split("/")?.pop()?.toLowerCase();
         if (!fileExtension) {
           alert("Invalid file type. Unable to process.");
           return;
         }
-        if (allowedExtensions.includes(fileExtension)) {
+
+        if (allowedDocumentExtensions.includes(fileExtension)) {
+          setFileData({
+            fileUrl: url,
+            fileType: mapContentTypeToFileType(content_type),
+            fileName: name,
+          });
+        } else {
           const link = document.createElement("a");
           link.href = url;
           link.download = name;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
-          toast.success("Image Downloaded Successfully");
-        } else {
-          setFileData({
-            fileUrl: url,
-            fileType: mapContentTypeToFileType(content_type),
-            fileName: name,
-          });
+          toast.success("File Downloaded Successfully");
         }
       }
     } catch (error) {
