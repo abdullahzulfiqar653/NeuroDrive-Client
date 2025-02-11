@@ -26,7 +26,7 @@ const Quantumography = ({
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const MAX_FILE_SIZE = Math.ceil(fileSize / 2.1);
+  const MIN_FILE_SIZE = Math.ceil(fileSize / 2.1);
 
   const formatFileSize = (sizeInBytes: number) => {
     if (sizeInBytes < 1024 ** 2) {
@@ -46,9 +46,9 @@ const Quantumography = ({
         setFile(null);
         return;
       }
-      if (file.size > MAX_FILE_SIZE) {
+      if (file.size < MIN_FILE_SIZE) {
         toast.warn(
-          `File size must be less than ${formatFileSize(MAX_FILE_SIZE)}!`
+          `File size must be greater than ${formatFileSize(MIN_FILE_SIZE)}!`
         );
         return;
       }
@@ -68,9 +68,9 @@ const Quantumography = ({
         setFile(null);
         return;
       }
-      if (file.size > MAX_FILE_SIZE) {
+      if (file.size < MIN_FILE_SIZE) {
         toast.warn(
-          `File size must be less than ${formatFileSize(MAX_FILE_SIZE)}!`
+          `File size must be greater than ${formatFileSize(MIN_FILE_SIZE)}!`
         );
         setFile(null);
         return;
@@ -346,7 +346,7 @@ const Quantumography = ({
                 </p>
 
                 <p className="text-red-500 mt-1 text-[12px]">
-                  Maximum allowed file size is {formatFileSize(MAX_FILE_SIZE)}.
+                  Minimum file size is {formatFileSize(MIN_FILE_SIZE)}.
                 </p>
                 
                 <input
