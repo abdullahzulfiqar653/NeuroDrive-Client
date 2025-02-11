@@ -82,7 +82,7 @@ const CustomPopup = ({
       </div>
       {toggleReName && (
         <ReNameFile
-          fileId={file?.id}
+          fileId={id}
           settoggleReName={settoggleReName}
           setActiveIndex={setActiveIndex}
         />
@@ -130,17 +130,21 @@ const CustomPopup = ({
         <Quantumography
           setToggleQuantumography={setToggleQuantumography}
           fileId={id}
+          fileName={name}
+          fileSize={file.size}
         />
       )}
 
-      <div
-        onClick={() => {
-          settogglePassword(true);
-        }}
-        className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer px-1 hover:shadow-md"
-      >
-        <Lock /> Set Password
-      </div>
+      {!isProtected && (
+        <div
+          onClick={() => {
+            settogglePassword(true);
+          }}
+          className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer px-1 hover:shadow-md"
+        >
+          <Lock /> Set Password
+        </div>
+      )}
       {togglePassword && (
         <SetPassword
           fileId={file?.id}

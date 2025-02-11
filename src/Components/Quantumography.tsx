@@ -3,12 +3,17 @@ import { Cross, Xcel } from "../assets/Icons";
 import { ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { postData } from "../features/ApiSlice";
+import { fetchData, postData } from "../features/ApiSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../app/store";
 import { getDirectory } from "../features/directories/folderSlice";
 
-const Quantumography = ({ setToggleQuantumography, fileId }: any) => {
+const Quantumography = ({
+  setToggleQuantumography,
+  fileId,
+  fileName,
+  fileSize,
+}: any) => {
   const [step, setStep] = useState(1);
   const [coverUrl, setCoverUrl] = useState("");
   const [secertUrl, setSecertUrl] = useState("");
@@ -20,18 +25,31 @@ const Quantumography = ({ setToggleQuantumography, fileId }: any) => {
   const [File, setFile] = useState<File | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
-  const MAX_FILE_SIZE = 500 * 1024;
+
+  const MAX_FILE_SIZE = Math.ceil(fileSize / 2.1);
+
+  const formatFileSize = (sizeInBytes: number) => {
+    if (sizeInBytes < 1024 ** 2) {
+      return `${(sizeInBytes / 1024).toFixed(2)} KB`;
+    } else if (sizeInBytes < 1024 ** 3) {
+      return `${(sizeInBytes / 1024 ** 2).toFixed(2)} MB`;
+    } else {
+      return `${(sizeInBytes / 1024 ** 3).toFixed(2)} GB`;
+    }
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       if (step === 1 && !["image/jpeg", "image/jpg"].includes(file.type)) {
-        toast.warn("Wrong file type!");
+        toast.warn("Only jpg or jpeg are allowed");
         setFile(null);
         return;
       }
       if (file.size > MAX_FILE_SIZE) {
-        toast.warn("File size must be less than 500KB!");
+        toast.warn(
+          `File size must be less than ${formatFileSize(MAX_FILE_SIZE)}!`
+        );
         return;
       }
       setFile(file);
@@ -46,12 +64,14 @@ const Quantumography = ({ setToggleQuantumography, fileId }: any) => {
     const file = e.dataTransfer?.files[0];
     if (file) {
       if (step === 1 && !["image/jpeg", "image/jpg"].includes(file.type)) {
-        toast.warn("Wrong file type!");
+        toast.warn("Only jpg or jpeg are allowed");
         setFile(null);
         return;
       }
       if (file.size > MAX_FILE_SIZE) {
-        toast.warn("File size must be less than 500KB!");
+        toast.warn(
+          `File size must be less than ${formatFileSize(MAX_FILE_SIZE)}!`
+        );
         setFile(null);
         return;
       }
@@ -84,42 +104,49 @@ const Quantumography = ({ setToggleQuantumography, fileId }: any) => {
           setCoverUrl(data?.image_url);
         }
         try {
-          const response = await axios.get(
-            `https://drive.api.azsoft.dev/api/files/${fileId}/`,
-            {
-              headers: {
-                accept: "application/json",
-                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                "Content-Type": "application/json",
-              },
+          // Step 1: Fetch file to get the URL
+          const result = await dispatch(
+            fetchData({ url: `files/${fileId}/`, key: "fileFetch" })
+          ).unwrap();
+
+          if (result && result.data) {
+            const { url, name } = result.data;
+
+            // Step 2: Download the file using the URL
+            const fileResponse = await axios.get(url, {
               responseType: "blob",
+            });
+
+            // Step 3: Convert response to Blob
+            const blob = new Blob([fileResponse.data], {
+              type: fileResponse.headers["content-type"],
+            });
+
+            // Step 4: Create FormData and append the file
+            const formData = new FormData();
+            const filename = name || `file_${Date.now()}${fileName}`;
+            formData.append("file", blob, filename);
+            formData.append("type", "secret");
+        
+            // Step 5: Upload the file
+            const { data } = await axios.post(
+              "https://qa.neuronus.net/upload-file",
+              formData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            );
+            if (data) {
+              setIsLoading(false);
+              setSecertUrl(data?.image_url);
+              setShowUpload(true);
+              setStep(2);
             }
-          );
-          const blob = new Blob([response.data], {
-            type: response.headers["content-type"],
-          });
-          const formData = new FormData();
-          const filename =
-            downloadUrl.split("/").pop() || `file_${Date.now()}.png`;
-          formData.append("file", blob, filename);
-          formData.append("type", "secret");
-          const { data } = await axios.post(
-            "https://qa.neuronus.net/upload-file",
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
-          if (data) {
-            setIsLoading(false);
-            setSecertUrl(data?.image_url);
-            setShowUpload(true);
-            setStep(2);
           }
         } catch (error) {
-          toast.warn("Somethong wents wrong");
+          console.error("Error:", error);
         }
       }
       if (step === 2) {
@@ -318,6 +345,10 @@ const Quantumography = ({ setToggleQuantumography, fileId }: any) => {
                   {step === 1 && " JPG or JPEG."}{" "}
                 </p>
 
+                <p className="text-red-500 mt-1 text-[12px]">
+                  Maximum allowed file size is {formatFileSize(MAX_FILE_SIZE)}.
+                </p>
+                
                 <input
                   id="dropzone-file"
                   type="file"

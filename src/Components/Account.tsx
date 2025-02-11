@@ -5,9 +5,10 @@ import { CiUser } from "react-icons/ci";
 import { ThreeCircles } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import { AppDispatch, RootState } from "../app/store";
-import { IoMdCopy } from "react-icons/io";
+import { IoMdCopy ,IoMdCheckmark} from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { postData } from "../features/ApiSlice";
+import { useState } from "react";
 
 interface AccountProps {
   className: string;
@@ -18,6 +19,7 @@ interface AccountProps {
 function Account({ className, profileLoading, address }: AccountProps) {
   const { profile } = useAuth();
   const navigate = useNavigate();
+  const [isCopied, setIsCopied] = useState(false);
   const { logout, setIsAccountOpen, setReGetProfile } = useAuth();
 
   const dispatch = useDispatch<AppDispatch>();
@@ -26,10 +28,11 @@ function Account({ className, profileLoading, address }: AccountProps) {
   const data = useSelector((state: RootState) => state.api.calls?.postProfile);
 
   const handleCopy = () => {
-    navigator.clipboard
-      .writeText(address)
-      .then(() => toast.success("Copied to clipboard!"))
-      .catch((err) => console.error("Failed to copy: ", err));
+    setIsCopied(true);
+    navigator.clipboard.writeText(address);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 700);
   };
 
   const handleUpload = async (event: any) => {
@@ -101,14 +104,15 @@ function Account({ className, profileLoading, address }: AccountProps) {
           </div>
         </div>
         <div className="px-4 w-[226px] md:w-[293px] rounded-lg">
-          <div
-            onClick={handleCopy}
-            className="flex items-center gap-3 justify-center text-[10px]"
-          >
+          <div className="flex items-center gap-3 justify-center text-[12px]">
             <p>{address}</p>
-            <p>
-              <IoMdCopy className="text-sm cursor-pointer" />
-            </p>
+            {isCopied ? (
+              <IoMdCheckmark size={16} />
+            ) : (
+              <p onClick={handleCopy}>
+                <IoMdCopy size={16} className="cursor-pointer" />
+              </p>
+            )}
           </div>
         </div>
         <div className="w-[226px] md:w-[293px] h-[40px] md:h-[52px] bg-[#F8FBFD] rounded-[99px] pl-2 md:pl-3 mb-3 flex items-center justify-between">
