@@ -100,7 +100,6 @@ const Quantumography = ({
           }
         );
         if (data) {
-          setIsLoading(false);
           setCoverUrl(data?.image_url);
         }
         try {
@@ -138,12 +137,13 @@ const Quantumography = ({
                 },
               }
             );
-            if (data) {
-              setIsLoading(false);
+            if (data) { 
+              setStep(2);         
+              setShowUpload(true);           
               setSecertUrl(data?.image_url);
-              setShowUpload(true);
-              setStep(2);
-            }
+              setIsLoading(false);            
+            }          
+
           }
         } catch (error) {
           console.error("Error:", error);
