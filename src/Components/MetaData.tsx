@@ -53,8 +53,8 @@ const MetaData = ({
         setActiveIndex(null);
         dispatch(getDirectory(parentFolderId));
       }
-    } catch (error) {
-      toast.warn("Error in removing meta data");
+    } catch (error: any) {
+      toast.error(error.detail);
       setMetaToggle(false);
       setActiveIndex(null);
     }

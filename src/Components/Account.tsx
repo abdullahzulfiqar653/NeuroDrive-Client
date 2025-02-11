@@ -5,7 +5,7 @@ import { CiUser } from "react-icons/ci";
 import { ThreeCircles } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import { AppDispatch, RootState } from "../app/store";
-import { IoMdCopy ,IoMdCheckmark} from "react-icons/io";
+import { IoMdCopy, IoMdCheckmark } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { postData } from "../features/ApiSlice";
 import { useState } from "react";
@@ -133,6 +133,7 @@ function Account({ className, profileLoading, address }: AccountProps) {
           <VerticalLine />
           <p
             onClick={() => {
+              localStorage.removeItem("folder_stack");
               navigate("/login", { replace: true });
               logout();
             }}

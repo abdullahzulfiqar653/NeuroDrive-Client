@@ -50,9 +50,8 @@ function SetPassword({
       setActiveIndex(null);
       dispatch(getDirectory(parentFolderId));
       toast.success("Password is set to file");
-    } catch (error) {
-      toast.warn("Unable to encryot file");
-      console.log("error", error);
+    } catch (error: any) {
+      toast.error(error.detail);
     }
   };
 

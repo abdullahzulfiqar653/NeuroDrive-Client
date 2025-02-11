@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDirectory } from "../../features/directories/folderSlice";
 import { fetchData } from "../../features/ApiSlice";
 import { LinearProgress } from "@mui/material";
+import { toast } from "react-toastify";
 
 function Home() {
   const {
@@ -125,7 +126,7 @@ function Home() {
 
                   <span className="flex items-center justify-center gap-1">
                     <p className="text-[#40566D] text-[12px] font-[600] font-sans text-right leading-[18px]">
-                    {data?.response?.data?.address?.match(/^[a-zA-Z-]+/)[0]}
+                      {data?.response?.data?.address?.match(/^[a-zA-Z-]+/)[0]}
                     </p>
                     <Arrow color="#1E1E1E" />
                   </span>
@@ -252,7 +253,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         setParentFolder(res);
         localStorage.setItem("parent_folder_id", res.id);
       })
-      .catch((error) => console.error("Error fetching folder details:", error));
+      .catch((error: any) => toast.error(error.detail));
   }, []);
 
   useEffect(() => {
@@ -276,7 +277,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         setParentFolder(res);
         localStorage.setItem("parent_folder_id", res.id);
       })
-      .catch((error) => console.error("Error fetching folder details:", error));
+      .catch((error: any) => toast.error(error.detail));
   };
 
   const goBack = () => {
@@ -294,7 +295,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
         setParentFolder(res);
         localStorage.setItem("parent_folder_id", res.id);
       })
-      .catch((error) => console.error("Error fetching folder details:", error));
+      .catch((error: any) => toast.error(error.detail));
   };
 
   const handleShareFile = async () => {
@@ -307,7 +308,9 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
       } else {
         setFiles(null);
       }
-    } catch (error) {}
+    } catch (error: any) {
+      toast.error(error.detail);
+    }
   };
 
   return (
@@ -362,13 +365,7 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
               : "hover:bg-[#3984FF] hover:text-white"
           }`}
           >
-            <div
-              onClick={() => {
-                handleClickFolder("shared");
-                (setLeftBar ?? (() => {}))(false);
-              }}
-              className="flex items-center gap-3"
-            >
+            <div className="flex items-center gap-3">
               <Shared color={activeFolder === "shared" ? "white" : "black"} />
               <p className="text-[14px] font-sans leading-[20px]">Shared</p>
             </div>
@@ -464,10 +461,8 @@ function LeftBar({ setLeftBar }: LeftBarProps) {
             <LinearProgress
               className=""
               sx={{
-                marginLeft: "13px",
+                margin: "13px",
                 marginBottom: "20px",
-                width: "90%", // Makes it fully responsive
-                maxWidth: "300px", // Maximum width for larger screens
                 height: 10,
                 borderRadius: 5,
                 backgroundColor: "#e0e0e0",
