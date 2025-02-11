@@ -4,8 +4,6 @@ import {
   Arrow,
   BackArrow,
   Download,
-  Invite,
-  Print,
   SixDots,
   Xcel,
 } from "../../assets/Icons";
@@ -20,7 +18,7 @@ import { useSelector } from "react-redux";
 function TextFile() {
   const navigate = useNavigate();
   const data = useSelector((state: RootState) => state.api.calls?.getProfile);
-  const { isAccountOpen, setIsAccountOpen, toggleComponent, profile } =
+  const { isAccountOpen, setIsAccountOpen, profile } =
     useAuth();
   // const queryParams = new URLSearchParams(location.search);
   // const Type = queryParams.get('type');
