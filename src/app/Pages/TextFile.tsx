@@ -4,8 +4,6 @@ import {
   Arrow,
   BackArrow,
   Download,
-  Invite,
-  Print,
   SixDots,
   Xcel,
 } from "../../assets/Icons";
@@ -20,7 +18,7 @@ import { useSelector } from "react-redux";
 function TextFile() {
   const navigate = useNavigate();
   const data = useSelector((state: RootState) => state.api.calls?.getProfile);
-  const { isAccountOpen, setIsAccountOpen, toggleComponent, profile } =
+  const { isAccountOpen, setIsAccountOpen, profile } =
     useAuth();
   // const queryParams = new URLSearchParams(location.search);
   // const Type = queryParams.get('type');
@@ -62,7 +60,7 @@ function TextFile() {
         </div>
 
         <div className="flex items-center gap-2">
-          <div
+          {/* <div
             onClick={() => toggleComponent("share")}
             style={{
               background: "linear-gradient(180deg, #77AAFF 0%, #3E85FF 100%)",
@@ -73,10 +71,10 @@ function TextFile() {
           >
             <Invite />
             <p className="text-[14px] text-[white]">Invite Friends</p>
-          </div>
-          <div className="w-[47px] h-[42px] bg-[#F8FAFC] rounded-[12px] border border-[#BFBFBF57] md:flex items-center justify-center hidden">
+          </div> */}
+          {/* <div className="w-[47px] h-[42px] bg-[#F8FAFC] rounded-[12px] border border-[#BFBFBF57] md:flex items-center justify-center hidden">
             <Print />
-          </div>
+          </div> */}
           <div className="w-[37px] h-[33px] md:w-[47px] md:h-[42px] bg-[#F8FAFC] rounded-[8px] md:rounded-[12px] border border-[#BFBFBF57] flex items-center justify-center">
             <Download className={"w-5 h-5"} />
           </div>

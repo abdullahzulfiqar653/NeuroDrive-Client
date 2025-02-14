@@ -23,6 +23,7 @@ function ReNameFile({
 
   const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
   const data = useSelector((state: RootState) => state.api.calls?.reName);
+  const message = data?.error?.user_address.detail;
 
   const handleSubmit = async () => {
     const paylod = {
@@ -41,8 +42,10 @@ function ReNameFile({
       setActiveIndex(null);
       toast.success("Name changed successfully");
       dispatch(getDirectory(parentFolderId));
+
     } catch (error: any) {
       toast.warn(error.detail);
+
     }
   };
 
