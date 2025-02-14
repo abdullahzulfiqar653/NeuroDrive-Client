@@ -16,7 +16,7 @@ function UploadDocument() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const res = useSelector((state: RootState) => state.api.calls?.uploadFile);
-  const message = res?.error?.user_address.detail;
+ 
 
   const dispatch = useDispatch<AppDispatch>();
 
