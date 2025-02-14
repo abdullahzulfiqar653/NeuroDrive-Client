@@ -16,7 +16,6 @@ function UploadDocument() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const res = useSelector((state: RootState) => state.api.calls?.uploadFile);
-  const message = res?.error?.user_address.detail;
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -118,8 +117,8 @@ function UploadDocument() {
       dispatch(getDirectory(parentFolderId));
       toast.success("File Upload Successful");
       toggleComponent("upload");
-    } catch (error) {
-      toast.error(message);
+    } catch (error: any) {
+      toast.error(error.deatil);
       toggleComponent("upload");
     }
   };

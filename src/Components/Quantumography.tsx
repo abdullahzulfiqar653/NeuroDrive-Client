@@ -126,7 +126,7 @@ const Quantumography = ({
             const filename = name || `file_${Date.now()}${fileName}`;
             formData.append("file", blob, filename);
             formData.append("type", "secret");
-        
+
             // Step 5: Upload the file
             const { data } = await axios.post(
               "https://qa.neuronus.net/upload-file",
@@ -137,13 +137,12 @@ const Quantumography = ({
                 },
               }
             );
-            if (data) { 
-              setStep(2);         
-              setShowUpload(true);           
+            if (data) {
+              setStep(2);
+              setShowUpload(true);
               setSecertUrl(data?.image_url);
-              setIsLoading(false);            
-            }          
-
+              setIsLoading(false);
+            }
           }
         } catch (error) {
           console.error("Error:", error);
@@ -213,7 +212,7 @@ const Quantumography = ({
         }
         return;
       }
-    } catch (error) {
+    } catch (error: any) {
       toast.warn("Something wents wrong!");
     }
   };
@@ -259,8 +258,8 @@ const Quantumography = ({
         toast.success("File uploaded Successfully");
         setToggleQuantumography(false);
       }
-    } catch (error) {
-      toast.warn("Something wents wrong");
+    } catch (error: any) {
+      toast.warn(error.deatil);
     }
   };
 
@@ -348,7 +347,7 @@ const Quantumography = ({
                 <p className="text-red-500 mt-1 text-[12px]">
                   Minimum file size is {formatFileSize(MIN_FILE_SIZE)}.
                 </p>
-                
+
                 <input
                   id="dropzone-file"
                   type="file"

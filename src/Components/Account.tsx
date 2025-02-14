@@ -54,11 +54,10 @@ function Account({ className, profileLoading, address }: AccountProps) {
       if (response?.status === 200) {
         toast.success("Successsfully uploaded profile");
         setReGetProfile((prev) => !prev);
-      } else {
-        toast.error("Failed to uploaded profile");
       }
-    } catch (error) {}
-    console.log("Profile upload error");
+    } catch (error: any) {
+      toast.warn(error.deatil);
+    }
   };
 
   return (
