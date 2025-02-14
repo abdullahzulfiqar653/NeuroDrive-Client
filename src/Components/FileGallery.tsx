@@ -28,7 +28,6 @@ function FileGallery({ showStarredOnly }: any) {
   const [metaToggle, setMetaToggle] = useState<boolean>(false);
   const [radioClick, setRadioClick] = useState(false);
   const { reset } = useApi("getSingleFile");
-  const { post } = useApi("starFile");
   const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
   const [fileData, setFileData] = useState<{
     fileUrl: string;
@@ -142,35 +141,43 @@ function FileGallery({ showStarredOnly }: any) {
     }
   };
 
-  const handleStarClick = (name: string, id: string) => {
+  const handleStarClick = async (name: string, id: string) => {
     try {
       const paylod = {
         name: name,
         is_starred: true,
       };
-      post({
-        url: `/files/${id}/`,
-        payload: paylod,
-        method: "put",
-      });
-      toast.success("File is getting starred");
-      dispatch(getDirectory(parentFolderId));
-      setActiveIndex(null);
+      const response = await dispatch(
+        postData({
+          url: `/files/${id}/`,
+          payload: paylod,
+          method: "put",
+          key: "starFile",
+        })
+      ).unwrap();
+      if (response.status === 200) {
+        toast.success("File is getting starred");
+        dispatch(getDirectory(parentFolderId));
+        setActiveIndex(null);
+      }
     } catch (error: any) {
       toast.error(error.detail);
     }
   };
-  const handleUnStarClick = (name: string, id: string) => {
+  const handleUnStarClick = async (name: string, id: string) => {
     try {
       const paylod = {
         name: name,
         is_starred: false,
       };
-      post({
-        url: `/files/${id}/`,
-        payload: paylod,
-        method: "put",
-      });
+      await dispatch(
+        postData({
+          url: `/files/${id}/`,
+          payload: paylod,
+          method: "put",
+          key: "unstarFile",
+        })
+      ).unwrap();
       toast.success("File is getting unstarred");
       dispatch(getDirectory(parentFolderId));
       setActiveIndex(null);

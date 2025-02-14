@@ -42,9 +42,10 @@ function ReNameFile({
       setActiveIndex(null);
       toast.success("Name changed successfully");
       dispatch(getDirectory(parentFolderId));
-    } catch (error) {
-      toast.warn(message);
-      console.log("error", error);
+
+    } catch (error: any) {
+      toast.warn(error.detail);
+
     }
   };
 

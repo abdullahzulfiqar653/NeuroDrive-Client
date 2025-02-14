@@ -52,7 +52,6 @@ function Home() {
 
   const average = size?.total_size / size?.size_allowed;
 
-  // Handle cases where size_allowed is 0 to avoid division by zero
   setUsedStorage(size?.size_allowed !== 0 ? average : 0);
 
   useEffect(() => {

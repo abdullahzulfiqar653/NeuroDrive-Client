@@ -1,8 +1,8 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Cross } from "../assets/Icons";
 import { CiUser } from "react-icons/ci";
 import { postData } from "../features/ApiSlice";
-import { AppDispatch, RootState } from "../app/store";
+import { AppDispatch } from "../app/store";
 import { useState } from "react";
 import { getDirectory } from "../features/directories/folderSlice";
 import { toast } from "react-toastify";
@@ -16,8 +16,6 @@ function ShareFile({ setShare, file }: Props) {
   const [address, setAddress] = useState("");
   const dispatch = useDispatch<AppDispatch>();
   const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
-  const data = useSelector((state: RootState) => state.api.calls?.shareFile);
-  const message = data?.error?.user_address.detail;
 
   const [shake, setShake] = useState(false);
 
@@ -49,7 +47,7 @@ function ShareFile({ setShare, file }: Props) {
       dispatch(getDirectory(parentFolderId));
       setShare?.(false);
     } catch (error: any) {
-      toast.warn(message);
+      toast.warn(error.detail);
     }
   };
 

@@ -118,8 +118,9 @@ function UploadDocument() {
       dispatch(getDirectory(parentFolderId));
       toast.success("File Upload Successful");
       toggleComponent("upload");
-    } catch (error) {
-      toast.error(message);
+
+    } catch (error: any) {
+      toast.error(error.deatil);
       toggleComponent("upload");
     }
   };
