@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Cross } from "../assets/Icons";
 import { CiUser } from "react-icons/ci";
 import { postData } from "../features/ApiSlice";
@@ -36,7 +36,7 @@ function ShareFile({ setShare, file }: Props) {
     try {
       await dispatch(
         postData({
-          url: `files/${file?.id}s/`,
+          url: `files/${file?.id}/`,
           payload: paylod,
           method: "patch",
           key: "shareFile",

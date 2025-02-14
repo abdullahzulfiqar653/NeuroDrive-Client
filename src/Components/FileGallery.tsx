@@ -28,7 +28,6 @@ function FileGallery({ showStarredOnly }: any) {
   const [metaToggle, setMetaToggle] = useState<boolean>(false);
   const [radioClick, setRadioClick] = useState(false);
   const { reset } = useApi("getSingleFile");
-  const { post } = useApi("starFile");
   const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
   const [fileData, setFileData] = useState<{
     fileUrl: string;
