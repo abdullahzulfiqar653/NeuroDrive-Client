@@ -93,16 +93,22 @@ const CustomPopup = ({
       >
         <Download /> Download
       </div>
-      <div
-        onClick={() => {
-          handleMetaData(meta);
-        }}
-        className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer px-1 hover:shadow-md"
-      >
-        <CleanMeta /> Clean meta data
-      </div>
+      {file?.content_type &&
+        (file.content_type.includes("image/") ||
+          file.content_type.includes("application/pdf")) && (
+          <div
+            onClick={() => {
+              handleMetaData(meta);
+            }}
+            className="flex gap-2 items-center whitespace-nowrap text-black cursor-pointer px-1 hover:shadow-md"
+          >
+            <CleanMeta /> Clean meta data
+          </div>
+        )}
+
       {metaToggle && (
         <MetaData
+          file={file}
           meta={meta}
           name={name}
           setMetaToggle={setMetaToggle}
