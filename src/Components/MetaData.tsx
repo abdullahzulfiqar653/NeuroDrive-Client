@@ -4,6 +4,7 @@ import { postData } from "../features/ApiSlice";
 import { AppDispatch } from "../app/store";
 import { toast } from "react-toastify";
 import { getDirectory } from "../features/directories/folderSlice";
+import { Gallery } from "../assets/Icons";
 
 type MetaDataType = {
   file_name: string;
@@ -19,6 +20,7 @@ type MetaDataType = {
 interface MetaDataProps {
   meta: MetaDataType;
   setMetaToggle: React.Dispatch<React.SetStateAction<boolean>>;
+  file: any;
   name: string;
   id: number;
   setActiveIndex: any;
@@ -26,6 +28,7 @@ interface MetaDataProps {
 
 const MetaData = ({
   meta,
+  file,
   name,
   id,
   setMetaToggle,
@@ -35,7 +38,7 @@ const MetaData = ({
 
   const handleRemove = async (id: number) => {
     const paylod = {
-      is_remove_metadata: true,
+      metadata: true,
     };
     const parentFolderId = localStorage.getItem("parent_folder_id") ?? "";
     try {
@@ -73,11 +76,22 @@ const MetaData = ({
             </h1>
           </div>
           <div>
-            <img
-              className=" h-[163px] sm:h-[289px] md:h-[330px] w-[64vw] sm:w-[318px] object-cover rounded-lg"
-              src="meta.png"
-              alt=""
-            />
+            {file.content_type.includes("image/") ? (
+              <>
+                <div>
+                  <Gallery className="h-[163px] sm:h-[289px] md:h-[290px] w-[64vw] sm:w-[290px] object-cover rounded-lg" />
+                </div>
+              </>
+            ) : file.content_type.includes("application/pdf") ? (
+              <>
+                <div>
+                  <img
+                    src="/pdf.png"
+                    className="h-[158px] sm:h-[280px] md:h-[280px] w-[35vw] sm:w-[290px] rounded-lg"
+                  />
+                </div>
+              </>
+            ) : null}
           </div>
           <p className="w-[60vw] sm:w-[300px] text-[10px] sm:text-xs text-start">
             NOTE: Once the cleaning process is completed, it will not be
