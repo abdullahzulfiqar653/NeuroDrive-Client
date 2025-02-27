@@ -207,7 +207,7 @@ function Login() {
       <div
         style={{
           background:
-            "linear-gradient(155.35deg, #3984FF -4.35%, #6860FE 32.93%, #8C44FD 62.55%, #B325FC 94.21%)",
+            "linear-gradient(155.35deg, #2a2e58 -4.35%, #2a2e58 32.93%, #2a2e58 62.55%, #4D55A4 94.21%)",
         }}
         className="rounded-[22px] w-full h-[50vh] md:h-[100vh]  md:w-[50%] overflow-hidden "
       >

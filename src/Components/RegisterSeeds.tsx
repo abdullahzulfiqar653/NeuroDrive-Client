@@ -167,21 +167,21 @@ function RegisterSeeds() {
       <div
         style={{
           background:
-            "linear-gradient(155.35deg, #3984FF -4.35%, #6860FE 32.93%, #8C44FD 62.55%, #B325FC 94.21%)",
+          "linear-gradient(155.35deg, #2a2e58 -4.35%, #2a2e58 32.93%, #2a2e58 62.55%, #4D55A4 94.21%)",
           height: "100vh",
         }}
-        className="rounded-[22px] w-full min-h-screen md:w-[50%] overflow-auto"
+        className="rounded-[22px] w-full h-[485px] md:min-h-screen md:w-[50%] md:overflow-hidden"
       >
         <img
-          src="/login-bg.svg"
+          src="/seed-web.svg"
           alt=""
-          className="w-full h-full object-cover hidden md:block"
+          className="w-full h-full object-cover object-center hidden md:block"
         />
 
         <img
           src="/seed-mob.svg"
           alt=""
-          className="w-full h-full object-cover block md:hidden"
+          className="w-full h-[485px] rounded-[22px] object-cover object-center block md:hidden"
         />
       </div>
     </div>
